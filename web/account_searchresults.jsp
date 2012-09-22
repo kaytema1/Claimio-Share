@@ -235,18 +235,149 @@
                                     <td><%= p.getFname()%>, <%= p.getLname()%> <%= p.getMidname()%></td><td><%= mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(p.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()).getSponsorname()%></td><td>  <%= p.getDateofbirth()%> </td>
                                     <td><%= mgr.getPatientFolder(p.getPatientid()).getStatus()%></td>
                                     <td>
-                                        <div style="display: block" id="s_<%=p.getPatientid()%>">
-                                            <select class="input-medium" name="contype" onchange='showConType("d_<%=p.getPatientid()%>")' id="ty">
-                                                <option>Select</option>
-                                                <option>Last Visit</option>
-                                                <option>Previous Visits</option>
-                                                <option>Billing History</option>
-                                            </select>
-                                        </div>
-                                        <div id="d_<%=p.getPatientid()%>" style="display: none; float: left;">
-                                            <a  id="patientidlink"  class="btn btn-info" onclick='getContype()'> <i class="icon-pencil icon-white"> </i> View </a>
+                                        <div class="btn-group">
+                                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                                Action
+                                                <span class="caret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li> <a href="#" id="<%= p.getPatientid()%>_patientidlink"> Last Visit </a> </li>
+                                                <li> <a href="#" id="<%= p.getPatientid()%>_patientidlink2"> Previous Visit </a> </li>
+                                                <li> <a href="#" id="<%= p.getPatientid()%>_patientidlink3"> Billing History </a> </li>
+                                            </ul>
                                         </div></td>
                                 </tr>
+                                <tr class="odd gradeX">
+                                    <td>
+                                        <div style="max-height: 600px; y-overflow: scroll; display: none;" class="usersummary hide" id="<%= p.getPatientid()%>_dialog"  title="Patient Information">
+                                            <div class="well thumbnail">
+                                                <ul style="margin-left: 0px;" class="breadcrumb">
+                                                    <li>
+                                                        <span class="divider"></span> Folder No: <%=lastVisitId%>
+                                                    </li>
+                                                    <li>
+                                                        <span class="divider"></span> <%= p.getLname()%>, <%= p.getMidname()%> <%= p.getFname()%>
+                                                    </li>
+                                                    <li>
+                                                        <span class="divider"></span> <%=p.getGender()%>
+                                                    </li>
+                                                    <li>
+                                                        <span class="divider"></span> <%= p.getEmployer()%>
+                                                    </li>
+                                                </ul>
+
+                                                <ul style="margin-left: 0px; margin-bottom: 0px;" class="breadcrumb">
+                                                    <li>   <b> Consultation  </b> </li>
+                                                </ul>   
+                                                <table class="table right table table-bordered table-condensed">
+
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Item</th>
+                                                            <th>Description</th>
+                                                            <th>Charge</th>
+                                                            <th>Amount Paid</th>
+                                                            <th>Outstanding</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        <tr>
+                                                            <td> Consultation Type </td>
+                                                            <%
+
+                                                                int conTypeId = vs.getVisittype();
+
+                                                                Consultation cs = mgr.getConsultationId(conTypeId);
+                                                                String csType = cs.getContype();
+                                                                double csCost = cs.getAmount();
+
+                                                                Patientconsultation pc = (Patientconsultation) mgr.getPatientConsultationByVisitid(vs.getVisitid()).get(0);
+                                                                System.out.println("amntPd : " + pc.getAmountpaid());
+
+                                                                double amountPaid = pc.getAmountpaid();
+                                                                double amountOutstanding = csCost - amountPaid;
+
+                                                            %>
+                                                            <td><%=csType%></td>
+                                                            <td><%=csCost%></td>
+                                                            <td><%=amountPaid%></td>
+                                                            <td><%=amountOutstanding%></td>
+                                                        </tr>
+                                                </table>
+                                                <ul style="margin-left: 0px; margin-bottom: 0px;" class="breadcrumb">
+                                                    <li>   <b> Pharmacy  </b> </li>
+                                                </ul>
+                                                <table class="table right table table-bordered table-condensed">
+
+
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Item</th>
+                                                            <th>Description</th>
+                                                            <th>Charge</th>
+                                                            <th>Amount Paid</th>
+                                                            <th>Outstanding</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <%
+                                                        List pTreatments = mgr.getPatientTreatmentByVisitid(lastVisitId);
+
+                                                        if (!pTreatments.isEmpty()) {
+                                                    %>
+
+                                                    <tr>
+                                                        <td> Folder No </td>
+                                                        <td> Folder No </td>
+
+                                                        <td><b> <%= p.getPatientid()%></b></td>
+                                                        <td> Folder No </td>
+
+                                                        <td><b> <%= p.getPatientid()%></b></td>
+
+                                                    </tr>
+                                                    <% }%>
+                                                    </tbody>
+                                                </table>
+                                                <div class="clearfix"></div>
+
+                                                <!--  <div class="btn-group" style="margin-left: 40%;">
+                                                      <button class="btn update_sponsor btn-info">
+                                                          Sponsorship
+                                                      </button>
+                                                  </div>  -->
+                                                <br />
+                                                <div class="clearfix"></div>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="max-height: 600px; y-overflow: scroll; display: none;" class="usersummary hide" id="<%= p.getPatientid()%>_dialog2"  title="Patient Information">
+                                            <div class="well thumbnail">
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        <div style="max-height: 600px; y-overflow: scroll; display: none;" class="usersummary hide" id="<%= p.getPatientid()%>_dialog3"  title="Patient Information">
+                                            <div class="well thumbnail">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                    </td>
+
+                                </tr>
+
 
                             </tbody>
                         </table>
@@ -266,109 +397,7 @@
 
         </div><!-- /container -->
 
-        <div style="max-height: 600px; y-overflow: scroll; display: none;" class="usersummary hide" id="<%= p.getPatientid()%>"  title="Patient Information">
-            <div class="well thumbnail">
-                <ul style="margin-left: 0px;" class="breadcrumb">
-                    <li>
-                        <span class="divider"></span> Folder No: <%=lastVisitId%>
-                    </li>
-                    <li>
-                        <span class="divider"></span> <%= p.getLname()%>, <%= p.getMidname()%> <%= p.getFname()%>
-                    </li>
-                    <li>
-                        <span class="divider"></span> <%=p.getGender()%>
-                    </li>
-                    <li>
-                        <span class="divider"></span> <%= p.getEmployer()%>
-                    </li>
-                </ul>
 
-                <ul style="margin-left: 0px; margin-bottom: 0px;" class="breadcrumb">
-                    <li>   <b> Consultation  </b> </li>
-                </ul>   
-                <table class="table right table table-bordered table-condensed">
-
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Description</th>
-                            <th>Charge</th>
-                            <th>Amount Paid</th>
-                            <th>Outstanding</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td> Consultation Type </td>
-                            <%
-
-                                int conTypeId = vs.getVisittype();
-
-                                Consultation cs = mgr.getConsultationId(conTypeId);
-                                String csType = cs.getContype();
-                                double csCost = cs.getAmount();
-
-                                Patientconsultation pc = (Patientconsultation) mgr.getPatientConsultationByVisitid(vs.getVisitid()).get(0);
-                                System.out.println("amntPd : " + pc.getAmountpaid());
-
-                                double amountPaid = pc.getAmountpaid();
-                                double amountOutstanding = csCost - amountPaid;
-
-                            %>
-                            <td><%=csType%></td>
-                            <td><%=csCost%></td>
-                            <td><%=amountPaid%></td>
-                            <td><%=amountOutstanding%></td>
-                        </tr>
-                </table>
-                <ul style="margin-left: 0px; margin-bottom: 0px;" class="breadcrumb">
-                    <li>   <b> Pharmacy  </b> </li>
-                </ul>
-                <table class="table right table table-bordered table-condensed">
-
-
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Description</th>
-                            <th>Charge</th>
-                            <th>Amount Paid</th>
-                            <th>Outstanding</th>
-                        </tr>
-                    </thead>
-
-                    <%
-                        List pTreatments = mgr.getPatientTreatmentByVisitid(lastVisitId);
-
-                        if (!pTreatments.isEmpty()) {
-                    %>
-
-                    <tr>
-                        <td> Folder No </td>
-                        <td> Folder No </td>
-
-                        <td><b> <%= p.getPatientid()%></b></td>
-                        <td> Folder No </td>
-
-                        <td><b> <%= p.getPatientid()%></b></td>
-
-                    </tr>
-                    <% }%>
-                    </tbody>
-                </table>
-                <div class="clearfix"></div>
-
-                <!--  <div class="btn-group" style="margin-left: 40%;">
-                      <button class="btn update_sponsor btn-info">
-                          Sponsorship
-                      </button>
-                  </div>  -->
-                <br />
-                <div class="clearfix"></div>
-
-            </div>
-        </div>
 
         <%}%>
         <%if (list != null) {%>
@@ -495,15 +524,64 @@
         </div>
     </div>
 
-    <div style="max-height: 600px; y-overflow: scroll; display: none;" class="usersummary hide" id="<%= ppp.getPatientid()%>_dialog2"  title="Patient Information">
-        <div class="well thumbnail">
-            <ul style="margin-left: 0px;" class="breadcrumb">
-                <li>
-                    <span class="divider"></span> Folder No: <%= ppp.getPatientid()%>
-                </li>
-            </ul>
-        </div>
-    </div>
+
+
+
+    <script type="text/javascript">
+   
+               
+        $("#<%= ppp.getPatientid()%>_dialog").dialog({
+            autoOpen : false,
+            width : 1000,
+            modal :true
+
+        });
+ 
+        $("#<%= ppp.getPatientid()%>_dialog2").dialog({
+            autoOpen : false,
+            width : 1000,
+            modal :true
+
+        });
+ 
+        $("#<%= ppp.getPatientid()%>_dialog3").dialog({
+            autoOpen : false,
+            width : 1000,
+            modal :true
+
+        });
+    
+ 
+    
+        $("#<%= ppp.getPatientid()%>_patientidlink").click(function(){
+      
+            $("#<%=ppp.getPatientid()%>_dialog").dialog('open');
+    
+        })
+ 
+        $("#<%= ppp.getPatientid()%>_patientidlink2").click(function(){
+      
+            $("#<%=ppp.getPatientid()%>_dialog2").dialog('open');
+    
+        }) 
+ 
+        $("#<%= ppp.getPatientid()%>_patientidlink2").click(function(){
+      
+            $("#<%=ppp.getPatientid()%>_dialog3").dialog('open');
+    
+        }) 
+   
+        $("#<%= ppp.getPatientid()%>_dialog").dialog({
+            autoOpen : false,
+            width : 1000,
+            modal :true
+
+        });
+   
+    
+    </script>
+
+
 
     <% }
     } else {
@@ -612,6 +690,53 @@
                 animation : true
 
             });
+            
+            
+            $("#<%= p.getPatientid()%>_dialog").dialog({
+                autoOpen : false,
+                width : 1000,
+                modal :true
+
+            });
+        
+        
+            $("#<%= p.getPatientid()%>_dialog2").dialog({
+                autoOpen : false,
+                width : 1000,
+                modal :true
+
+            });
+            
+            
+            $("#<%= p.getPatientid()%>_dialog3").dialog({
+                autoOpen : false,
+                width : 1000,
+                modal :true
+
+            });
+            $("#<%= p.getPatientid()%>_patientidlink").click(function(){
+      
+                $("#<%=p.getPatientid()%>_dialog").dialog('open');
+    
+            })
+            
+            
+            
+            
+        
+            $("#<%= p.getPatientid()%>_patientidlink2").click(function(){
+      
+                $("#<%=p.getPatientid()%>_dialog2").dialog('open');
+    
+            })
+            
+             
+        
+            $("#<%= p.getPatientid()%>_patientidlink3").click(function(){
+      
+                $("#<%=p.getPatientid()%>_dialog3").dialog('open');
+    
+            })
 
         });
             
@@ -659,6 +784,20 @@
             modal :true
 
         });
+        
+        $("#<%= vst.getPatientid()%>_dialog2").dialog({
+            autoOpen : false,
+            width : 1000,
+            modal :true
+
+        });
+        
+        $("#<%= vst.getPatientid()%>_dialog3").dialog({
+            autoOpen : false,
+            width : 1000,
+            modal :true
+
+        });
     
    
     
@@ -666,7 +805,19 @@
       
             $("#<%=vst.getPatientid()%>_dialog").dialog('open');
     
-        })    
+        })
+        
+        $("#<%= vst.getPatientid()%>_patientidlink2").click(function(){
+      
+            $("#<%=vst.getPatientid()%>_dialog2").dialog('open');
+    
+        }) 
+        
+        $("#<%= vst.getPatientid()%>_patientidlink2").click(function(){
+      
+            $("#<%=vst.getPatientid()%>_dialog3").dialog('open');
+    
+        }) 
    
         $("#<%= vst.getPatientid()%>_dialog").dialog({
             autoOpen : false,

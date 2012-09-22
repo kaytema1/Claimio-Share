@@ -26,7 +26,7 @@
 
 <script type="text/javascript" src="js/tablecloth.js"></script>   
 <script type="text/javascript" src="js/demo.js"></script>    
-
+<script type="text/javascript" language="javascript" src="js/jquery.dataTables.js"></script>
 <!--initiate accordion-->
 <script type="text/javascript">
     $(function() {
@@ -58,10 +58,7 @@
 
     });
 
-</script>
 
-<script type="text/javascript" language="javascript" src="js/jquery.dataTables.js"></script>
-<script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
      
         $('.example').dataTable({

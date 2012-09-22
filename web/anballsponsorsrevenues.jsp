@@ -16,7 +16,7 @@
             } %>
 <html>
     <head>
-        <%@include file="widgets/stylesheets.jsp" %>
+        
         <%
             boolean correctDateFound = false;
             boolean singleDateValue = true;
@@ -67,6 +67,7 @@
 
             System.out.print("dateValue : " + dateValue);
         %>
+        <%@include file="widgets/stylesheets.jsp" %>
     </head>
     <body data-spy="scroll" data-target=".subnav" data-offset="50">
 
