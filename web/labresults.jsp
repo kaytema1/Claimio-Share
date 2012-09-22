@@ -86,7 +86,7 @@
                                 <tr>
                                     <td><%=laborders.getPatientid()%></td>
                                     <td><%=mgr.getPatientByID(laborders.getPatientid()).getFname()%>, <%=mgr.getPatientByID(laborders.getPatientid()).getMidname()%> <%=mgr.getPatientByID(laborders.getPatientid()).getLname()%></td>
-                                    <td><%=mgr.getStafftableByid(laborders.getFromdoc()).getLastname()%> <%=mgr.getStafftableByid(laborders.getFromdoc()).getLastname() %></td>
+                                    <td><%=mgr.getStafftableByid(laborders.getFromdoc())==null?"":mgr.getStafftableByid(laborders.getFromdoc()).getLastname()%> <%=mgr.getStafftableByid(laborders.getFromdoc())==null?"":mgr.getStafftableByid(laborders.getFromdoc()).getLastname() %></td>
                                     <td><%=laborders.getOrderdate()%></td>
                                     <td><%=laborders.getDonedate()%></td>
                                     <td>

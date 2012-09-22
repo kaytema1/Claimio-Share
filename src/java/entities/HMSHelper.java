@@ -206,7 +206,7 @@ public class HMSHelper {
         return conroom;
     }
 
-    public Visitationtable createNewVisit(String patientID, String doctor, String vitals, String status, int type, String notes) {
+    public Visitationtable createNewVisit(String patientID, String doctor, String vitals, String status, String previous, int type, String notes) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         Visitationtable visitation = new Visitationtable();
@@ -220,7 +220,7 @@ public class HMSHelper {
         //visitation.setAdmissiondate(new Date());
         // visitation.setDischargedate(discharge);
         visitation.setVisittype(type);
-        visitation.setPreviouslocstion("Records");
+        visitation.setPreviouslocstion(previous);
         visitation.setReview(Boolean.FALSE);
         session.save(visitation);
         session.getTransaction().commit();

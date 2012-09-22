@@ -55,7 +55,7 @@
                 return;
             }
 
-            Visitationtable visit = mgr.createNewVisit(patientid, "", "", unitName, type, "");
+            Visitationtable visit = mgr.createNewVisit(patientid, "", "", unitName,(String)session.getAttribute("unit"), type, "");
             mgr.updateFolderLocation((String)session.getAttribute("unit"), unitName, patientid);
             mgr.addPatientConsultation(visit.getVisitid(), type);
             session.setAttribute("class","alert-success");

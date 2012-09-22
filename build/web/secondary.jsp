@@ -7,10 +7,10 @@
 <%@page import="entities.*,java.util.List,java.util.Date,java.text.SimpleDateFormat,java.text.DateFormat" %>
 <!DOCTYPE html>
 <% Users user = (Users) session.getAttribute("staff");
-            if(user == null){
-                session.setAttribute("lasterror", "Please Login");
-                response.sendRedirect("index.jsp");
-            } %>
+    if (user == null) {
+        session.setAttribute("lasterror", "Please Login");
+        response.sendRedirect("index.jsp");
+    }%>
 
 <html>
     <head>
@@ -163,7 +163,7 @@
                 tr.appendChild(td5);
                 tr.appendChild(td6);
                 document.getElementById( id2 ).appendChild( tr );
-               var ch = document.getElementById("labtest");
+                var ch = document.getElementById("labtest");
                
                 btn.onclick = function(){
     
@@ -345,7 +345,7 @@
                 return false;
             });
         </script>
-       
+
     </head>
 
 
@@ -407,24 +407,24 @@
 
                                     Date date = new Date();
                                     //System.out.println(dateFormat.format(date));
-                                    List visits = mgr.listSecondaryConsultation((String)session.getAttribute("unit"));
-                                    if(visits != null){
-                                    for (int i = 0; i < visits.size(); i++) {
-                                        Visitationtable visit = (Visitationtable) visits.get(i);
-                                        vs = mgr.currentVisitations(visit.getVisitid());
+                                    List visits = mgr.listSecondaryConsultation((String) session.getAttribute("unit"));
+                                    if (visits != null) {
+                                        for (int i = 0; i < visits.size(); i++) {
+                                            Visitationtable visit = (Visitationtable) visits.get(i);
+                                            vs = mgr.currentVisitations(visit.getVisitid());
 
-                                       // List patientHistory = mgr.patientHistory(visit.getPatientid());
-                                %>
+                                            // List patientHistory = mgr.patientHistory(visit.getPatientid());
+%>
                                 <tr>
                                     <td>
                                        <!-- <a href="condetails.jsp?patientid=<%=visit.getPatientid()%>&id=<%=visit.getVisitid()%>"> -->
-                                            <%= visit.getPatientid()%> </a> 
+                                        <%= visit.getPatientid()%> </a> 
                                     </td>
                                     <td>
                                         <%= mgr.getPatientByID(visit.getPatientid()).getFname()%>, <%= mgr.getPatientByID(visit.getPatientid()).getMidname()%> <%= mgr.getPatientByID(visit.getPatientid()).getLname()%>
                                     </td>
                                     <td>
-                                        <%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid())==null?mgr.sponsorshipDetails(visit.getPatientid()).getType():mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%> 
+                                        <%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(visit.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%> 
                                     </td>
                                     <td>
                                         <%= formatter.format(mgr.getPatientByID(visit.getPatientid()).getDateofregistration())%>
@@ -460,11 +460,11 @@
          } else {
          file = "getnhistreatment.jsp";
          }*/
-if(visits != null){
-        for (int i = 0; i < visits.size(); i++) {
-            Visitationtable visit = (Visitationtable) visits.get(i);
-            // vs = mgr.currentVisitations(visit.getVisitid());
-            List patientHistory = mgr.patientHistory(visit.getPatientid());
+        if (visits != null) {
+            for (int i = 0; i < visits.size(); i++) {
+                Visitationtable visit = (Visitationtable) visits.get(i);
+                // vs = mgr.currentVisitations(visit.getVisitid());
+                List patientHistory = mgr.patientHistory(visit.getPatientid());
     %>
     <script type="text/javascript">
         $(document).ready(function(){
@@ -526,32 +526,32 @@ if(visits != null){
                             <tr>
                                 <td>Temperature</td>
 
-                                <td><b><%=vts[0]==null?"":vts[0]%> (Celsius)</b></td>
+                                <td><b><%=vts[0] == null ? "" : vts[0]%> (Celsius)</b></td>
                             </tr>
 
                             <tr>
                                 <td>Weight </td>
 
-                                <td><b><%=vts[1]==null?"":vts[1]%> (Kg)</b></td>
+                                <td><b><%=vts[1] == null ? "" : vts[1]%> (Kg)</b></td>
                             </tr>
 
                             <tr>
                                 <td>Height </td>
 
-                                <td><b><%=vts[2]==null?"":vts[2]%> (m)</b></td>
+                                <td><b><%=vts[2] == null ? "" : vts[2]%> (m)</b></td>
                             </tr>
                             <tr>
                                 <td>Blood Pressure </td>
 
-                                <td><b>Systolic <%=bps[0]==null?"":bps[0]%></b><br/>
-                                    <b>Diatolic <%=bps[1]==null?"":bps[1]%></b><br/>
-                                    <b>Pulse <%=vts[4]==null?"":vts[4]%> (minutes)</b><br/>
+                                <td><b>Systolic <%=bps[0] == null ? "" : bps[0]%></b><br/>
+                                    <b>Diatolic <%=bps[1] == null ? "" : bps[1]%></b><br/>
+                                    <b>Pulse <%=vts[4] == null ? "" : vts[4]%> (minutes)</b><br/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Symptoms </td>
 
-                                <td><b><%=vts[5]==null?"":vts[5]%></b></td>
+                                <td><b><%=vts[5] == null ? "" : vts[5]%></b></td>
                             </tr>
 
                         </table>
@@ -575,10 +575,10 @@ if(visits != null){
                             <tbody style="height: 100px; overflow-y: auto;">
                                 <% for (int r = 0; r < patientHistory.size(); r++) {
                                         Visitationtable vps = (Visitationtable) patientHistory.get(r);
-                                        if(vps.getVitals() !=""){
-                                        String[] vts = vps.getVitals().split("-");
-                                        if(vts != null){
-                                        String[] bps = vts[3].split(":");
+                                        if (vps.getVitals() != "") {
+                                            String[] vts = vps.getVitals().split("-");
+                                            if (vts != null) {
+                                                String[] bps = vts[3].split(":");
                                 %>
                                 <tr>
 
@@ -587,11 +587,13 @@ if(visits != null){
                                     </td>
 
                                     <td>
-                                        
+
                                     </td>
 
                                 </tr>
-                                <%}else{%><tr><td>No History</td></tr><%}}}%>
+                                <%} else {%><tr><td>No History</td></tr><%}
+                                        }
+                                    }%>
                             </tbody>
 
                         </table>
@@ -793,7 +795,7 @@ if(visits != null){
                                                 <option value="Select">Select Treatment</option>
                                                 <%
                                                     //treatments = mgr.listNhisTreatment();
-                                                treatments = mgr.listTreatments();
+                                                    treatments = mgr.listTreatments();
                                                     String replacedString = "";
                                                     String[] treatmentString = null;
                                                     if (treatments != null) {
@@ -1068,7 +1070,7 @@ if(visits != null){
                                 <%
                                     // List treatments = mgr.patientTreatment(int visitationid);
                                     //investigations = mgr.listNhisInvesigation();
-                                investigations = mgr.listInvestigation();
+                                    investigations = mgr.listInvestigation();
                                     if (investigations != null) {
                                         for (int p = 0; p < investigations.size(); p++) {
                                             Investigation investigation = (Investigation) investigations.get(p);
@@ -1140,67 +1142,66 @@ if(visits != null){
                                     <th>
                                         <label > View </label>
                                     </th>
-                                    
+
 
                                 </tr>
                             </thead>
                             <tbody>
-                                <% List labids = mgr.listLabordersByVisitid(visit.getVisitid()); 
-                                if(labids.size() > 0){
-                                    System.out.println(labids.size());
-                                Laborders laborder = (Laborders)labids.get(0);
-                               if(labids != null){
+                                <% List labids = mgr.listLabordersByVisitid(visit.getVisitid());
+                                    if (labids.size() > 0) {
+                                        System.out.println(labids.size());
+                                        Laborders laborder = (Laborders) labids.get(0);
+                                        if (labids != null) {
                                 %>
-                                 <tr>
+                                <tr>
                                     <td>
-                                        Ordered Doctor
                                     </td>
                                     <td>
                                         <%=laborder.getOrderdate()%> 
                                     </td>
                                     <td>
-                                         <%=laborder.getDonedate()%> 
-                                        
+                                        <%=laborder.getDonedate()%> 
+
                                     </td>
-                                    
+
                                     <td>
                                         <button  value="view" class="btn btn-danger btn-large" onclick="updateLaborders();return false;">
 
-                                        <i class="icon-white icon-arrow-right"> </i> View Lab Report
-                                    </button>
+                                            <i class="icon-white icon-arrow-right"> </i> View Lab Report
+                                        </button>
                                     </td>
                                 </tr>
-                                <% }}else{%>
+                                <% }
+                                } else {%>
                             <div>No laboratory request for today's visit</div>
-                                <%}
+                            <%}
                                 List results = mgr.listLabordersByPatientid(visit.getPatientid());
-                                if(results != null){
+                                if (results != null) {
                                     for (int var = 0; var < results.size(); var++) {
                                         Laborders laborders = (Laborders) results.get(var);
-                                        if(!laborders.getViewed()){
-                                %>
-                                <tr>
-                                    <td>
-                                        Ordered Doctor
-                                    </td>
-                                    <td>
-                                        <%=laborders.getOrderdate()%> 
-                                    </td>
-                                    <td>
-                                         <%=laborders.getDonedate()%> 
-                                        <!-- <input type="hidden" name="labid" value="<%=laborders.getOrderid()%>"/> -->
-                                    </td>
-                                    
-                                    <td>
-                                        <button  value="view" class="btn btn-danger btn-large" onclick="updateLaborders();return false;">
+                                        if (!laborders.getViewed()) {
+                            %>
+                            <tr>
+                                <td>
+                                </td>
+                                <td>
+                                    <%=laborders.getOrderdate()%> 
+                                </td>
+                                <td>
+                                    <%=laborders.getDonedate()%> 
+                                   <!-- <input type="hidden" name="labid" value="<%=laborders.getOrderid()%>"/> -->
+                                </td>
+
+                                <td>
+                                    <button  value="view" class="btn btn-danger btn-large" onclick="updateLaborders();return false;">
 
                                         <i class="icon-white icon-arrow-right"> </i> View Lab Report
                                     </button>
-                                    </td>
-                                </tr>
-                                <%}
-                                    }
-                                }%>
+                                </td>
+                            </tr>
+                            <%}
+                                        }
+                                    }%>
                             </tbody>
 
                         </table>
@@ -1274,20 +1275,20 @@ if(visits != null){
 
                                 <td>
                                     <select name="unitid">
-                                            <% List list = mgr.listWard();
-                                                for (int j = 0; j < list.size(); j++) {
-                                                    Ward ward = (Ward) list.get(j);
-                                            %>
-                                            <option value="<%=ward.getType()%>_<%=ward.getWardid()%>"><%=ward.getWardname()%></option>
-                                            <%}
-                                                List lists = mgr.listUnits();
+                                        <% List list = mgr.listWard();
+                                            for (int j = 0; j < list.size(); j++) {
+                                                Ward ward = (Ward) list.get(j);
+                                        %>
+                                        <option value="<%=ward.getType()%>_<%=ward.getWardid()%>"><%=ward.getWardname()%></option>
+                                        <%}
+                                            List lists = mgr.listUnits();
 
-                                                for (int r = 0; r < lists.size(); r++) {
-                                                    Units unit = (Units) lists.get(r);
-                                            %>  
-                                            <option value="<%=unit.getType()%>_<%=unit.getUnitid()%>"><%=unit.getUnitname()%></option>
-                                            <%}
-                                               %>
+                                            for (int r = 0; r < lists.size(); r++) {
+                                                Units unit = (Units) lists.get(r);
+                                        %>  
+                                        <option value="<%=unit.getType()%>_<%=unit.getUnitid()%>"><%=unit.getUnitname()%></option>
+                                        <%}
+                                        %>
                                     </select>
                                     <input type="hidden" name="patientid" value="<%=visit.getPatientid()%>"/>
                                     <input type="hidden" name="id" value="<%=visit.getVisitid()%>"/> 
@@ -1328,8 +1329,8 @@ if(visits != null){
     </div>
     <% //}%>
     <%   //  }
+            }
         }
-}
     %>
 
 </body>
