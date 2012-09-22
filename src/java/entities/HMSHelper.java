@@ -9,7 +9,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -1812,7 +1814,7 @@ public class HMSHelper {
         session.getTransaction().commit();
         return app;
     }
-    
+
     public Appoint honorAppointment(int id) throws ParseException {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -1820,7 +1822,7 @@ public class HMSHelper {
         Appoint app = (Appoint) session.get(Appoint.class, id);
 
         app.setHonored(Boolean.TRUE);
-        
+
         session.update(app);
         session.getTransaction().commit();
         return app;
@@ -2440,7 +2442,7 @@ public class HMSHelper {
         session.getTransaction().commit();
         return newborn;
     }
-    
+
     public Appoint getAppointmentById(int id) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -2735,5 +2737,62 @@ public class HMSHelper {
             return false;
         }
         return true;
+    }
+
+    /**
+     * **
+     * Nezer Sept 22th Sept 2012 *
+     */
+    public List listPatientVisits(String patientId) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from Visitationtable where patientid ='" + patientId + "'").list();
+        session.getTransaction().commit();
+        return result;
+    }
+
+//    public void getPatientConsultationByVisitid(int visitid) {
+//        session = HibernateUtil.getSessionFactory().getCurrentSession();
+//        session.beginTransaction();
+//
+//      //  List patientconsultation = session.createQuery("from Patientconsultation where visitid='" + visitid + "'").list();
+//
+//      //  session.getTransaction().commit();
+//        //    return patientconsultation;
+//
+//
+//        String SQL_QUERY = " from Insurance as insurance where insurance lngInsuranceId = '1' ";
+//        Query query = session.createQuery(SQL_QUERY);
+//        for (Iterator it = query.iterate(); it.hasNext();) {
+//            Patientconsultation insurance = (Patientconsultation) it.next();
+//            System.out.println("ID: " + insurance.getAmountpaid());
+//            System.out.println("Name: "+ insurance.getVisitid());
+//
+//        }
+//    }
+    public List getPatientConsultationByVisitid(int visitid) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+
+        Query query = session.createQuery("from Patientconsultation where visitid = :code ");
+        query.setParameter("code", visitid);
+        List list = query.list();
+
+        session.getTransaction().commit();
+        return list;
+    }
+    
+     public List getPatientTreatmentByVisitid(int visitid) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+
+        Query query = session.createQuery("from Patienttreatment where visitationid = :code ");
+        query.setParameter("code", visitid);
+        List list = query.list();
+
+        session.getTransaction().commit();
+        return list;
     }
 }

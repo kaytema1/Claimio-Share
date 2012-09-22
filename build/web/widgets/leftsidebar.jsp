@@ -121,6 +121,9 @@
                 <li class="subitem1">
                     <a href="accounts.jsp">Current Bills <span><%=accs.size()%></span></a>
                 </li>
+                 <li class="subitem1">
+                    <a href="account_search.jsp">Patient Bills </a><span></span>
+                </li>
                 <li class="subitem1">
                     <a href="furtheraccounting.jsp">Re-Visit</a>
                 </li>
