@@ -222,7 +222,7 @@
                                         }
                                 %>
                                 <tr>
-                                    <td><%=sponsorName%> </td>
+                                    <td><a href="sponsorbreakdown.jsp?sid=<%=sponsor.getSponshorshipid()%>"><%=sponsorName%></a> </td>
                                     <td><%=sponsorTotal%></td>
                                 </tr>
                                 <%

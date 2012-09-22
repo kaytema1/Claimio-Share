@@ -2750,26 +2750,7 @@ public class HMSHelper {
         session.getTransaction().commit();
         return result;
     }
-
-//    public void getPatientConsultationByVisitid(int visitid) {
-//        session = HibernateUtil.getSessionFactory().getCurrentSession();
-//        session.beginTransaction();
-//
-//      //  List patientconsultation = session.createQuery("from Patientconsultation where visitid='" + visitid + "'").list();
-//
-//      //  session.getTransaction().commit();
-//        //    return patientconsultation;
-//
-//
-//        String SQL_QUERY = " from Insurance as insurance where insurance lngInsuranceId = '1' ";
-//        Query query = session.createQuery(SQL_QUERY);
-//        for (Iterator it = query.iterate(); it.hasNext();) {
-//            Patientconsultation insurance = (Patientconsultation) it.next();
-//            System.out.println("ID: " + insurance.getAmountpaid());
-//            System.out.println("Name: "+ insurance.getVisitid());
-//
-//        }
-//    }
+    
     public List getPatientConsultationByVisitid(int visitid) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -2794,5 +2775,50 @@ public class HMSHelper {
 
         session.getTransaction().commit();
         return list;
+    }
+     
+     public List getPatientInvestigatonsByVisitid(int visitid) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+
+        Query query = session.createQuery("from Patientinvestigation where visitationid = :code ");
+        query.setParameter("code", visitid);
+        List list = query.list();
+
+        session.getTransaction().commit();
+        return list;
+    }
+     
+     public List listAllPatientVisitsForDate(Date specificDate) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from Visitationtable where date = '" + specificDate + "'").list();
+        session.getTransaction().commit();
+        return result;
+    }
+     
+      public List listAllPatientVisitsForDuration(Date startDate, Date endDate) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from Visitationtable where date between '" + startDate + "' and '" + endDate + "'").list();
+        session.getTransaction().commit();
+        return result;
+    }
+      
+       public List listAllPatientVisits() {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from Visitationtable").list();
+        session.getTransaction().commit();
+        return result;
+    }
+       
+       public List listPatientsOfSponsor(int sponsorId) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from Sponsorhipdetails where sponsorid = '" + sponsorId + "'").list();
+        session.getTransaction().commit();
+        return result;
     }
 }
