@@ -728,7 +728,7 @@
 <script src="js/application.js"></script>
 
 <script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
-<!--
+
 <script type="text/javascript" src="third-party/jQuery-UI-Date-Range-Picker/js/date.js"></script>
 <script type="text/javascript" src="third-party/jQuery-UI-Date-Range-Picker/js/daterangepicker.jQuery.js"></script>
 
@@ -738,7 +738,6 @@
 
 <script src="third-party/jQuery-UI-FileInput/js/enhance.min.js" type="text/javascript"></script>
 <script src="third-party/jQuery-UI-FileInput/js/fileinput.jquery.js" type="text/javascript"></script>
--->
 <script type="text/javascript" src="js/tablecloth.js"></script>
 <script type="text/javascript" src="js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="js/demo.js"></script>
@@ -759,7 +758,7 @@
         $(".footer").fadeIn();
         $(".subnav").fadeIn();
         $(".progress1").hide();
-        $(".numeric").numeric();
+       
 
         menu_a.click(function(e) {
             e.preventDefault();
