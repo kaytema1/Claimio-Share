@@ -46,10 +46,5 @@
     <table-filter match-name="users"/>
     <table-filter match-name="loggingtable"/>
     <table-filter match-name="appoint"/>
-    <table-filter match-name="labtypes"/>
-    <table-filter match-name="detailed_investigation"/>
-    <table-filter match-name="detailedinv_posinvresults"/>
-    <table-filter match-name="labtype_detailedinv"/>
-    <table-filter match-name="maininv_subinv"/>
-    <table-filter match-name="possibleinv_results"/>
+    <table-filter match-name="appointType"/>
 </hibernate-reverse-engineering>

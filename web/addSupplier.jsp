@@ -93,7 +93,7 @@
                         <ul class="nav pull-right">
 
                             <li class="dropdown">
-                                <a class="active" > Logged in as:  Mr. Amoo </a>
+                                <a class="active" > Logged in as:  <%=mgr.getStafftableByid(user.getStaffid()).getLastname() %> <%=mgr.getStafftableByid(user.getStaffid()).getOthername() %></a>
 
                             </li>
                             <li class="divider-vertical"></li>

@@ -20,5 +20,3 @@
     @import "css/custom-theme/jquery-ui-1.8.16.custom.css";
 </style>
 <link href="css/tablecloth.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="third-party/jQuery-UI-Date-Range-Picker/css/ui.daterangepicker.css" media="screen" rel="Stylesheet" type="text/css" />
-

@@ -56,10 +56,6 @@
                 color: #777777;
                 /* padding: 7px 14px; */
             }
-            
-            .modal {
-                top: 65%;
-            }
         </style>
 
         <link href="css/tablecloth.css" rel="stylesheet" type="text/css" media="screen" />
@@ -111,8 +107,49 @@
 
         <!-- Navbar
         ================================================== -->
-        
-        <%@include file="widgets/header.jsp" %>
+        <div style="display: none;" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+                    <a class="brand" href="../"><img src="images/logo.png" width="200px;" /></a>
+
+                    <div style="margin-top: 10px;" class="nav-collapse">
+                       <!-- <ul class="nav pull-right">
+
+                            <li class="dropdown">
+                               <!-- <a class="active" > Logged in as:  Mr. Amoo </a>
+
+                            </li>
+                            <li class="divider-vertical"></li>
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> Account <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+
+                                    <li>
+                                        <a target="_blank" href="bootstrap.min.css"><i class="icon-wrench"></i> Settings </a>
+                                    </li>
+
+                                    <li>
+                                        <a target="_blank" href="bootstrap.css"><i class="icon-question-sign"></i> Help </a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="bootstrap.css"><i class="icon-share"></i> Feedback </a>
+                                    </li>
+                                    <li class="divider"></li>
+
+                                    <li>
+                                        <a target="_blank" href="logout.jsp"><i class="icon-off"></i> Log Out</a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                        </ul>-->
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="container-fluid">
 
@@ -123,10 +160,12 @@
                 <div style="margin-top: 20px; margin-bottom: -50px;" class="subnav navbar-fixed-top hide">
                     <ul class="nav nav-pills">
 
-                        
+                        <li>
+                            <a href="#">Home</a><span class="divider"></span>
+                        </li>
 
                     </ul>
-                </div>  
+                </div>
 
             </header>
 
@@ -148,15 +187,6 @@
 
                 <!-- Headings & Paragraph Copy -->
                 <div class="row">
-                    
-                    <%if (session.getAttribute("lasterror") != null) {%>
-                    <div class="alert hide <%=session.getAttribute("class")%> span12 center">
-                        <b> <%=session.getAttribute("lasterror")%>  </b>
-                    </div>
-                    <br/>
-                    <div style="margin-bottom: 20px;" class="clearfix"></div>
-                    <%session.removeAttribute("lasterror");
-                        }%>
 
                     <%
 
@@ -170,19 +200,24 @@
 
 
                     %>     
-                    <br/>
-                    <br/>
-                    <br/>
-                    <div  class="modal hide">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h3>Sign In</h3>
-                        </div>
 
-                        <form class="form-horizontal" action="action/login.jsp" method="post" name="items" >
+                    <div style="margin-top: 0px; text-align: center;" class="span12 offset3 content1 hide">
 
-                            <fieldset>
-                                <div class="modal-body">
+                        <div style="padding-bottom: 80px;" class="span9 thumbnail well content">
+                            <ul style="margin-left: 0px;" class="breadcrumb">
+                                <li>
+                                    <h4>Sign in</h4>
+                                    <br/>
+
+
+                                </li>
+
+                            </ul>
+
+                            <form action="action/login.jsp" method="post" name="items" >
+
+                                <fieldset>
+
                                     <div class="control-group">
                                         <label class="control-label" for="input01"> Username </label>
                                         <div class="controls">
@@ -199,37 +234,36 @@
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="input01"> Unit </label>
-                                        <div class="controls">
-                                            <select class="input-medium" name="unit">
-                                                <% List list = mgr.listWard();
-                                                    for (int i = 0; i < list.size(); i++) {
-                                                        Ward ward = (Ward) list.get(i);
-                                                %>
-                                                <option value="<%=ward.getType()%>_<%=ward.getWardid()%>"><%=ward.getWardname()%></option>
-                                                <%}
-                                                    List lists = mgr.listUnits();
 
-                                                    for (int r = 0; r < lists.size(); r++) {
-                                                        Units unit = (Units) lists.get(r);
-                                                %>  
-                                                <option value="<%=unit.getType()%>_<%=unit.getUnitid()%>"><%=unit.getUnitname()%></option>
-                                                <%}
-                                                    List ls = mgr.listConRooms();
-                                                    for (int x = 0; x < ls.size(); x++) {
-                                                        Consultingrooms conroom = (Consultingrooms) ls.get(x);
-                                                %>
-                                                <option value="<%=conroom.getType()%>_<%=conroom.getConsultingroomid()%>"><%=conroom.getConsultingroom()%></option>
-                                                <%}%>
-                                            </select>
+                                        <select name="unit">
+                                            <% List list = mgr.listWard();
+                                                for (int i = 0; i < list.size(); i++) {
+                                                    Ward ward = (Ward) list.get(i);
+                                            %>
+                                            <option value="<%=ward.getType()%>_<%=ward.getWardid()%>"><%=ward.getWardname()%></option>
+                                            <%}
+                                                List lists = mgr.listUnits();
 
-                                            <p class="help-block"></p>
-                                        </div>
-                                    </div>
+                                                for (int r = 0; r < lists.size(); r++) {
+                                                    Units unit = (Units) lists.get(r);
+                                            %>  
+                                            <option value="<%=unit.getType()%>_<%=unit.getUnitid()%>"><%=unit.getUnitname()%></option>
+                                            <%}
+                                                List ls = mgr.listConRooms();
+                                                for(int x = 0 ; x < ls.size(); x++){
+                                                    Consultingrooms conroom = (Consultingrooms) ls.get(x);
+                                            %>
+                                            <option value="<%=conroom.getType()%>_<%=conroom.getConsultingroomid()%>"><%=conroom.getConsultingroom()%></option>
+                                                    <%}%>
+                                    </select>
+
+                                    <p class="help-block"></p>
                                 </div>
-                                <div class="modal-footer">
 
-                                    <button class="btn btn-info btn-large" type="submit" value="login" name="action">
-                                        <i class=" icon-lock icon-white"> </i> Sign In 
+                                <div class="form-actions">
+
+                                    <button class="btn btn-danger btn-large" type="submit" value="login" name="action">
+                                        <i class="icon-arrow-right icon-white"> </i> Sign Up 
                                     </button>
 
                                 </div>
@@ -237,25 +271,26 @@
                         </form>
 
 
+
                     </div>
 
-
-                    <div class="clearfix"></div>
-
                 </div>
+                <div class="clearfix"></div>
+
+            </div>
 
 
-            </section>
+        </section>
 
-            <!--    <footer style="display: none; position: static; bottom: 500px;"  class="footer">
-                    <p style="text-align: center" class="pull-right">
-                        <img src="images/logo.png" width="100px;" />
-                    </p>
-                </footer>   -->
+        <footer style="display: none; margin-top: 50px;" class="footer">
+            <p style="text-align: center" class="pull-right">
+                <img src="images/logo.png" width="100px;" />
+            </p>
+        </footer>
 
-        </div><!-- /container -->    
+    </div><!-- /container -->    
 
-    </div>
+</div>
 </div>
 <!--end static dialog-->
 
@@ -292,15 +327,13 @@
         var menu_ul = $('.menu > li > ul'), menu_a = $('.menu > li > a');
 
         menu_ul.hide();
-        $(".alert").fadeIn();
-        $(".modal").fadeIn();
+
         $(".menu").fadeIn();
         $(".content1").fadeIn();
         $(".navbar").fadeIn();
         $(".footer").fadeIn();
         $(".subnav").fadeIn();
         $(".progress1").hide();
-        
 
         menu_a.click(function(e) {
             e.preventDefault();

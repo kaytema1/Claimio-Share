@@ -13,10 +13,10 @@
             if(user == null){
                 session.setAttribute("lasterror", "Please Login");
                 response.sendRedirect("index.jsp");
-            } %>
+            } HMSHelper mgr = new HMSHelper();%>
 <html>
     <head>
-        
+        <%@include file="widgets/stylesheets.jsp" %>
         <%
             boolean correctDateFound = false;
             boolean singleDateValue = true;
@@ -67,7 +67,6 @@
 
             System.out.print("dateValue : " + dateValue);
         %>
-        <%@include file="widgets/stylesheets.jsp" %>
     </head>
     <body data-spy="scroll" data-target=".subnav" data-offset="50">
 
@@ -111,7 +110,7 @@
 
                                     int regConsultation = 20;
                                     double patientConsultation = 0;
-                                    HMSHelper mgr = new HMSHelper();
+                                   // HMSHelper mgr = new HMSHelper();
 
                                     List sponsors = mgr.listSponsors();
                                     Sponsorship sponsor;
@@ -223,7 +222,7 @@
                                         }
                                 %>
                                 <tr>
-                                    <td><a href="sponsorbreakdown.jsp?sid=<%=sponsor.getSponshorshipid()%>"><%=sponsorName%></a> </td>
+                                    <td><%=sponsorName%> </td>
                                     <td><%=sponsorTotal%></td>
                                 </tr>
                                 <%

@@ -13,7 +13,7 @@
             if(user == null){
                 session.setAttribute("lasterror", "Please Login");
                 response.sendRedirect("index.jsp");
-            } %>
+            }HMSHelper mgr = new HMSHelper(); %>
 <html>
     <head>
         <%@include file="widgets/stylesheets.jsp" %>
@@ -115,7 +115,7 @@
 
                                     int regConsultation = 20;
                                     double patientConsultation = 0;
-                                    HMSHelper mgr = new HMSHelper();
+                                   // HMSHelper mgr = new HMSHelper();
 
                                     //       List visits = mgr.listVisitations();
                                     List patients = mgr.listPatients();

@@ -26,6 +26,7 @@
             System.out.println(id);
             HMSHelper mgr = new HMSHelper();
             if (!patientid.equalsIgnoreCase("") || id != 0) {
+                mgr.updateVisitation(id, user.getStaffid());
                 String diagnosis[] = request.getParameterValues("diaglist") == null ? null : request.getParameterValues("diaglist");
                 String treatment[] = request.getParameterValues("data") == null ? null : request.getParameterValues("data");
                 String labtest[] = request.getParameterValues("labtest") == null ? null : request.getParameterValues("labtest");
@@ -107,7 +108,7 @@
                 }
                 mgr.updateVisitNotes(id, notes);
                 mgr.updateVisitation(patientid, id, unitName, vitals, (String)session.getAttribute("unit"));
-                mgr.updateVisitation(id, user.getStaffid());
+                
                 //String registrationDate = request.getParameter("dor");
 
                 mgr.updateFolderLocation((String)session.getAttribute("unit"), unitName, patientid);

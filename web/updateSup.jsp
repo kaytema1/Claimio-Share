@@ -19,7 +19,7 @@
             if(user == null){
                 session.setAttribute("lasterror", "Please Login");
                 response.sendRedirect("index.jsp");
-            } %>
+            }HMSHelper its = new HMSHelper(); %>
 
 <% try {
         HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
@@ -50,7 +50,7 @@
             System.out.println("ere");
 
 
-            HMSHelper its = new HMSHelper();
+           
             Post it = null;
 
 

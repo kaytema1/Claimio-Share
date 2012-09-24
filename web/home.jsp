@@ -11,7 +11,7 @@
             if(user == null){
                 session.setAttribute("lasterror", "Please Login");
                 response.sendRedirect("index.jsp");
-            } %>
+            } HMSHelper mgr = new HMSHelper(); %>
 <html lang="en">
     <head>
         <%@include file="widgets/stylesheets.jsp" %>
@@ -64,7 +64,7 @@
                             </thead>
                             <tbody>
                                 <%
-                                    HMSHelper mgr = new HMSHelper();
+                                   
                                     // Patient singleton = (Patient) session.getAttribute("patient");
 
                                     // Sponsorhipdetails sponsorDetail = mgr.sponsorshipDetails(singleton.getPatientid());

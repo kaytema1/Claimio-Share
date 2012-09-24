@@ -20,16 +20,13 @@
 <div style="height: 100%; position: fixed;" class="span3">
     <ul style="display: none;"  class="menu hide">
         <li class="item1">
-            <a  href="#"><i class="icon-folder-open"></i> Records Department</a>
+            <a  href="#"><i class="icon-folder-open"></i> Patient Management</a>
             <ul>
                 <li class="subitem1">
                     <a href="records.jsp">Front Desk </a>
                 </li>
                 <li class="subitem2">
-                    <a href="opd.jsp">Nurses Station </a>
-                </li>
-                <li class="subitem3">
-                    <a href="listpatients.jsp">All Patients </a>
+                    <a href="opd.jsp">Out Patient Department </a>
                 </li>
 
             </ul>
@@ -43,7 +40,7 @@
                     <a href="consultingroom.jsp">Patients <span><%=rms.size()%></span></a>
                 </li>
                 <li class="subitem1">
-                    <a href="secondary.jsp">Re-Visit </a>
+                    <a href="secondary.jsp">Re-Visit <span></span></a>
                 </li>
                 <li class="subitem2">
                     <a href="#">Appointments <span>6</span></a>
@@ -64,16 +61,16 @@
             </a> 
             <ul>
                 <li class="subitem1">
-                    <a href="ward.jsp">In Patients </a>
+                    <a href="ward.jsp">In Patients <span></span></a>
                 </li>
                 <li class="subitem2">
-                    <a href="#">New Ward Report </a>
+                    <a href="#">New Ward Report <span></span></a>
                 </li>
                 <li class="subitem3">
-                    <a href="#">Ward Reports </a>
+                    <a href="#">Ward Reports Previous Reports <span></span></a>
                 </li> 
                 <li class="subitem4">
-                    <a href="#">Schedule</a>
+                    <a href="#">Schedule<span></span></a>
                 </li> 
 
             </ul>
@@ -82,23 +79,19 @@
             <a href="#"><i class="icon-share"></i> Laboratory  </a>
             <ul>
                 <li class="subitem1">
-                    <a href="laboratory.jsp">Patients <span><%=labs.size()%></span></a>
+                    <a href="laboratory.jsp">Patients </a><span><%=labs.size()%></span>
                 </li>
                 <li class="subitem1">
-                    <a href="furtherinvestigation.jsp">Re-Visit </a>
+                    <a href="furtherinvestigation.jsp">Re-Visit <span></span></a>
                 </li>
-                
+                <li class="subitem2">
+
+                </li>
                 <li class="subitem3">
-                    <a href="#">Outstanding Investigations<span>6</span></a>
+                    <a href="">Outstanding Treatments</a><span>6</span>
                 </li>
                 <li class="subitem3">
                     <a href="#">Procurement Sheet</a>
-                </li>
-                <li class="subitem4">
-                    <a href="addlabtype.jsp">Add Lab Type</a>
-                </li>
-                <li class="subitem4">
-                    <a href="addmaininv.jsp">Add Investigation</a>
                 </li>
 
             </ul>
@@ -107,16 +100,16 @@
             <a href="#"><i class="icon-check"></i> Pharmacy </a>
             <ul>
                 <li class="subitem1">
-                    <a href="pharmacy.jsp">Patients <span><%=pharmacy.size()%></span></a>
+                    <a href="pharmacy.jsp">Patients </a><span><%=pharmacy.size()%></span>
                 </li>
                 <li class="subitem1">
-                    <a href="furthertreatment.jsp">Re-Visit </a>
+                    <a href="furthertreatment.jsp">Re-Visit <span></span></a>
                 </li>
                 <li class="subitem3">
-                    <a href="#">Outstanding Treatments<span>6</span></a>
+                    <a href="">Outstanding Treatments</a><span>6</span>
                 </li>
                 <li class="subitem3">
-                    <a href="#">Procurement Sheet</a>
+                    <a href="">Procurement Sheet</a>
                 </li>
 
             </ul>
@@ -125,13 +118,10 @@
             <a href="#"><i class="icon-check"></i> Accounts and Billing</a>
             <ul>
                 <li class="subitem1">
-                    <a href="accounts.jsp">Current Bills <span><%=accs.size()%></span></a>
-                </li>
-                 <li class="subitem1">
-                    <a href="account_search.jsp">Patient Bills </a><span></span>
+                    <a href="accounts.jsp">Current Bills </a><span><%=accs.size()%></span>
                 </li>
                 <li class="subitem1">
-                    <a href="furtheraccounting.jsp">Re-Visit</a>
+                    <a href="furtheraccounting.jsp">Re-Visit <span></span></a>
                 </li>
                 <li class="subitem3">
                     <a href="anballdepartments.jsp">Departmental Bills</a>
@@ -139,9 +129,9 @@
                 <li class="subitem3">
                     <a href="anballpatientsrevenues.jsp">All Patients Revenues</a>
                 </li>
-            <!--    <li class="subitem3">
+                <li class="subitem3">
                     <a href="anbpatientrevenues.jsp">Patient Revenues</a>
-                </li>  -->
+                </li>
                 <li class="subitem3">
                     <a href="anballsponsorsrevenues.jsp">Sponsors Revenues</a>
                 </li>

@@ -18,12 +18,12 @@
                 response.sendRedirect("index.jsp");
             }
             Users user = (Users) session.getAttribute("staff");
-            if (user == null) {
+            if(user == null){
                 session.setAttribute("lasterror", "Please Login");
                 response.sendRedirect("index.jsp");
-            }
+            } 
             //Patient patient = mgr.getPatientByID(patientid);
-        %>
+%>
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
         <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -38,10 +38,10 @@
         <style type="text/css" title="currentStyle">
             @import "css/jquery.dataTables_themeroller.css";
             @import "css/custom-theme/jquery-ui-1.8.16.custom.css";
-                body {
-                    overflow: hidden;
-                }
-            
+            body {
+                overflow: hidden;
+            }
+
             .large_button {
                 background-color: #35AFE3;
                 background-image: -moz-linear-gradient(center top , #45C7EB, #2698DB);
@@ -73,7 +73,49 @@
 
         <!-- Navbar
         ================================================== -->
-        <%@include file="widgets/header.jsp" %> 
+        <div style="display: none;" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+                    <a class="brand" href="../"><img src="images/logo.png" width="200px;" /></a>
+
+                    <div style="margin-top: 10px;" class="nav-collapse">
+                        <ul class="nav pull-right">
+
+                             <li class="dropdown">
+                                <a class="active" > Logged in as:  <%=mgr.getStafftableByid(user.getStaffid()).getLastname() %> <%=mgr.getStafftableByid(user.getStaffid()).getOthername() %></a>
+
+                            </li>
+                            <li class="divider-vertical"></li>
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> Account <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+
+                                    <li>
+                                        <a target="_blank" href="bootstrap.min.css"><i class="icon-wrench"></i> Settings </a>
+                                    </li>
+
+                                    <li>
+                                        <a target="_blank" href="bootstrap.css"><i class="icon-question-sign"></i> Help </a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="bootstrap.css"><i class="icon-share"></i> Feedback </a>
+                                    </li>
+                                    <li class="divider"></li>
+
+                                    <li>
+                                        <a target="_blank" href="logout.jsp"><i class="icon-off"></i> Log Out</a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="container-fluid">
 
@@ -85,10 +127,10 @@
                     <ul class="nav nav-pills">
 
                         <li>
-                            <a href="records.jsp">Records</a><span class="divider"></span>
+                            <a href="#">Front Desk</a><span class="divider"></span>
                         </li>
-                        <li class="active">
-                            <a href="#">All Patients</a><span class="divider"></span>
+                        <li>
+                            <a href="#">Recent Patients</a><span class="divider"></span>
                         </li>
 
                     </ul>
@@ -118,7 +160,12 @@
                     <div style="margin-top: 0px; "class="span12 offset3 content1 hide">
 
                         <div style="padding-bottom: 80px; " class="span9 thumbnail well content">
-                            
+                            <ul style="margin-left: 0px;" class="breadcrumb">
+                                <li>
+                                    <a> <i class="icon-tasks"></i> Recent Patients</a>
+                                </li>
+
+                            </ul>
                             <table class="example display">
                                 <thead>
                                     <tr>
@@ -143,7 +190,7 @@
                                         <td> <%=patient.getDateofbirth()%> </td>
                                         <td>
                                             <div style="display: block" id="s_<%=patient.getPatientid()%>">
-                                                <select class="input-medium" name="contype" onchange='showConType("d_<%=patient.getPatientid()%>")'>
+                                                <select name="contype" onchange='showConType("d_<%=patient.getPatientid()%>")'>
                                                     <option>Select</option>
                                                     <%
                                                         List types = mgr.listConsultation();
@@ -155,7 +202,7 @@
                                                 </select>
                                             </div>
                                             <div id="d_<%=patient.getPatientid()%>" style="display: none">
-                                                <button class="btn user_summary_link btn-info btn-small">
+                                                <button class="btn user_summary_link btn-info">
                                                     <i class="icon-white icon-pencil"></i> New Visit
                                                 </button>
                                             </div></td>
@@ -313,7 +360,7 @@
                                                                     <span class="help-inline"></span>
                                                                 </div>
                                                             </div>
-
+                                                            
                                                             <div class="form-actions">
                                                                 <button type="submit" name ="action" value="patient" class="btn ui-primary">
                                                                     <i class="icon-ok"></i> Update Profile
@@ -326,19 +373,16 @@
                                                 </form>
 
                                             </div>
-                                            <button class="btn btn-info btn-small" id="<%=patient.getPatientid()%>_link">
-                                                 Update
-                                            </button>
-                                        </td>
+                                            <button class="btn  btn-info" id="<%=patient.getPatientid()%>_link">
+                                                <i class="icon-white icon-pencil"></i> Update
+                                            </button></td>
                                         <td>
-
-
-                                            <button class="btn btn-danger btn-small" onclick='deletePatient("id_<%=patient.getPatientid()%>")'>
-                                                 Delete
-                                            </button>
-                                            <input type="hidden" id ="id_<%=patient.getPatientid()%>" value="<%=patient.getPatientid()%>"/>
-
-                                        </td>
+                                            <form action="" method="post">
+                                                <input type="hidden" id ="id_<%=patient.getPatientid()%>" value="<%=patient.getPatientid()%>"/>
+                                                <button class="btn btn-danger btn-medium" onclick='deletePatient("id_<%=patient.getPatientid()%>")'>
+                                                    <i class="icon-white icon-pencil"></i> Delete
+                                                </button>
+                                            </form></td>
                                     </tr>
                                     <%}%>
                                 </tbody>
@@ -426,7 +470,6 @@
             $(document).ready(function() {
                 $('.example').dataTable({
                     "bJQueryUI" : true,
-                    "sScrollY" : 400,
                     "sPaginationType" : "full_numbers",
                     "iDisplayLength" : 25,
                     "aaSorting" : [],
@@ -478,7 +521,7 @@
                 //}else{
                 
                 //  } if(show.style.display == "none"){ 
-                // shows.style.display="none";
+               // shows.style.display="none";
             }
 
         </script>

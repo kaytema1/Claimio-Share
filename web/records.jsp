@@ -11,7 +11,13 @@
 
             Date date = new Date();
             List visits = mgr.listRecentVisits(dateFormat.format(date));
+            Users user = (Users) session.getAttribute("staff");
+            if(user == null){
+                session.setAttribute("lasterror", "Please Login");
+                response.sendRedirect("index.jsp");
+            }
         %>
+        
         <title>ClaimSync Extended</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
@@ -43,7 +49,7 @@
                 text-decoration: none;
                 font-weight: lighter;
                 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                font-size: 30px;
+                font-size: 36px;
             }
 
             .large_button:hover {
@@ -64,7 +70,51 @@
 
     <body data-spy="scroll" data-target=".subnav" data-offset="50">
 
-        <%@include file="widgets/header.jsp" %>
+        <!-- Navbar
+        ================================================== -->
+        <div style="display: none;" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+                    <a class="brand" href="#"><img src="images/logo.png" width="200px;" /></a>
+
+                    <div style="margin-top: 10px;" class="nav-collapse">
+                        <ul class="nav pull-right">
+
+                             <li class="dropdown">
+                                <a class="active" > Logged in as:  <%=mgr.getStafftableByid(user.getStaffid()).getLastname() %> <%=mgr.getStafftableByid(user.getStaffid()).getOthername() %></a>
+
+                            </li>
+                            <li class="divider-vertical"></li>
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> Account <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+
+                                    <li>
+                                        <a target="_blank" href="bootstrap.min.css"><i class="icon-wrench"></i> Settings </a>
+                                    </li>
+
+                                    <li>
+                                        <a target="_blank" href="bootstrap.css"><i class="icon-question-sign"></i> Help </a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="bootstrap.css"><i class="icon-share"></i> Feedback </a>
+                                    </li>
+                                    <li class="divider"></li>
+
+                                    <li>
+                                        <a target="_blank" href="logout.jsp"><i class="icon-off"></i> Log Out</a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="container-fluid">
 
@@ -75,8 +125,8 @@
                 <div style="margin-top: 20px; margin-bottom: -50px;" class="subnav navbar-fixed-top hide">
                     <ul class="nav nav-pills">
 
-                        <li class="active">
-                            <a href="#">Records</a><span class="divider"></span>
+                        <li>
+                            <a href="#">Home</a><span class="divider"></span>
                         </li>
 
                     </ul>
@@ -103,16 +153,16 @@
                 <!-- Headings & Paragraph Copy -->
 
 
-
-                  <%if (session.getAttribute("lasterror") != null) {%>
-                    <div class="alert hide <%=session.getAttribute("class")%> span12 center">
-                        <b> <%=session.getAttribute("lasterror")%>  </b>
-                    </div>
-                    <br/>
-                    <div style="margin-bottom: 20px;" class="clearfix"></div>
-                    <%session.removeAttribute("lasterror");
+                
+                    <%if (session.getAttribute("lasterror") != null) {%>
+                    
+                    <div class="alert alert-danger">
+                    <%=session.getAttribute("lasterror")%> 
+                     </div>
+                    <%
+                            session.removeAttribute("lasterror");
                         }%>
-
+               
 
 
                 <div class="row">
@@ -122,29 +172,25 @@
 
                     <div style="margin-top: 0px; "class="span12 offset3 content1 hide">
 
-                        <%if (session.getAttribute("lasterror") != null) {%>
-                        <div class="alert hide <%=session.getAttribute("class")%> span12 center">
-                            <b>  <%=session.getAttribute("lasterror")%> </b>
-                        </div>
-
-                        <div class="clearfix"></div>
-                        <%session.removeAttribute("lasterror");
-                            }%>
-
                         <div style="padding-bottom: 80px;" class="span9 thumbnail well content">
+                            <ul style="margin-left: 0px;" class="breadcrumb">
+                                <li>
+                                    <a> <i class="icon-home"></i> Front Desk</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="listpatients.jsp">List Patients</a><br/>
 
+                                </li>
+                            </ul>
 
                             <div style="margin-top: 20px;" class="clearfix"></div>
                             <br />
                             <br />
 
                             <a href="#">
-                                <div class="span3  center  well large_button registration_dialog_link">
-                                    <img style="margin-top: -4px;" width= " 36px;" src="images/46.png" />  New Registration
+                                <div class="span3  center  well large_button dialog_link">
+                                    New Registration
                                 </div> </a>
                             <a href="#">
                                 <div class="dialog_link2 span3 offset1 center  well large_button">
-                                    <img style="margin-top: -4px;" width= " 36px;" src="images/16.png" />  Find Patient
+                                    Find Patient
                                 </div> </a>
 
                             <div class="clearfix"></div>
@@ -156,18 +202,20 @@
                             <a href="recentpatients.jsp">
                                 <div class="span3 center well large_button">
                                     <%if (visits != null) {%>
-                                    <img style="margin-top: -4px;" width= " 36px;" src="images/123.png" />  Today's Visits (<%=visits.size()%>)
+                                    Today's Visits (<%=visits.size()%>)
                                     <%} else {%> No Visits Today<%}%>
                                 </div> </a>
                             <a href="appointment.jsp">
                                 <div class="span3 offset1  center well large_button">
-                                    <img style="margin-top: -4px;" width= " 36px;" src="images/12.png" />      Appointments
+                                    Appointments
                                 </div> </a>
 
                         </div>
-                        <div class="clearfix"></div>
 
-                    </div>  
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>  
 
             </section>
 
@@ -179,9 +227,9 @@
 
         </div><!-- /container -->
 
-        <div style="max-height: 600px; display: none" id="registration_dialog" title="New Registration">
+        <div style="max-height: 600px; display: none" id="dialog" title="New Regitration">
 
-            <form id="registration" enctype="multipart/data"action="action/registrationaction.jsp" method="POST" class="form-horizontal well">
+            <form enctype="multipart/data"action="action/registrationaction.jsp" method="POST" class="form-horizontal well">
                 <fieldset>
                     <div style="float: left;" class="pre_first_half">
                         <div class="control-group">
@@ -191,49 +239,58 @@
                                     String y = yr.substring(2);
                                 %>
                                 <input type="text" name="patientid" readonly="readonly" id="input01" value="<%=(y + "DC" + (mgr.listPatients().size() + 1))%>"/>
+                                <p class="help-inline">
 
+                                </p>
                             </div>
                         </div>
 
 
                         <div class="control-group">
-                            <label class="control-label" for="fname">First Name</label>
+                            <label class="control-label" for="input01">First Name</label>
                             <div class="controls">
-                                <input  type="text" name="fname"  id="fname"/>
+                                <input  type="text" name="fname"  id="input01"/>
+                                <p class="help-inline">
 
+                                </p>
                             </div>
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label" for="lname">Last Name</label>
+                            <label class="control-label" for="input01">Last Name</label>
                             <div class="controls">
-                                <input type="text" name="lname"  id="lname"/>
+                                <input type="text" name="lname"  id="input01"/>
+                                <p class="help-inline">
 
+                                </p>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="midname">Other Names</label>
+                            <label class="control-label" for="input01">Other Names</label>
                             <div class="controls">
-                                <input type="text" name="midname"  id="midname"/>
+                                <input type="text" name="midname"  id="input01"/>
+                                <p class="help-inline">
 
+                                </p>
                             </div>
                         </div>
-                        <div class="control-group gender_group">
-                            <label class="control-label MustSel" for="input01">Gender</label>
+                        <div class="control-group">
+                            <label class="control-label" for="input01">Gender</label>
                             <div class="controls">
-                                <select class="MustSelectOpt" name="gender" id="gender">
-                                    <option>Select</option>
+                                <select name="gender" id="select01">
                                     <option>Male</option>
                                     <option>Female</option>
                                 </select>
+                                <p class="help-inline">
 
+                                </p>
                             </div>
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label" for="dateofbirth">Date of Birth</label>
+                            <label class="control-label" for="inputError">Date of Birth</label>
                             <div class="controls">
-                                <select class="input-mini dob" id="day" name="day" >
+                                <select class="input-mini"  name="day">
                                     <option>D</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -268,7 +325,7 @@
                                     <option value="31">31</option>
                                 </select>
 
-                                <select class="input-mini dob" name="month">
+                                <select class="input-mini" name="month">
                                     <option>M</option>
                                     <option value="01">Jan</option>
                                     <option value="02">Feb</option>
@@ -286,8 +343,9 @@
 
 
 
-                                <select class="input-small dob"  name="year">
+                                <select class="input-small"  name="year">
                                     <option>Y</option>
+                                    
                                     <option value="2004">2004</option>
                                     <option value="2003">2003</option>
                                     <option value="2002">2002</option>
@@ -395,84 +453,90 @@
                                     <option value="1900">1900</option>
                                 </select>
 
-
+                                <span class="help-inline"></span>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label  class="control-label MustSel">Marital Status</label>
+                            <label class="control-label" for="input01">Marital Status</label>
                             <div class="controls">
-                                <select class="MustSelectOpt" name="maritalstatus" id="martialstatus">
-                                    <option>Select</option>
+                                <select name="maritalstatus" id="select01">
                                     <option>Married</option>
                                     <option>Single</option>
                                     <option>Divorced</option>
-                                    <option>Separated</option>
                                 </select>
+                                <p class="help-inline">
 
+                                </p>
                             </div>
                         </div>
 
-
-
-                    </div>
-                    <div style="float: left;" class="second">            
                         <div class="control-group">
-                            <label class="control-label MustSel"  for="input01">Country</label>
+                            <label class="control-label" for="input01">Country</label>
                             <div class="controls">
-                                <select class="MustSelectOpt" name="country" id="country">
-                                    <option >Select</option>
+                                <select name="country" id="select01">
                                     <option>Ghana</option>
                                     <option>Togo</option>
                                     <option>Benin</option>
                                 </select>
+                                <p class="help-inline">
 
+                                </p>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label" for="city">City</label>
                             <div class="controls">
-                                <input type="text" name="city" id="city"/>
-
+                                <input type="text" name="city" id="inputSuccess"/>
+                                <span class="help-inline"></span>
                             </div>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label" for="address">Address</label>
-                            <div class="controls">
-                                <textarea type="text" name="address" id="address"></textarea>
 
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" >Email</label>
-                            <div class="controls">
-                                <input type="text" name="email" id="email"/>
+                    </div>
+                    <div  style="float: left;" class="second">            
 
-                            </div>
-                        </div>
                         <div class="control-group">
-                            <label class="control-label">Telephone No.</label>
+                            <label class="control-label" for="inputSuccess">Address</label>
                             <div class="controls">
-                                <input type="text" name="contact" id="contact"/>
-
+                                <textarea type="text" name="address" id="inputSuccess"></textarea>
+                                <span class="help-inline"></span>
                             </div>
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label">Emergency Person.</label>
+                            <label class="control-label" for="inputSuccess">Telephone No.</label>
                             <div class="controls">
-                                <input type="text" name="emergencyperson" id="emergencyperson"/>
-
+                                <input type="text" name="contact" id="inputSuccess"/>
+                                <span class="help-inline"></span>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">Emergency Tel. No.</label>
+                            <label class="control-label" for="inputSuccess">Emergency Person.</label>
                             <div class="controls">
-                                <input type="text" name="emergencycontact" id="emergencycontact"/>
-
+                                <input type="text" name="emergencyperson" id="inputSuccess"/>
+                                <span class="help-inline"></span>
                             </div>
                         </div>
-
-
+                        <div class="control-group">
+                            <label class="control-label" for="inputSuccess">Emergency Tel. No.</label>
+                            <div class="controls">
+                                <input type="text" name="emergencycontact" id="inputSuccess"/>
+                                <span class="help-inline"></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="inputSuccess">Email</label>
+                            <div class="controls">
+                                <input type="text" name="email" id="inputSuccess"/>
+                                <span class="help-inline"></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="inputSuccess">Employer</label>
+                            <div class="controls">
+                                <input type="text" name="employer" id="inputSuccess"/>
+                                <span class="help-inline"></span>
+                            </div>
+                        </div>
                         <!-- <div class="control-group">
                              <label class="control-label" for="inputSuccess">Upload Image</label>
                              <div class="controls">
@@ -482,27 +546,17 @@
                          </div>-->
 
 
-
-                    </div>
-                    <div style="float: left;" class=" third_third">
                         <div class="control-group">
-                            <label class="control-label" for="employer">Employer</label>
+                            <label class="control-label" for="selectError">Sponsorship Method</label>
                             <div class="controls">
-                                <input type="text" name="employer" id="inputSuccess"/>
-
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label MustSel"  for="type">Sponsorship Method</label>
-                            <div class="controls">
-                                <select class="MustSelectOpt" id="payment" name="type">
+                                <select id="payment" name="type">
                                     <option >Select</option>
                                     <option id="nhis" value="NHIS" onclick="showInsurance()">National Health Insurance</option>
                                     <option id="cash" value="CASH" onclick="hideIt()">Out of Pocket </option>
                                     <option id="private"value="Private" onclick="showMembershipbox()">Private Health Insurance</option>
                                     <option id="corporate" value="Cooperate" onclick="showCorporate()">Cooperate</option>
                                 </select>
-
+                                <span class="help-inline"></span>
                             </div>
                         </div>
 
@@ -512,7 +566,7 @@
                                 <div class="controls">
 
 
-                                    <select id="coperate" name="coperate">
+                                    <select name="coperate">
                                         <option>Select</option>
                                         <%
 
@@ -527,23 +581,24 @@
 
                                     </select>
 
+                                    <span class="help-inline"></span>
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label for="coperateid" class="control-label" >Corporate ID</label>
+                                <label class="control-label" >Corporate ID</label>
                                 <div class="controls">
-                                    <input type="text" id="coperateid" name="coperateid" for="coperateid" value=""/>
-
+                                    <input type="text" id="inputSuccess" name="coperateid" for="inputSuccess" value=""/>
+                                    <span class="help-inline"></span>
                                 </div>
                             </div>
                         </div>
                         <div style="display:none;" id="privatediv">
                             <div class="control-group">
-                                <label class="control-label">Sponsors</label>
+                                <label class="control-label" for="selectError">Sponsors</label>
                                 <div class="controls">
-                                    <select name="sponsorid" id="sponsor">
-                                        <option value="Select">Select</option>
+                                    <select name="sponsorid">
+                                        <option value="0">Select</option>
                                         <%
 
                                             List Sponsors = mgr.listPrivateSponsors();
@@ -556,41 +611,60 @@
                                         %>
 
                                     </select>
-
+                                    <span class="help-inline"></span>
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label for="membershipid" class="control-label" >Membership ID</label>
+                                <label class="control-label" >Membership ID</label>
                                 <div class="controls">
-                                    <input type="text" class="input-medium" id="membershipid"name="membershipid" for="membershipid" value=""/>
-
+                                    <input type="text" id="inputSuccess"name="membershipid" for="inputSuccess" value=""/>
+                                    <span class="help-inline"></span>
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label for="benefitplan" class="control-label" >Benefit Plan</label>
+                                <label class="control-label" >Benefit Plan</label>
                                 <div class="controls">
-                                    <input type="text" id="benefitplan" name="benefitplan" for="benefitplan" value=""/>
-
+                                    <input type="text" id="inputSuccess" name="benefitplan" for="inputSuccess" value=""/>
+                                    <span class="help-inline"></span>
                                 </div>
                             </div>
                         </div>
                         <div style="display:none;" id="nhisdiv">
                             <div class="control-group">
-                                <label for="nhismembershipid" class="control-label" >Membership ID</label>
+                                <label class="control-label" >Sponsor</label>
                                 <div class="controls">
-                                    <input type="text" id="nhismembershipid"name="nhismembershipid" for="nhismembershipid" value=""/>
-
+                                    <input type="text" id="inputSuccess"name="sponsorid" for="inputSuccess" value=""/>
+                                    <span class="help-inline"></span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" >Membership ID</label>
+                                <div class="controls">
+                                    <input type="text" id="inputSuccess"name="nhismembershipid" for="inputSuccess" value=""/>
+                                    <span class="help-inline"></span>
                                 </div>
                             </div>
                         </div>
-
-
+                       <!-- <div class="control-group">
+                            <label class="control-label" >Consultation Type</label>
+                            <div class="controls">
+                                <select name="contype">
+                                    <option value="0">Select</option>
+                                    <%
+                                        List types = mgr.listConsultation();
+                                        for (int j = 0; j < types.size(); j++) {
+                                            Consultation unit = (Consultation) types.get(j);
+                                    %>
+                                    <option value="<%=unit.getConid()%>"><%=unit.getContype()%></option> 
+                                    <% }%>
+                                </select></div>
+                        </div>-->
                     </div>
                 </fieldset>
                 <div style="text-align: center;">
-                    <button type="submit" name ="action" value="patient" class="btn btn-danger btn-large submit_button">
+                    <button type="submit" name ="action" value="patient" class="btn btn-danger btn-large">
                         <i class="icon-ok icon-white"></i> Save changes
                     </button>
 
@@ -599,345 +673,178 @@
             </form>
         </div>
 
-        <div style="display: none;" id="dialog2" title="Patient Search">
+    </div>
 
-            <form class="form-horizontal" action="searchresults.jsp" method="post">
-                <fieldset>
-                    <div class="control-group center">
-                        <h3> Search By </h3>
-                        <br />
+    <div style="display: none;" id="dialog2" title="Patient Search">
 
-                        <select name="searchid">
-                            <option value="patientid">Patient ID/Folder No.</option>
-                            <option value="fullname">Patient First or Last Names</option>
-                            <option value="memberdshipnumber">Policy No.</option>
-                            <option value="dob">Date of Birth(0000-00-00)</option>
-                        </select>
+        <form class="form-horizontal" action="searchresults.jsp" method="post">
+            <fieldset>
+                <div class="control-group center">
+                    <h3> Search By </h3>
+                    <br />
 
-                    </div>
+                    <select name="searchid">
+                        <option value="patientid">Patient ID/Folder No.</option>
+                        <option value="fullname">Patient First or Last Names</option>
+                        <option value="memberdshipnumber">Policy No.</option>
+                        <option value="dob">Date of Birth(0000-00-00)</option>
+                    </select>
 
-                    <hr />
+                </div>
 
-                    <div class="clearfix"></div>
-                    <div class="center">
+                <hr />
 
-                        <input type="text" placeholder="Please enter search query" class="input-xlarge"  name="searchquery"/>
+                <div class="clearfix"></div>
+                <div class="center">
 
-                        <br />
-                        <br />
-                        <br />
+                    <input type="text" placeholder="Please enter search query" class="input-xlarge"  name="searchquery"/>
 
-                        
-                        
-                        <button type="submit" name="action" class="btn btn-large btn-info">
-                            <i class="icon-white icon-search"></i> Search
-                        </button>
-                    </div>
+                    <br />
+                    <br />
+                    <br />
 
-                </fieldset>
-            </form>
+                    <input class="btn btn-large" type="submit" value="search" name="action"/>
+                </div>
 
-        </div>
-        <!--end static dialog-->
+            </fieldset>
+        </form>
 
-        <!-- Le javascript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="js/jquery.js"></script>
-        <script src="js/bootstrap-dropdown.js"></script>
-        <script src="js/bootstrap-scrollspy.js"></script>
-        <script src="js/bootstrap-collapse.js"></script>
-        <script src="js/bootstrap-tooltip.js"></script>
-        <script src="js/bootstrap-popover.js"></script>
-        <script src="js/application.js"></script>
-        <script src="js/jquery.validate.min.js"></script>
+    </div>
+    <!--end static dialog-->
 
-        <script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/application.js"></script>
 
-        <script type="text/javascript" src="third-party/jQuery-UI-Date-Range-Picker/js/date.js"></script>
-        <script type="text/javascript" src="third-party/jQuery-UI-Date-Range-Picker/js/daterangepicker.jQuery.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
 
-        <script src="third-party/wijmo/jquery.mousewheel.min.js" type="text/javascript"></script>
-        <script src="third-party/wijmo/jquery.bgiframe-2.1.3-pre.js" type="text/javascript"></script>
-        <script src="third-party/wijmo/jquery.wijmo-open.1.5.0.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="third-party/jQuery-UI-Date-Range-Picker/js/date.js"></script>
+    <script type="text/javascript" src="third-party/jQuery-UI-Date-Range-Picker/js/daterangepicker.jQuery.js"></script>
 
-        <script src="third-party/jQuery-UI-FileInput/js/enhance.min.js" type="text/javascript"></script>
-        <script src="third-party/jQuery-UI-FileInput/js/fileinput.jquery.js" type="text/javascript"></script>
+    <script src="third-party/wijmo/jquery.mousewheel.min.js" type="text/javascript"></script>
+    <script src="third-party/wijmo/jquery.bgiframe-2.1.3-pre.js" type="text/javascript"></script>
+    <script src="third-party/wijmo/jquery.wijmo-open.1.5.0.min.js" type="text/javascript"></script>
 
-        <script type="text/javascript" src="js/tablecloth.js"></script>
-        <script type="text/javascript" src="js/demo.js"></script>
+    <script src="third-party/jQuery-UI-FileInput/js/enhance.min.js" type="text/javascript"></script>
+    <script src="third-party/jQuery-UI-FileInput/js/fileinput.jquery.js" type="text/javascript"></script>
 
-        <!--initiate accordion-->
-        <script type="text/javascript">
-            
-            
-            
-            $(".submit_button").click(function(){
-                
-                $(".MustSelectOpt").each(function(){
-                   
-                    var selectedid =  $(this).attr('id');
-                    var selectedvalue = $(this).attr('value')
-                    
-                    if(selectedvalue=="Select"){
-                       
-                        $('#'+selectedid).closest('.control-group').addClass('error').removeClass('success')
-                    }
-                    else{
-                       
-                        $('#'+selectedid).closest('.control-group').addClass('success').removeClass('error');
-                    }
-                   
-                });
-                
-               
-                
-            });
-            
-            
-            
-            
-            
-            $(".MustSelectOpt").change(function(){
-                
-                var selectedvalue = $(this).attr('value')
-                var selectedid = $(this).attr('id');    
-                //alert(selectedvalue);
-                //alert(selectedid);
-                if($("#"+selectedid).attr("value")=="Select"){
-                    
-                    $('#'+selectedid).closest('.control-group').addClass('error').removeClass('success')
-                    // $('.MustSel').closest('.control-group').addClass('error').removeClass('success')
-                        
-                }else{
-                    $('#'+selectedid).closest('.control-group').addClass('success').removeClass('error');        
-                    //  $('.MustSel').closest('.control-group').addClass('success').removeClass('error');
-                }
-                        
-                  
-                    
-            })
+    <script type="text/javascript" src="js/tablecloth.js"></script>
+    <script type="text/javascript" src="js/demo.js"></script>
+
+    <!--initiate accordion-->
+    <script type="text/javascript">
         
-            $('#registration').validate({
-                rules: {
-                    fname: {
-                        minlength: 2,
-                        required: true
-                    },
-                    lname: {
-                        minlength: 2,
-                        required: true
-                    },
-                    midname: {
-                        minlength: 2,
-                        required: false
-                    },
-                    
-                   
-                    
-                    address: {
-                        required: true
-                        
-                    }
-                },
-                highlight: function(label) {
-                    $(label).closest('.control-group').addClass('error');
-                },
-                success: function(label) {
-                    label
-                    .text('OK!').addClass('valid')
-                    .closest('.control-group').addClass('success');
-                }
-            });
-        
-            $("#payment").change(function() {
+        $("#payment").change(function() {
           
-                var payment =  $('#payment option:selected').attr('id');
+            var payment =  $('#payment option:selected').attr('id');
             
-                if(payment=='nhis'){
-                    //alert("nhis");
-                    $("#companydiv").slideUp();
-                    $("#privatediv").slideUp();
-                    $("#nhisdiv").slideDown();
-                    $('#nhismembershipid').rules('add', {
-                        required : true,
-                        minlength: 2
-                    });
-                    $('#coperateid').rules('remove', {
-                        required : true,
-                        minlength: 2
-                    });
-                    $('#benefitplan').rules('remove', {
-                        required : true,
-                        minlength: 2
-                    });
-                    $('#membershipid').rules('remove', {
-                        required : true,
-                        minlength: 2
-                    });
+            if(payment=='nhis'){
+                $("#companydiv").slideUp();
+                $("#privatediv").slideUp();
+                $("#nhisdiv").slideDown();
                 
+            }else if(payment=='cash'){
+                $("#companydiv").slideUp();
+                $("#privatediv").slideUp();
+                $("#nhisdiv").slideUp();
                 
-                }else if(payment=='cash'){
-                    //alert("cash");
-                    $("#companydiv").slideUp();
-                    $("#privatediv").slideUp();
-                    $("#nhisdiv").slideUp();
-                    $('#nhismembershipid').rules('remove', {
-                        required : true,
-                        minlength: 2
-                    });
-                    $('#coperateid').rules('remove', {
-                        required : true,
-                        minlength: 2
-                    });
-                    $('#benefitplan').rules('remove', {
-                        required : true,
-                        minlength: 2
-                    });
-                    $('#membershipid').rules('remove', {
-                        required : true,
-                        minlength: 2
-                    });
-                
-                }else if(payment=='private'){
-                    //alert("private");
-                    $("#companydiv").slideUp();
-                    $("#privatediv").slideDown();
-                    $("#nhisdiv").slideUp();
-                    /* $('#benefitplan').rules('add', {
-                       required : true,
-                        minlength: 2
-                    });
-                    
-                     */
-                    if ($('#sponsor').attr('value')=="Select"){
-                        $('#sponsor').closest('.control-group').addClass('error').removeClass('success')
-                    }
-                    
-                    $('#membershipid').rules('add', {
-                        required : true,
-                        minlength: 2
-                    });
-                    $('#nhismembershipid').rules('remove', {
-                        required : true,
-                        minlength: 2
-                    });
-                    $('#coperateid').rules('remove', {
-                        required : true,
-                        minlength: 2
-                    });
-               
+            }else if(payment=='private'){
+                $("#companydiv").slideUp();
+                $("#privatediv").slideDown();
+                $("#nhisdiv").slideUp();
             
-                }else if(payment=='corporate'){
-                    //alert("corporate");
-                    $("#companydiv").slideDown();
-                    $("#privatediv").slideUp();
-                    $("#nhisdiv").slideUp();
-                    
-                    if ($('#coperate').attr('value')=="Select"){
-                        $('#coperate').closest('.control-group').addClass('error').removeClass('success')
-                    }
-                    
-                    $('#coperateid').rules('add', {
-                        required : true,
-                        minlength: 2
-                    });
-                    $('#nhismembershipid').rules('remove', {
-                        required : true,
-                        minlength: 2
-                    });
-                
-                    $('#benefitplan').rules('remove', {
-                        required : true,
-                        minlength: 2
-                    });
-                    $('#membershipid').rules('remove', {
-                        required : true,
-                        minlength: 2
-                    });
-                }
-                else{
-                    alert("Please Select Payment Method");
-                }
-            });
+            }else if(payment=='corporate'){
+                $("#companydiv").slideDown();
+                $("#privatediv").slideUp();
+                $("#nhisdiv").slideUp();
+            }
+            else{
+                alert("Please Select Payment Method");
+            }
+        });
                
                
                
            
-            $(function() {
+        $(function() {
             
-                var menu_ul = $('.menu > li > ul'), menu_a = $('.menu > li > a');
+            var menu_ul = $('.menu > li > ul'), menu_a = $('.menu > li > a');
             
             
 
-                menu_ul.hide();
+            menu_ul.hide();
 
-                $(".menu").fadeIn();
-                $(".content1").fadeIn();
-                $(".navbar").fadeIn();
-                $(".footer").fadeIn();
-                $(".subnav").fadeIn();
-                $(".alert").fadeIn();
-                $(".progress1").hide();
-                
+            $(".menu").fadeIn();
+            $(".content1").fadeIn();
+            $(".navbar").fadeIn();
+            $(".footer").fadeIn();
+            $(".subnav").fadeIn();
+            $(".progress1").hide();
 
-                menu_a.click(function(e) {
-                    e.preventDefault();
-                    if(!$(this).hasClass('active')) {
-                        menu_a.removeClass('active');
-                        menu_ul.filter(':visible').slideUp('normal');
-                        $(this).addClass('active').next().stop(true, true).slideDown('normal');
-                    } else {
-                        $(this).removeClass('active');
-                        $(this).next().stop(true, true).slideUp('normal');
-                    }
-                });
-
+            menu_a.click(function(e) {
+                e.preventDefault();
+                if(!$(this).hasClass('active')) {
+                    menu_a.removeClass('active');
+                    menu_ul.filter(':visible').slideUp('normal');
+                    $(this).addClass('active').next().stop(true, true).slideDown('normal');
+                } else {
+                    $(this).removeClass('active');
+                    $(this).next().stop(true, true).slideUp('normal');
+                }
             });
-            
-            
-            
-            
-            
-            function showMembershipbox(){
-                               var show = document.getElementById("privateid");
-                               var shows = document.getElementById("nhis");
-                              
-                               show.style.display="block";
-                               shows.style.display="none";
-                           
-                       }
-        
-            function showCorporate(){
-                               var show = document.getElementById("privateid");
-                               var shows = document.getElementById("nhis");
-                              
-                               show.style.display="none";
-                               shows.style.display="none";
-                           
-                       }
-        
-                       function showInsurance(){
-                               var show = document.getElementById("nhis");
-                               var shows = document.getElementById("privateid");
-                              
-                               show.style.display="block";
-                               shows.style.display="none";
-                           
-                       }
-        
-                       function hideIt(){
-                               var show = document.getElementById("privateid");
-                                var shows = document.getElementById("nhis");
-                                //if(show.style.display == "block"){
-                               show.style.display="none";
-                           //}else{
-                               
-                             //  } if(show.style.display == "none"){ 
-                                shows.style.display="none";
-                       }    
-      
-        </script>
 
-    </body>
+        });
+            
+            
+            
+            
+            
+        function showMembershipbox(){
+                           var show = document.getElementById("privateid");
+                           var shows = document.getElementById("nhis");
+                          
+                           show.style.display="block";
+                           shows.style.display="none";
+                       
+                   }
+        
+         function showCorporate(){
+                           var show = document.getElementById("privateid");
+                           var shows = document.getElementById("nhis");
+                          
+                           show.style.display="none";
+                           shows.style.display="none";
+                       
+                   }
+        
+                   function showInsurance(){
+                           var show = document.getElementById("nhis");
+                           var shows = document.getElementById("privateid");
+                          
+                           show.style.display="block";
+                           shows.style.display="none";
+                       
+                   }
+        
+                   function hideIt(){
+                           var show = document.getElementById("privateid");
+                            var shows = document.getElementById("nhis");
+                            //if(show.style.display == "block"){
+                           show.style.display="none";
+                       //}else{
+                           
+                         //  } if(show.style.display == "none"){ 
+                            shows.style.display="none";
+                   }    
+      
+    </script>
+
+</body>
 </html>

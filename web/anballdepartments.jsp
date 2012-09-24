@@ -11,10 +11,10 @@
 <%@page import="entities.*,java.util.List,java.util.Date,java.text.SimpleDateFormat,java.text.DateFormat" %>
 <!DOCTYPE html>
 <% Users user = (Users) session.getAttribute("staff");
-    if (user == null) {
-        session.setAttribute("lasterror", "Please Login");
-        response.sendRedirect("index.jsp");
-    }%>
+            if(user == null){
+                session.setAttribute("lasterror", "Please Login");
+                response.sendRedirect("index.jsp");
+            } HMSHelper mgr = new HMSHelper();%>
 <html>
     <head>
         <%@include file="widgets/stylesheets.jsp" %>
@@ -35,10 +35,6 @@
             String splittedDateDuration[] = new String[2];
             String[] splittedDate = new String[3];
             String[] splittedDateRange = new String[3];
-
-            System.out.println("telling");
-            dateRange = request.getParameter("daterange");
-            System.out.println("dateRange : " + dateRange);
 
             if (request.getParameter("daterange") != null) {
                 dateValue = request.getParameter("daterange");
@@ -109,19 +105,18 @@
 
                                 <tr>
                                     <th>Department</th>
-                                    <th>Expected Revenue</th>
-                                         <th>Actual Revenue</th>
-                                      <!--       <th>Registered On</th>
+                                    <th>Revenue</th>
+                                    <!--       <th>Sponsor</th>
+                                           <th>Registered On</th>
                                            <th> </th>
                                     -->
                                 </tr>
                             </thead>
                             <tbody>
                                 <%
-                                    HMSHelper mgr = new HMSHelper();
+                                    //HMSHelper mgr = new HMSHelper();
                                     List allPTreatments = null;
                                     List allPInvs = null;
-                                    List allPCons = null;
 
                                     if (correctDateFound) {
                                         if (singleDateValue) {
@@ -136,18 +131,15 @@
                                         allPTreatments = mgr.listAllPatientTreatments();
                                     }
 
-                                    System.out.println(" allPTreatments : " + allPTreatments.size());
+                                System.out.println(" allPTreatments : " + allPTreatments.size());
 
                                     Treatment treatment;
-                                    double treatmentCost, treatmentPrice, totalTreatmentCost = 0, amountPaid, totAmountPaid = 0;
+                                    double treatmentCost, treatmentPrice, totalTreatmentCost = 0;
                                     int treatmentId, qty;
                                     for (int i = 0; i < allPTreatments.size(); i++) {
                                         Patienttreatment pT = (Patienttreatment) allPTreatments.get(i);
                                         treatmentId = pT.getTreatmentid();
                                         qty = pT.getQuantity();
-                                        
-                                        amountPaid = pT.getAmounpaid();
-                                        totAmountPaid += amountPaid;
 
                                         treatment = mgr.getTreatment(treatmentId);
                                         treatmentPrice = treatment.getPrice();
@@ -156,7 +148,7 @@
                                         totalTreatmentCost += treatmentCost;
                                     }
 
-                                    if (correctDateFound) {
+                                      if (correctDateFound) {
                                         if (singleDateValue) {
                                             System.out.println("very single");
                                             System.out.println(" dateValue : " + dateValue);
@@ -166,21 +158,18 @@
                                             allPInvs = mgr.listAllPatientInvestigationForDuration(dateSqlDate, rangeSqlDate);
                                         }
                                     } else {
-                                        allPInvs = mgr.listAllPatientInvestigation();
+                                         allPInvs = mgr.listAllPatientInvestigation();
                                     }
-
-
+                                    
+                                   
                                     System.out.println(" allPInvs : " + allPInvs.size());
                                     Investigation inv;
-                                    double invCost, invPrice, totalInvCost = 0, invAmntPaid, totInvAmntPaid = 0;
+                                    double invCost, invPrice, totalInvCost = 0;
                                     int invId, invQty;
                                     for (int i = 0; i < allPInvs.size(); i++) {
                                         Patientinvestigation pT = (Patientinvestigation) allPInvs.get(i);
                                         invId = pT.getInvestigationid();
                                         invQty = pT.getQuantity();
-                                        
-                                        invAmntPaid = pT.getAmountpaid();
-                                        totInvAmntPaid += invAmntPaid;
 
                                         inv = mgr.getInvestigation(invId);
                                         invPrice = inv.getPrice();
@@ -189,68 +178,39 @@
                                         totalInvCost += invCost;
                                     }
 
-                                    if (correctDateFound) {
-                                        if (singleDateValue) {
-                                            System.out.println("very single");
-                                            System.out.println(" dateValue : " + dateValue);
-                                            allPCons = mgr.listAllPatientVisitsForDate(dateSqlDate);
-                                        } else {
-                                            System.out.println("not very single");
-                                            allPCons = mgr.listAllPatientVisitsForDuration(dateSqlDate, rangeSqlDate);
-                                        }
-                                    } else {
-                                        allPCons = mgr.listAllPatientVisits();
-                                    }
+                                    List allVisits = mgr.listVisitations();
+                                    int visitsCount = allVisits.size();
+                                    double regCost = 5;
+                                    double consultationCost = 15;
+                                    double specialistConsultation = 35;
 
+                                    Random registration = new Random();
+                                    int regNum = registration.nextInt(visitsCount);
+                                    regNum += 50;
+                                    double totalRegCost = regCost * regNum;
 
-                                    System.out.println(" allPCons : " + allPCons.size());
-                                    Visitationtable vTable;
-                                    List patientVisit = null;
-                                    int visitId = 0;
-                                    Patientconsultation pCon = null;
-                                    Consultation con = null;
+                                    Random speccons = new Random();
+                                    int specConsNum = speccons.nextInt(visitsCount);
+                                    specConsNum += 50;
+                                    double totalSpecCost = specialistConsultation * specConsNum;
 
-                                    double conPrice, totalConCost = 0, conExpected, conTotExpected = 0;
-
-                                    for (int i = 0; i < allPCons.size(); i++) {
-                                        Visitationtable pT = (Visitationtable) allPCons.get(i);
-                                        visitId = pT.getVisitid();
-
-                                        patientVisit = mgr.getPatientConsultationByVisitid(visitId);
-                                      //  System.out.println("size : " + patientVisit.size());
-
-                                        if (!patientVisit.isEmpty() && patientVisit != null) {
-                                           System.out.println("size : " + patientVisit.size());
-                                           
-                                            for (int j = 0; j < patientVisit.size(); j++) {
-                                                pCon = (Patientconsultation) patientVisit.get(j);
-
-                                                con = mgr.getConsultationId(pCon.getTypeid());
-                                                conExpected = con.getAmount();
-                                                conTotExpected += conExpected;
-                                                
-                                                conPrice = pCon.getAmountpaid();
-                                                totalConCost += conPrice;
-                                            }
-                                        }
-                                        
-                                    }
-
-
-
+                                    double totalConst = visitsCount * consultationCost;
 
                                 %>
                                 <tr>
-                                    <td>Registration </td> <td>0</td> <td>0</td>
+                                    <td>OPD / Registration </td> <td><%=totalRegCost%></td>
                                 </tr>
                                 <tr>
-                                    <td>Consultation </td> <td><%=conTotExpected%></td> <td><%=totalConCost%></td>
+                                    <td>Consultation </td> <td><%=totalConst%></td>
                                 </tr>
                                 <tr>
-                                    <td>Pharmacy </td> <td><%=totalTreatmentCost%></td> <td><%=totAmountPaid %></td>
+                                    <td>Specialist Consultation </td> <td><%=totalSpecCost%></td>
                                 </tr>
                                 <tr>
-                                    <td>Laboratory </td> <td><%=totalInvCost%></td> <td><%=totInvAmntPaid %></td>
+                                    <td>Pharmacy </td> <td><%=totalTreatmentCost%></td>
+                                </tr>
+                                <tr>
+                                    <td>Laboratory </td> <td><%=totalInvCost%></td>
                                 </tr>
 
                             </tbody>

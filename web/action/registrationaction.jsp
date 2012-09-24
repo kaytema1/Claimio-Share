@@ -11,11 +11,11 @@
 <%@page import="entities.*,helper.HibernateUtil"%>
 <!DOCTYPE html>
 <% try {
-        Users current = (Users) session.getAttribute("staff");
-        if (current == null) {
-            session.setAttribute("lasterror", "Please Login");
-            response.sendRedirect("records.jsp");
-        }
+    Users current = (Users) session.getAttribute("staff");
+            if(current == null){
+                session.setAttribute("lasterror", "Please Login");
+                response.sendRedirect("index.jsp");
+            }
         // HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
         Session sess = HibernateUtil.getSessionFactory().getCurrentSession();
         sess.beginTransaction();
@@ -55,79 +55,68 @@
             //String benefitPlan = request.getParameter("benefitplan");
             String sponsorid = request.getParameter("sponsorid");
             System.out.println(contact.length());
-            if (lName.equalsIgnoreCase("") || fName.equalsIgnoreCase("")) {
-                session.setAttribute("lasterror", "Name fields cannot be empty");
-                session.setAttribute("class", "alert-error");
-                response.sendRedirect("../records.jsp");
-                return;
+            if(lName.equalsIgnoreCase("")||fName.equalsIgnoreCase("")){
+               session.setAttribute("lasterror", "Name fields cannot be empty");
+                response.sendRedirect("../index.jsp");
+                return; 
             }
-            if (city.equalsIgnoreCase("")) {
-                session.setAttribute("lasterror", "City field cannot be empty");
-                session.setAttribute("class", "alert-error");
-                response.sendRedirect("../records.jsp");
-                return;
+            if(city.equalsIgnoreCase("")){
+                 session.setAttribute("lasterror", "City field cannot be empty");
+                response.sendRedirect("../index.jsp");
+                return; 
             }
-            if (year.equalsIgnoreCase("D") || month.equalsIgnoreCase("M") || day.equalsIgnoreCase("Y")) {
-                session.setAttribute("lasterror", "Date fields cannot be empty");
-                session.setAttribute("class", "alert-error");
-                response.sendRedirect("../records.jsp");
-                return;
+            if(year.equalsIgnoreCase("D")||month.equalsIgnoreCase("M")||day.equalsIgnoreCase("Y")){
+                 session.setAttribute("lasterror", "Date fields cannot be empty");
+                response.sendRedirect("../index.jsp");
+                return; 
             }
-            if (!contact.equals("N/A") && contact.length() > 10) {
+            if(!contact.equals("N/A") && contact.length() > 10){ 
                 session.setAttribute("lasterror", "Telephone number length cannot be more than 10 digits");
-                session.setAttribute("class", "alert-error");
-                response.sendRedirect("../records.jsp");
-                return;
+                response.sendRedirect("../index.jsp");
+                return; 
             }
-            if (!contact.equals("N/A") && contact.length() < 10) {
+            if(!contact.equals("N/A") && contact.length() < 10){
                 session.setAttribute("lasterror", "Telephone number length cannot be less then 10 digits");
-                session.setAttribute("class", "alert-error");
-                response.sendRedirect("../records.jsp");
-                return;
+                response.sendRedirect("../index.jsp");
+                return; 
             }
-            if (!emergencyContact.equals("N/A") && emergencyContact.length() > 10) {
-                session.setAttribute("lasterror", "Emergency telephone number length cannot be more than 10 digits");
-                session.setAttribute("class", "alert-error");
-                response.sendRedirect("../records.jsp");
-                return;
+            if(!emergencyContact.equals("N/A") && emergencyContact.length() > 10){ 
+                 session.setAttribute("lasterror", "Emergency telephone number length cannot be more than 10 digits");
+                response.sendRedirect("../index.jsp");
+                return; 
             }
-            if (!emergencyContact.equals("N/A") && emergencyContact.length() < 10) {
-                session.setAttribute("lasterror", "Emergency telephone number length cannot be less than 10 digits");
-                session.setAttribute("class", "alert-error");
-                response.sendRedirect("../records.jsp");
-                return;
+            if(!emergencyContact.equals("N/A") && emergencyContact.length() < 10){
+               session.setAttribute("lasterror", "Emergency telephone number length cannot be less than 10 digits");
+                response.sendRedirect("../index.jsp");
+                return; 
             }
-            if (address.equalsIgnoreCase("")) {
-                session.setAttribute("lasterror", "Address field cannot be empty, please enter patient house number instead");
-                session.setAttribute("class", "alert-error");
-                response.sendRedirect("../records.jsp");
-                return;
+            if(address.equalsIgnoreCase("")){
+                 session.setAttribute("lasterror", "Address field cannot be empty, please enter patient house number instead");
+                response.sendRedirect("../index.jsp");
+                return; 
             }
-            if (sponsorType.trim().equals("NHIS") && nhismembershipid.equalsIgnoreCase("")) {
-                session.setAttribute("lasterror", "NHIS membership number field cannot be empty");
-                session.setAttribute("class", "alert-error");
-                response.sendRedirect("../records.jsp");
-                return;
+            if(sponsorType.trim().equals("NHIS") && nhismembershipid.equalsIgnoreCase("")){
+               session.setAttribute("lasterror", "NHIS membership number field cannot be empty");
+                response.sendRedirect("../index.jsp");
+                return; 
             }
-            if (sponsorType.trim().equals("Cooperate") && coperateid.equalsIgnoreCase("N/A")) {
-                session.setAttribute("class", "alert-error");
+            if(sponsorType.trim().equals("Cooperate") && coperateid.equalsIgnoreCase("N/A")){
                 session.setAttribute("lasterror", "Coperate membership number field cannot be empty");
-                response.sendRedirect("../records.jsp");
-                return;
+                response.sendRedirect("../index.jsp");
+                return;  
             }
-            /* if(contype == 0){
-             session.setAttribute("lasterror", "Please select a consultation type");
-             response.sendRedirect("../records.jsp");
-             return; 
-             }*/
-
-            if (sponsorType.trim().equals("Private") && membershipID.equalsIgnoreCase("")) {
-                session.setAttribute("lasterror", "Private membership number field cannot be empty");
-                session.setAttribute("class", "alert-error");
-                response.sendRedirect("../records.jsp");
-                return;
+           /* if(contype == 0){
+               session.setAttribute("lasterror", "Please select a consultation type");
+                response.sendRedirect("../index.jsp");
+                return; 
+            }*/
+            
+            if(sponsorType.trim().equals("Private") && membershipID.equalsIgnoreCase("")){
+                 session.setAttribute("lasterror", "Private membership number field cannot be empty");
+                response.sendRedirect("../index.jsp");
+                return; 
             }
-
+            
             if (sponsorid != "") {
                 spid = Integer.parseInt(sponsorid);
             }
@@ -142,23 +131,21 @@
             Folder f = null;
             Sponsorhipdetails sd = null;
             //String name = fName+" "+lName+" "+midName;
-            p = mgr.createPatient(patientID, fName, lName, midName, gender, address, employer, dob, contact, emergencyPerson, emergencyContact, email, country, city, maritalstatus, "");
+            p = mgr.createPatient(patientID, fName, lName , midName, gender, address, employer, dob, contact, emergencyPerson, emergencyContact, email, country, city, maritalstatus, "");
 
             System.out.println("p p p p : " + p);
 
             if (p == null) {
-                session.setAttribute("class", "alert-error");
-                session.setAttribute("lasterror", "Patient Details could not be saved, Please Try Again");
-                response.sendRedirect("../records.jsp");
+                session.setAttribute("lasterror", "patient details could not be saved please try again");
+                response.sendRedirect("../index.jsp");
                 return;
             }
 
 
-            f = mgr.createFolder(p.getPatientid(), p.getLname().substring(0, 1) + "-0001", (String) session.getAttribute("unit"), (String) session.getAttribute("unit"));
+            f = mgr.createFolder(p.getPatientid(), p.getLname().substring(0, 1) + "-0001", (String)session.getAttribute("unit"), (String)session.getAttribute("unit"));
             if (f == null) {
-                session.setAttribute("class", "alert-error");
-                session.setAttribute("lasterror", "Patient Details could not be saved, Please Try Again");
-                response.sendRedirect("../records.jsp");
+                session.setAttribute("lasterror", "patient folder could not be created delete patient's details and please try again");
+                response.sendRedirect("../index.jsp");
                 return;
             }
             System.out.println(sponsorType);
@@ -177,17 +164,16 @@
                 sd = mgr.createPatientSponsorshipDetails(p.getPatientid(), "N/A", sponsorType, "N/A", 0);
             }
             if (sd == null) {
-                session.setAttribute("lasterror", "Patient Sponsorship Details could not be updated. Please Update Later");
+                session.setAttribute("lasterror", "patient sponsorship details could not be updated please update later");
                 response.sendRedirect("../registration.jsp");
                 return;
             }
             /*if (p != null) {
-             mgr.createNewVisit(p.getPatientid(), "", "", "OPD", contype,"");
-             }*/
-            session.setAttribute("class", "alert-success");
-            session.setAttribute("lasterror", "Patient Details Saved Successfully!");
+                mgr.createNewVisit(p.getPatientid(), "", "", "OPD", contype,"");
+            }*/
+            session.setAttribute("succ", "Patient's details saved successfully");
             session.setAttribute("patient", p);
-            response.sendRedirect("../records.jsp");
+            response.sendRedirect("../index.jsp");
             return;
         }
 
@@ -198,12 +184,11 @@
         HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().rollback();
         if (ServletException.class.isInstance(ex)) {
             // throw (ServletException) ex;
-            session.setAttribute("class", "alert-error");
-            session.setAttribute("lasterror", "An Error Occurred. Please Try Again Later");
-            response.sendRedirect("../records.jsp");
+            session.setAttribute("lasterror", "An error occurred please try again later");
+            response.sendRedirect("../index.jsp");
         } else {
             // throw new ServletException(ex);
-            session.setAttribute("lasterror", "An Error Occurred. Please Try Again Later");
-            response.sendRedirect("../records.jsp");
+            session.setAttribute("lasterror", "An error occurred please try again later");
+            response.sendRedirect("../index.jsp");
         }
     }%>

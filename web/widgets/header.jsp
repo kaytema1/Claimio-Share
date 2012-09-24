@@ -1,8 +1,8 @@
 <!-- Navbar
         ================================================== -->
-<div class="navbar navbar-fixed-top hide">
+<div style="display: none;"  class="navbar navbar-fixed-top hide">
     <div class="navbar-inner">
-        <div class="container-fluid">
+        <div class="container">
             <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
             <a class="brand" href="#"><img src="images/logo.png" width="200px;" /></a>
 
@@ -10,9 +10,9 @@
                 <ul class="nav pull-right">
 
                     <li class="dropdown">
-                        <a class="active" > Logged in as:  Mr. Amoo </a>
+                                <a class="active" > Logged in as:  <%=mgr.getStafftableByid(user.getStaffid()).getLastname() %> <%=mgr.getStafftableByid(user.getStaffid()).getOthername() %></a>
 
-                    </li>
+                            </li>
                     <li class="divider-vertical"></li>
 
                     <li class="dropdown">
@@ -20,21 +20,20 @@
                         <ul class="dropdown-menu">
 
                             <li>
+                                <a target="_blank" href="bootstrap.min.css"><i class="icon-wrench"></i> Settings </a>
                             </li>
 
                             <li>
-                                <a href="#"><i class="icon-question-sign"></i> Help </a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="icon-share"></i> Feedback </a>
+                                <a target="_blank" href="bootstrap.css"><i class="icon-question-sign"></i> Help </a>
                             </li>
                             <li class="divider"></li>
 
                             <li>
-                                <a href="logout.jsp"><i class="icon-off"></i> Log Out</a>
-                            </li>
+                                        <a target="_blank" href="logout.jsp"><i class="icon-off"></i> Log Out</a>
+                                    </li>
 
                         </ul>
+
                     </li>
                 </ul>
             </div>

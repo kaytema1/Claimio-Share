@@ -12,7 +12,7 @@
             if(user == null){
                 session.setAttribute("lasterror", "Please Login");
                 response.sendRedirect("index.jsp");
-            } %>
+            }HMSHelper mgr = new HMSHelper(); %>
 <html>
     <head>
         <meta charset="utf-8">
@@ -122,7 +122,7 @@
                         <ul class="nav pull-right">
 
                             <li class="dropdown">
-                                <a class="active" > Logged in as:  Mr. Amoo </a>
+                                <a class="active" > Logged in as:  <%=mgr.getStafftableByid(user.getStaffid()).getLastname() %> <%=mgr.getStafftableByid(user.getStaffid()).getOthername() %></a>
 
                             </li>
                             <li class="divider-vertical"></li>
@@ -197,7 +197,7 @@
 
                         HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
 
-                        HMSHelper mgr = new HMSHelper();
+                        
 
                         List itmss = mgr.listPermissions();
 

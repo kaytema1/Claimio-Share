@@ -7,13 +7,12 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <% Users user = (Users) session.getAttribute("staff");
-            if (user == null) {
+            if(user == null){
                 session.setAttribute("lasterror", "Please Login");
                 response.sendRedirect("index.jsp");
-            }%>
+            } %>
 
         <%@page import="entities.*,java.util.List,java.util.Date,java.text.SimpleDateFormat,java.text.DateFormat" %>
-
         <%
             HMSHelper mgr = new HMSHelper();
             String searchid = request.getParameter("searchid") == null ? "" : request.getParameter("searchid");
@@ -26,8 +25,7 @@
                 if (searchid.equalsIgnoreCase("memberdshipnumber")) {
                     if (searchquery.equals("")) {
                         session.setAttribute("lasterror", "Invalid search. Please enter a correct value in the field provided");
-                        session.setAttribute("class", "alert-error");
-                        response.sendRedirect("records.jsp");
+                        response.sendRedirect("index.jsp");
                         return;
                     }
                     // Sponsorhipdetails spd = mgr.getSearchedSpID(searchquery.trim());
@@ -40,8 +38,7 @@
                 if (searchid.equalsIgnoreCase("fullname")) {
                     if (searchquery.equals("")) {
                         session.setAttribute("lasterror", "Invalid search. Please enter a correct value in the field provided");
-                        session.setAttribute("class", "alert");
-                        response.sendRedirect("records.jsp");
+                        response.sendRedirect("index.jsp");
                         return;
                     }
                     list = mgr.getPatientByName(searchquery);
@@ -51,8 +48,7 @@
                 if (searchid.equalsIgnoreCase("patientid")) {
                     if (searchquery.equals("")) {
                         session.setAttribute("lasterror", "Invalid search. Please enter a correct value in the field provided");
-                        session.setAttribute("class", "alert");
-                        response.sendRedirect("records.jsp");
+                        response.sendRedirect("index.jsp");
                         return;
                     }
                     p = mgr.getPatientByID(searchquery.trim());
@@ -61,8 +57,7 @@
                 if (searchid.equalsIgnoreCase("dob")) {
                     if (searchquery.equals("")) {
                         session.setAttribute("lasterror", "Invalid search. Please enter a correct value in the field provided");
-                        session.setAttribute("class", "alert");
-                        response.sendRedirect("records.jsp");
+                        response.sendRedirect("index.jsp");
                         return;
                     }
                     System.out.println(searchquery);
@@ -73,8 +68,7 @@
                 }
             } catch (Exception e) {
                 session.setAttribute("lasterror", "Invalid search. Please enter a correct value in the field provided");
-                session.setAttribute("class", "alert");
-                response.sendRedirect("records.jsp");
+                response.sendRedirect("index.jsp");
                 return;
             }
 
@@ -119,24 +113,6 @@
                 color: #FFFFFF;
                 text-decoration: none;
             }
-
-
-            .table th {
-                border-top: 1px solid #DDDDDD;
-                line-height: 10px;
-                text-align: center;
-                vertical-align: top;
-                color: #000000;
-            }
-
-            .table td {
-                padding: 6px;
-                padding-bottom: 0px;
-                line-height: 25px;
-            }
-
-
-
         </style>
         <link href="css/tablecloth.css" rel="stylesheet" type="text/css" media="screen" />
 
@@ -144,7 +120,51 @@
 
     <body data-spy="scroll" data-target=".subnav" data-offset="50">
 
-        <%@include file="widgets/header.jsp" %>
+        <!-- Navbar
+        ================================================== -->
+        <div style="display: none;" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+                    <a class="brand" href="../"><img src="images/logo.png" width="200px;" /></a>
+
+                    <div style="margin-top: 10px;" class="nav-collapse">
+                        <ul class="nav pull-right">
+
+                             <li class="dropdown">
+                                <a class="active" > Logged in as:  <%=mgr.getStafftableByid(user.getStaffid()).getLastname() %> <%=mgr.getStafftableByid(user.getStaffid()).getOthername() %></a>
+
+                            </li>
+                            <li class="divider-vertical"></li>
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> Account <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+
+                                    <li>
+                                        <a target="_blank" href="bootstrap.min.css"><i class="icon-wrench"></i> Settings </a>
+                                    </li>
+
+                                    <li>
+                                        <a target="_blank" href="bootstrap.css"><i class="icon-question-sign"></i> Help </a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="bootstrap.css"><i class="icon-share"></i> Feedback </a>
+                                    </li>
+                                    <li class="divider"></li>
+
+                                    <li>
+                                        <a target="_blank" href="logout.jsp"><i class="icon-off"></i> Log Out</a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="container-fluid">
 
@@ -156,10 +176,7 @@
                     <ul class="nav nav-pills">
 
                         <li>
-                            <a href="records.jsp">Records</a><span class="divider"></span>
-                        </li>
-                        <li class="active">
-                            <a href="#">Search Results</a><span class="divider"></span>
+                            <a href="#">Home</a><span class="divider"></span>
                         </li>
 
                     </ul>
@@ -190,24 +207,21 @@
 
                     <div style="display: none;" class="span9 offset3 thumbnail well content1 hide">
 
-                        <%if (session.getAttribute("lasterror") != null) {%>
-                        <div class="alert hide <%=session.getAttribute("class")%> span12 center">
-                            <b> <%=session.getAttribute("lasterror")%>  </b>
-                        </div>
-                        <br/>
-                        <div style="margin-bottom: 20px;" class="clearfix"></div>
-                        <%session.removeAttribute("lasterror");
-                            }%>
+                        <ul style="margin-left: 0px;" class="breadcrumb ">
+                            <li>
+                                <a>Search Result for {Query} </a>
+                            </li>
+                        </ul>
 
                         <table cellpadding="0" cellspacing="0" border="0" class="display example table">
                             <thead>
                                 <tr>
-                                    <th>Folder # </th>
+                                    <th>Folder Number </th>
                                     <th>Full Name </th>
                                     <th>Sponsor</th>
                                     <th>Date of Birth</th>
-                                    <th>Location</th>
-                                    <th>Consultation Type</th>
+                                    <th>Folder Location</th>
+                                    <th>To Log a Patient in Select Consultation Type</th>
 
                                 </tr>
                             </thead>
@@ -216,16 +230,12 @@
                                 <tr class="odd gradeX">
 
                                     <td class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <b><%= p.getFname()%>, <%= p.getLname()%> <%= p.getMidname()%> </b></h5> <h5><b> Date of Birth :</b> <%= p.getDateofbirth()%></h5> <span>"
-                                        data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%= p.getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%= p.getEmployer()%>  </td>  </tr> <tr> <td> Sponsor </td> <td>
-                                        <%=  mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(p.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()).getSponsorname()%>  </td> </tr>
-                                        </table>">
-                                        <a class="patientid"><%= p.getPatientid()%></a>
-                                    </td>
-                                    <td><%= p.getFname()%>, <%= p.getLname()%> <%= p.getMidname()%></td><td><%= mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(p.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()).getSponsorname()%></td><td>  <%= p.getDateofbirth()%> </td>
+                                        data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%= p.getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%= p.getEmployer()%>  </td>  </tr> <tr> <td> Sponsor </td> <td><%=  mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid())==null?mgr.sponsorshipDetails(p.getPatientid()).getType() :mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()).getSponsorname()%>  </td> </tr>
+                                        </table>"><a class="patientid"><%= p.getPatientid()%></a></td><td><%= p.getFname()%>, <%= p.getLname()%> <%= p.getMidname()%></td><td><%= mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid())==null ? mgr.sponsorshipDetails(p.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()).getSponsorname()%></td><td>  <%= p.getDateofbirth()%> </td>
                                     <td><%= mgr.getPatientFolder(p.getPatientid()).getStatus()%></td>
                                     <td>
                                         <div style="display: block" id="s_<%=p.getPatientid()%>">
-                                            <select class="input-medium" name="contype" onchange='showConType("d_<%=p.getPatientid()%>")' id="ty">
+                                            <select name="contype" onchange='showConType("d_<%=p.getPatientid()%>")' id="ty">
                                                 <option>Select</option>
                                                 <%
                                                     List types = mgr.listConsultation();
@@ -236,7 +246,7 @@
                                                 <% }%>
                                             </select>
                                         </div>
-                                        <div id="d_<%=p.getPatientid()%>" style="display: none; float: left;">
+                                        <div id="d_<%=p.getPatientid()%>" style="display: none">
                                             <a  id="patientidlink"  class="btn btn-info" onclick='getContype()'> <i class="icon-pencil icon-white"> </i> New Visit </a>
                                         </div></td>
                                 </tr>
@@ -290,11 +300,6 @@
 
                         <td><b> <%= p.getEmployer()%></b></td>
                     </tr>
-                    <tr>
-                        <td> Folder No </td>
-
-                        <td><b> <%= p.getPatientid() %></b></td>
-                    </tr>
 
                 </table>
 
@@ -306,24 +311,24 @@
 
 
                 <form class="span3" style="text-align: center; margin-left: 25%;"  action="action/forwardaction.jsp" method="post">
+                    Send <b><%= p.getFname()%></b> to
+                     <div class="control-group">
+                                        <label class="control-label" for="input01"> Unit </label>
 
-                    <div class="control-group">
+                                        <select name="unitid" onchange="updateView()">
+                                            <% 
+                                                List lists = mgr.listUnits();
 
+                                                for (int r = 0; r < lists.size(); r++) {
+                                                    Units unit = (Units) lists.get(r);
+                                            %>  
+                                            <option value="<%=unit.getType()%>_<%=unit.getUnitid()%>"><%=unit.getUnitname()%></option>
+                                            <%}
+                                               %>
+                                    </select>
 
-                        <select class="input-medium" name="unitid" onchange="updateView()">
-                            <%
-                                List lists = mgr.listUnits();
-
-                                for (int r = 0; r < lists.size(); r++) {
-                                    Units unit = (Units) lists.get(r);
-                            %>  
-                            <option value="<%=unit.getType()%>_<%=unit.getUnitid()%>"><%=unit.getUnitname()%></option>
-                            <%}
-                            %>
-                        </select>
-
-                        <p class="help-block"></p>
-                    </div>
+                                    <p class="help-block"></p>
+                                </div>
                     <br />
                     <input type="hidden" name="patient" value="<%=p.getPatientid()%>"/>
                     <input type="hidden" name="contype" id="contype" value=""/>
@@ -334,15 +339,107 @@
                 </form>
                 <div class="clearfix"></div>
 
-                <!--  <div class="btn-group" style="margin-left: 40%;">
-                      <button class="btn update_sponsor btn-info">
-                          Sponsorship
-                      </button>
-                  </div>  -->
+                <div class="btn-group" style="margin-left: 40%;">
+                    <button class="btn update_sponsor btn-info">
+                        Sponsorship
+                    </button>
+                </div>
                 <br />
                 <div class="clearfix"></div>
 
+                <div style="display: none;" class="sponsor_panel thumbnail well hide">
+                    <ul class="breadcrumb">
+                        <li>
+                            <a  href="#"> Sponsorship Details </a>
+                        </li>
 
+                    </ul>
+
+                    <form action="action/sponsorupdate.jsp" method="post" class="form-horizontal">
+                        <fieldset>
+
+                            <div class="control-group">
+                                <label class="control-label" for="input01">Sponsor Type</label>
+                                <div class="controls">
+                                    <% Sponsorhipdetails sponsorhipdetails = mgr.sponsorshipDetails(p.getPatientid());%>
+                                    <% if (sponsorhipdetails != null) {%>
+                                    <input type="text" name="type" value="<%=mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid())==null ? "" : mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()).getType()%>"/>
+                                    <%} else {%>
+                                    <select name="type">
+                                        <%if (sponsorhipdetails.getType() != null) {%>
+                                        <option selected="selected" value="<%=sponsorhipdetails.getType()%>"><%=sponsorhipdetails.getType()%></option>
+                                        <%}%>
+                                        <option value="nhis">National Health Insurance </option>
+                                        <option value="cash">Out of Pocket</option>
+                                        <option value="private">Private Health Insurance</option>
+                                        <option value="cooperate">Corporate</option>
+                                    </select>
+                                    <%}%>
+                                    <p class="help-inline">
+
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="input01">Sponsors</label>
+                                <div class="controls">
+                                    <%if (sponsorhipdetails != null) {%>
+                                    <input type="text" name="sponsorid" value="<%=mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid())== null ? "" : mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()).getSponsorname()%>"/>
+                                    <%} else {%>
+                                    <select name="sponsorid">
+                                        <%
+                                            List sponsorList = mgr.listSponsors();
+                                            for (int r = 0; r < sponsorList.size(); r++) {
+                                                Sponsorship sponsor = (Sponsorship) sponsorList.get(r);
+
+                                        %>
+                                        <option value="<%=sponsor.getSponshorshipid()%>"><%=sponsor.getSponsorname()%></option>
+                                        <% }
+
+                                        %>
+                                    </select>
+                                    <%}%>
+                                    <p class="help-inline">
+
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="input01">Benefit Plan : </label>
+                                <div class="controls">
+                                    <% if (sponsorhipdetails != null) {%>
+                                    <input type="text" name="benefitplan" value="<%=sponsorhipdetails.getBenefitplan() == null ? "" : sponsorhipdetails.getBenefitplan()%>"/>
+
+                                    <%}%><p class="help-inline">
+
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="input01">Membership ID Number : </label>
+                                <div class="controls">
+                                    <% if (sponsorhipdetails != null) {%>
+                                    <input type="text" name="membershipid" value="<%=sponsorhipdetails.getMembershipid() == null ? "" : sponsorhipdetails.getMembershipid()%>"/>
+
+                                    <input type="hidden" name="patientid" value="<%= p.getPatientid()%>"/>
+                                    <%}%><p class="help-inline">
+
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn" id="action" name="action" value="update">
+                                    <i class="icon-edit "> </i> Update Details
+                                </button>
+                                <button type="button" class="btn btn-inverse slideup">
+                                    <i class="icon-off icon-white"></i> Cancel
+                                </button>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                </div>
 
                 <div style="display: none;" class="history_panel thumbnail well hide">
                     <ul class="breadcrumb">
@@ -389,17 +486,21 @@
 
                 <div style="display: none;" class="span9 offset3 thumbnail well content1 hide">
 
-
+                    <ul style="margin-left: 0px;" class="breadcrumb ">
+                        <li>
+                            <a>Search Result for {Query} </a>
+                        </li>
+                    </ul>
 
                     <table cellpadding="0" cellspacing="0" border="0" class="display example table">
                         <thead>
                             <tr>
-                                <th>Folder # </th>
+                                <th>Folder Number </th>
                                 <th>Full Name </th>
                                 <th>Sponsor</th>
                                 <th>Date of Birth</th>
-                                <th>Location</th>
-                                <th>Consultation Type</th>
+                                <th>Folder Location</th>
+                                <th>To Log a Patient in Select Consultation Type</th>
 
                             </tr>
                         </thead>
@@ -410,12 +511,12 @@
                             %>
                             <tr class="odd gradeX">
                                 <td class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <b> <%= pp.getFname()%>, <%= pp.getLname()%> <%= pp.getMidname()%> </b></h5> <h5><b> Date of Birth :</b> <%= pp.getDateofbirth()%></h5> <span>"
-                                    data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%= pp.getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%= pp.getEmployer()%>  </td>  </tr> <tr> <td> Sponsor </td> <td><%=mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(pp.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid()).getSponsorname()%>  </td> </tr>
-                                    </table>"><a class="patientid"><%= pp.getPatientid()%></a></td><td><b><%= pp.getFname()%>, <%= pp.getLname()%> <%= pp.getMidname()%> </b></td><td><%= mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(pp.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid()).getSponsorname()%></td><td>  <%= pp.getDateofbirth()%> </td>
+                                    data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%= pp.getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%= pp.getEmployer()%>  </td>  </tr> <tr> <td> Sponsor </td> <td><%=mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid())==null? mgr.sponsorshipDetails(pp.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid()).getSponsorname()%>  </td> </tr>
+                                    </table>"><a class="patientid"><%= pp.getPatientid()%></a></td><td><b><%= pp.getFname()%>, <%= pp.getLname()%> <%= pp.getMidname()%> </b></td><td><%= mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid())==null?mgr.sponsorshipDetails(pp.getPatientid()).getType() :mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid()).getSponsorname()%></td><td>  <%= pp.getDateofbirth()%> </td>
                                 <td><%= mgr.getPatientFolder(pp.getPatientid()).getStatus()%></td>
                                 <td>
                                     <div style="display: block" id="s_<%=pp.getPatientid()%>">
-                                        <select class="input-medium" name="contype" onchange='showConType("d_<%=pp.getPatientid()%>")' id="ty_<%=pp.getPatientid()%>">
+                                        <select name="contype" onchange='showConType("d_<%=pp.getPatientid()%>")' id="ty_<%=pp.getPatientid()%>">
                                             <option>Select</option>
                                             <%
                                                 List types = mgr.listConsultation();
@@ -467,12 +568,6 @@
 
             <table class="table span3 right table table-bordered table-condensed">
                 <tr>
-                    <td> Folder Number </td>
-
-                    <td><b> <%= ppp.getPatientid()%></b></td>
-                </tr>
-
-                <tr>
                     <td> Full Name</td>
 
                     <td><b> <%= ppp.getFname()%></b></td>
@@ -490,8 +585,6 @@
                     <td><b> <%= ppp.getEmployer()%></b></td>
                 </tr>
 
-
-
             </table>
 
             <div class="clearfix"></div>
@@ -501,28 +594,26 @@
             <hr />
 
 
-
-
             <form class="span3" style="text-align: center; margin-left: 25%; "  action="action/forwardaction.jsp" method="post">
+                Send <b><%= ppp.getFname()%></b> to
+                 <div class="control-group">
+                                        <label class="control-label" for="input01"> Unit </label>
 
-                <div class="control-group">
+                                        <select name="unitid" onchange="updateView()">
+                                            <% 
+                                                List lists = mgr.listUnits();
 
+                                                for (int r = 0; r < lists.size(); r++) {
+                                                    Units unit = (Units) lists.get(r);
+                                            %>  
+                                            <option value="<%=unit.getType()%>_<%=unit.getUnitid()%>"><%=unit.getUnitname()%></option>
+                                            <%}
+                                               %>
+                                    </select>
 
-                    <select name="unitid" onchange="updateView()">
-                        <%
-                            List lists = mgr.listUnits();
-
-                            for (int r = 0; r < lists.size(); r++) {
-                                Units unit = (Units) lists.get(r);
-                        %>  
-                        <option value="<%=unit.getType()%>_<%=unit.getUnitid()%>"><%=unit.getUnitname()%></option>
-                        <%}
-                        %>
-                    </select>
-
-                    <p class="help-block"></p>
-                </div>
-
+                                    <p class="help-block"></p>
+                                </div>
+                
                 <br />
                 <input type="hidden" name="patient" value="<%=ppp.getPatientid()%>"/>
 
@@ -534,31 +625,147 @@
             </form>
             <div class="clearfix"></div>
 
+            <div class="btn-group" style="margin-left: 40%;">
+                <button class="btn update_sponsor btn-info">
+                    Sponsorship
+                </button>
 
 
+            </div>
+            <br />
+            <div class="clearfix"></div>
 
+            <div style="display: none;" class="sponsor_panel thumbnail well hide">
+                <ul class="breadcrumb">
+                    <li>
+                        <a  href="#"> Sponsorship Details </a>
+                    </li>
+
+                </ul>
+
+                <form action="action/sponsorupdate.jsp" method="post" class="form-horizontal">
+                    <fieldset>
+
+                        <div class="control-group">
+                            <label class="control-label" for="input01">Sponsor Type</label>
+                            <div class="controls">
+                                <% Sponsorhipdetails sponsorhipdetails = mgr.sponsorshipDetails(ppp.getPatientid());%>
+                                <% if (sponsorhipdetails != null) {%>
+                                <input type="text" name="type" value="<%=mgr.getSponsor(mgr.sponsorshipDetails(ppp.getPatientid()).getSponsorid())==null?"":mgr.getSponsor(mgr.sponsorshipDetails(ppp.getPatientid()).getSponsorid()).getType()%>"/>
+                                <%} else {%>
+                                <select name="type">
+                                    <%if (sponsorhipdetails.getType() != null) {%>
+                                    <option selected="selected" value="<%=sponsorhipdetails.getType()%>"><%=sponsorhipdetails.getType()%></option>
+                                    <%}%>
+                                    <option value="nhis">National Health Insurance </option>
+                                    <option value="cash">Out of Pocket</option>
+                                    <option value="private">Private Health Insurance</option>
+                                    <option value="cooperate">Corporate</option>
+                                </select>
+                                <%}%>
+                                <p class="help-inline">
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="input01">Sponsors</label>
+                            <div class="controls">
+                                <%if (sponsorhipdetails != null) {%>
+                                <input type="hidden" name="sponsorid" value="<%=mgr.sponsorshipDetails(ppp.getPatientid()).getSponsorid()%>"/>
+                                <input type="text" name="sponsorid" value="<%=mgr.getSponsor(mgr.sponsorshipDetails(ppp.getPatientid()).getSponsorid())==null?"":mgr.getSponsor(mgr.sponsorshipDetails(ppp.getPatientid()).getSponsorid()).getSponsorname()%>"/>
+                                <%} else {%>
+                                <select name="sponsorid">
+                                    <%
+                                        List sponsorList = mgr.listSponsors();
+                                        for (int r = 0; r < sponsorList.size(); r++) {
+                                            Sponsorship sponsor = (Sponsorship) sponsorList.get(r);
+
+                                    %>
+                                    <option value="<%=sponsor.getSponshorshipid()%>"><%=sponsor.getSponsorname()%></option>
+                                    <% }
+
+                                    %>
+                                </select>
+                                <%}%>
+                                <p class="help-inline">
+
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="input01">Benefit Plan : </label>
+                            <div class="controls">
+                                <% if (sponsorhipdetails != null) {%>
+                                <input type="text" name="benefitplan" value="<%=sponsorhipdetails.getBenefitplan() == null ? "" : sponsorhipdetails.getBenefitplan()%>"/>
+
+                                <%}%><p class="help-inline">
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="input01">Membership ID Number : </label>
+                            <div class="controls">
+                                <% if (sponsorhipdetails != null) {%>
+                                <input type="text" name="membershipid" value="<%=sponsorhipdetails.getMembershipid() == null ? "" : sponsorhipdetails.getMembershipid()%>"/>
+
+                                <input type="hidden" name="patientid" value="<%= ppp.getPatientid()%>"/>
+                                <%}%><p class="help-inline">
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn" id="action" name="action" value="update">
+                                <i class="icon-edit "> </i> Update Details
+                            </button>
+                            <button type="button" class="btn btn-inverse slideup">
+                                <i class="icon-off icon-white"></i> Cancel
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+
+            </div>
+
+            <div style="display: none;" class="history_panel thumbnail well hide">
+                <ul class="breadcrumb">
+                    <li>
+                        <a  href="#">Visit History </a>
+                    </li>
+
+                </ul>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="color: black;">Visit Date </th>
+                            <th style="color: black;">Visit Type </th>
+
+                        </tr>
+                    </thead>
+                    <% List visits = mgr.patientHistory(ppp.getPatientid());%>
+                    <tbody>
+                        <%for (int r = 0; r < visits.size(); r++) {
+                                Visitationtable vs = (Visitationtable) visits.get(r);
+                        %>
+                        <tr>
+                            <td class="patient_visit" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Visit Summary </h3> <h5><%=ppp.getFname()%> <%=ppp.getFname()%></h5> <h5> <%=ppp.getDateofbirth()%> </h5> <span>"
+                                data-content="<table class='table table-bordered'> <tr> <td> <%=vs.getStatus()%></td> <td> <%=vs.getDate()%> </td> </tr>  <tr> <%=vs.getStatus()%></td> <td> <%=vs.getDate()%>  </td> </tr>  <tr> <td>  <%=vs.getStatus()%></td> <td> <%=vs.getDate()%>  </td> </tr> <tr>
+                                </table> "> <%=vs.getDate()%> </td>
+                            <td><%=vs.getStatus()%></td>
+                        </tr>
+                        <%}%>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
     </div>
 
     <% }
-    } else {
-
-    %>
-
-    <br/> 
-
-    <div class="alert hide alert-info container center">
-        <b> No Results Found!  </b>
-    </div>
-    <br/>
-    <div class="container-fluid center">
-
-
-        <img id="bgimage"  class="center hide" width="40%" src="images/logoonly.png" />
-
-    </div>   
-    <%        }
+        }
     %>
 
     <!--end static dialog-->
@@ -598,12 +805,10 @@
             menu_ul.hide();
 
             $(".menu").fadeIn();
-            $(".alert").fadeIn();
             $(".content1").fadeIn();
             $(".navbar").fadeIn();
             $(".footer").fadeIn();
             $(".subnav").fadeIn();
-            $("#bgimage").fadeIn();
             $(".progress1").hide();
 
             menu_a.click(function(e) {

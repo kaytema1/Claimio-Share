@@ -10,7 +10,9 @@
             if(user == null){
                 session.setAttribute("lasterror", "Please Login");
                 response.sendRedirect("index.jsp");
-            } %>
+            } 
+  HMSHelper mgr = new HMSHelper();
+%>
 
 <html>
     <head>
@@ -344,7 +346,7 @@
                             </thead>
                             <tbody>
                                 <%
-                                    HMSHelper mgr = new HMSHelper();
+                                  
                                     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                                     SimpleDateFormat formatter = new SimpleDateFormat("EEEE, d MMMM yyyy");
                                     Visitationtable vs = null;
