@@ -49,17 +49,15 @@
             String l = mgr.stepOverVisit(patientid, dateFormat.format(date));
 
             if (l.equalsIgnoreCase("Yes")) {
-                session.setAttribute("class","alert");
-                session.setAttribute("lasterror", "Patient is Already Logged In!");
+                session.setAttribute("lasterror", "Patient is already logged");
                 response.sendRedirect("../records.jsp");
                 return;
             }
 
-            Visitationtable visit = mgr.createNewVisit(patientid, "", "", unitName,(String)session.getAttribute("unit"), type, "");
+            Visitationtable visit = mgr.createNewVisit(patientid, "", "", unitName, (String)session.getAttribute("unit"), type, "");
             mgr.updateFolderLocation((String)session.getAttribute("unit"), unitName, patientid);
             mgr.addPatientConsultation(visit.getVisitid(), type);
-            session.setAttribute("class","alert-success");
-            session.setAttribute("lasterror", " Patient Forwarded Successfully!");
+            session.setAttribute("lasterror", "Successfully forwarded");
             response.sendRedirect("../records.jsp");
             return;
 

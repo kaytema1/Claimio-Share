@@ -6,7 +6,7 @@
 <%@page import="java.util.List"%>
 <%@page import="entities.*,helper.HibernateUtil" %>
 <% try {
-
+     
         HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
 
         if ("login".equals(request.getParameter("action"))) {
@@ -14,8 +14,7 @@
             String password = request.getParameter("password");
             String unit = request.getParameter("unit");
             if (username.equals("") || password.equals("") || unit.equals("")) {
-                session.setAttribute("class", "alert-error");
-                session.setAttribute("lasterror", "Sorry, Please Complete All Fields !");
+                session.setAttribute("lasterror", "Sorry Can't log you in");
                 response.sendRedirect("../index.jsp");
                 return;
             }
@@ -29,8 +28,7 @@
             String[] redirect = unit.split("_");
             //Password password1 = new Password();
             if (Password.check(password, user.getPassword())) {
-                session.setAttribute("lasterror", "Signed in Successfully");
-                session.setAttribute("class", "alert-success");
+                session.setAttribute("lasterror", "Sign in successful");
                 session.setAttribute("staff", user);
                 if (redirect[0].equals("ward")) {
                     response.sendRedirect("../ward.jsp");
@@ -69,7 +67,7 @@
                 }
 
             }
-            session.setAttribute("class", "alert-error");
+
             session.setAttribute("lasterror", "Sorry Can't log you in");
             response.sendRedirect("../index.jsp");
             return;
@@ -79,8 +77,7 @@
 
         HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction().commit();
         HibernateUtil.getSessionFactory().close();
-        session.setAttribute("class", "alert-error");
-        session.setAttribute("lasterror", "Invalid Username or Password");
+        session.setAttribute("lasterror", "Wrong username or password");
         response.sendRedirect("../index.jsp");
         return;
     } catch (Exception ex) {

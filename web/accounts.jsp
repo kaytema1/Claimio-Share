@@ -72,6 +72,7 @@
             Date date = new Date();
             //System.out.println(dateFormat.format(date));
 <<<<<<< HEAD
+<<<<<<< HEAD
             List visits = mgr.listUnitVisitations("Accounts", dateFormat.format(date));
             
             
@@ -81,6 +82,10 @@
 
             List visits = mgr.listUnitVisitations((String) session.getAttribute("unit"), dateFormat.format(date));
 >>>>>>> Changes in the Files by Isaac 24 Sept 2012
+=======
+
+            List visits = mgr.listUnitVisitations((String) session.getAttribute("unit"), dateFormat.format(date));
+>>>>>>> a5571dd5bb74ce4057461a6d40624acd977761fa
             List treatments = null;
 
             // for (int i = 0; i < visits.size(); i++) {
@@ -97,7 +102,55 @@
 
     <body data-spy="scroll" data-target=".subnav" data-offset="50">
 
+<<<<<<< HEAD
         <%@include file="widgets/header.jsp" %>
+=======
+        <!-- Navbar
+        ================================================== -->
+        <div style="display: none;" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+                    <a class="brand" href="../"><img src="images/logo.png" width="200px;" /></a>
+
+                    <div style="margin-top: 10px;" class="nav-collapse">
+                        <ul class="nav pull-right">
+
+                            <li class="dropdown">
+                                <a class="active" > Logged in as:  <%=mgr.getStafftableByid(user.getStaffid()).getLastname() %> <%=mgr.getStafftableByid(user.getStaffid()).getOthername() %></a>
+
+                            </li>
+                            <li class="divider-vertical"></li>
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> Account <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+
+                                    <li>
+                                        <a target="_blank" href="bootstrap.min.css"><i class="icon-wrench"></i> Settings </a>
+                                    </li>
+
+                                    <li>
+                                        <a target="_blank" href="bootstrap.css"><i class="icon-question-sign"></i> Help </a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="bootstrap.css"><i class="icon-share"></i> Feedback </a>
+                                    </li>
+                                    <li class="divider"></li>
+
+                                    <li>
+                                        <a target="_blank" href="logout.jsp"><i class="icon-off"></i> Log Out</a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+>>>>>>> a5571dd5bb74ce4057461a6d40624acd977761fa
 
         <div class="container-fluid">
 
@@ -442,8 +495,14 @@
                                                     </form>
                                                     <%}
                                                         String rec = vst.getPreviouslocstion();
+<<<<<<< HEAD
                                                         String[] recs = rec.split("_");
                                                         if (recs[0].equals("records")){%>
+=======
+                                                        String[] recs = rec.split("_");%>
+                                                        <%=rec%>
+                                                        <%if (recs[0].equals("records")){%>
+>>>>>>> a5571dd5bb74ce4057461a6d40624acd977761fa
                                                     <form action="action/accountsaction.jsp" method="post">
                                                         <table class="table example display">
                                                             <thead>
@@ -513,6 +572,7 @@
                                                                 <i class="icon-white icon-arrow-right"> </i> Forward
                                                             </button>
                                                         </div>
+                                                            </form>
                                                         <%}%>
 
                                                 </div>
@@ -690,8 +750,7 @@
         $("#<%=vst.getVisitid()%>_adddrug_dialog").dialog('open');
         
     })
-   
-    
+     
 </script>
 
 

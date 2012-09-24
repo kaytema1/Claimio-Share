@@ -10,7 +10,8 @@
     if (user == null) {
         session.setAttribute("lasterror", "Please Login");
         response.sendRedirect("index.jsp");
-    }%>
+    }
+    HMSHelper mgr = new HMSHelper();%>
 
 <html>
     <head>
@@ -397,7 +398,7 @@
                             </thead>
                             <tbody>
                                 <%
-                                    HMSHelper mgr = new HMSHelper();
+
                                     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                                     SimpleDateFormat formatter = new SimpleDateFormat("EEEE, d MMMM yyyy");
                                     Visitationtable vs = null;
@@ -602,7 +603,26 @@
                     <div style="display: none;" class="well thumbnail center diagnosis">
                         <ul class="breadcrumb">
                             <li>
-                                <a style="text-align: center;">Diagnosis</a>
+                                <a style="text-align: center;">Diagnoses</a>
+                            </li>
+
+                        </ul>
+                        <br/>
+                        <ul class="breadcrumb">
+                            <%List pds = mgr.patientDiagnosis(visit.getVisitid());
+                                if (pds != null) {
+                                    for (int z = 0; z < pds.size(); z++) {
+                                        Patientdiagnosis p = (Patientdiagnosis) pds.get(z);
+                            %>
+                            <li>
+                                <%=mgr.getDiagnosis(p.getDiagnosisid()).getDiagnosis()%>
+                            </li><br/>
+                            <%}
+                            }%>
+                        </ul>
+                        <ul class="breadcrumb">
+                            <li>
+                                <a style="text-align: center;">Make new diagnosis</a>
                             </li>
 
                         </ul>
@@ -745,10 +765,28 @@
                     <div style="display: none;" class="well thumbnail center prescription">
                         <ul class="breadcrumb">
                             <li>
+                                <a>Prescriptions</a>
+                            </li>
+                        </ul>
+                        <br/>
+                        <ul class="breadcrumb">
+                        <%List pts = mgr.patientTreatment(visit.getVisitid());
+                            if (pts != null) {
+                                for (int u = 0; u < pts.size(); u++) {
+                                    Patienttreatment p = (Patienttreatment) pts.get(u);
+                                
+                        %>
+                        <li>
+                            <%=mgr.getTreatment(p.getTreatmentid()).getTreatment()%>
+                            </li><br/>
+                        <%}
+                            }%>
+                        </ul>
+                        <ul class="breadcrumb">
+                            <li>
                                 <a>Prescription Form</a>
                             </li>
                         </ul>
-
                         <div id="treat">
 
                             <table> 
@@ -1052,6 +1090,21 @@
                     <div style="display: none;" class="well thumbnail center laboratory">
                         <ul class="breadcrumb">
                             <li>
+                                <a href="#">Requests</a>
+                            </li>
+
+                        </ul>
+                        <ul class="breadcrumb">
+                            <% List pis = mgr.patientInvestigation(visit.getVisitid());
+                            if(pis != null){
+                                for(int v=0;v<pis.size();v++){ 
+                                     Patientinvestigation p = (Patientinvestigation) pis.get(v);
+                            %>
+                            <li><%=mgr.getTreatment(p.getInvestigationid()).getTreatment()%></li><br/>
+                            <%}}%>
+                        </ul>
+                        <ul class="breadcrumb">
+                            <li>
                                 <a href="#" onclick="showdInvestigation()">Laboratory Request Form</a>
                             </li>
 
@@ -1183,7 +1236,9 @@
                             %>
                             <tr>
                                 <td>
+
                                 </td>
+
                                 <td>
                                     <%=laborders.getOrderdate()%> 
                                 </td>
@@ -1200,8 +1255,8 @@
                                 </td>
                             </tr>
                             <%}
-                                        }
-                                    }%>
+                                    }
+                                }%>
                             </tbody>
 
                         </table>

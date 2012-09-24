@@ -8,8 +8,6 @@
 <%
 
         session.removeAttribute("staff");
-        session.setAttribute("lasterror", "Log Out Successful!");
-        session.setAttribute("class", "alert-success");
         response.sendRedirect("index.jsp");
         return;
     %>

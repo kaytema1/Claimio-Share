@@ -9,10 +9,10 @@
 <%@page import="entities.*,java.util.List,java.util.Date,java.text.SimpleDateFormat,java.text.DateFormat" %>
 <!DOCTYPE html>
 <% Users user = (Users) session.getAttribute("staff");
-    if (user == null) {
-        session.setAttribute("lasterror", "Please Login");
-        response.sendRedirect("index.jsp");
-    }%>
+            if(user == null){
+                session.setAttribute("lasterror", "Please Login");
+                response.sendRedirect("index.jsp");
+            }HMSHelper mgr = new HMSHelper(); %>
 <html>
     <head>
         <%@include file="widgets/stylesheets.jsp" %>
@@ -23,35 +23,20 @@
         <%@include file="widgets/header.jsp" %>
 
         <div class="container-fluid">
-            <header  class="jumbotron subhead" id="overview">
-
-                <div style="margin-top: 20px; margin-bottom: -50px;" class="subnav navbar-fixed-top hide">
-                    <ul class="nav nav-pills">
-                        
-                        <li>
-                            <a href="#">Records</a><span class="divider"></span>
-                        </li>
-                        <li class="active">
-                            <a href="#">Nurses Station</a><span class="divider"></span>
-                        </li>
-
-                    </ul>
-                </div>
-
-            </header>
+            <%@include file="widgets/subhead.jsp" %>
 
 
             <%@include file="widgets/loading.jsp" %>
 
             <section id="dashboard">
-
-                <%if (session.getAttribute("lasterror") != null) {%>
-                <div class="alert hide <%=session.getAttribute("class")%> span12 center">
-                    <b> <%=session.getAttribute("lasterror")%>  </b>
-                </div>
-                <br/>
-                <div style="margin-bottom: 20px;" class="clearfix"></div>
-                <%session.removeAttribute("lasterror");
+                
+                     <%if (session.getAttribute("lasterror") != null) {%>
+                    
+                    <div class="alert alert-danger">
+                    <%=session.getAttribute("lasterror")%> 
+                     </div>
+                    <%
+                            session.removeAttribute("lasterror");
                         }%>
                 <!-- Headings & Paragraph Copy -->
                 <div class="row">
@@ -59,7 +44,12 @@
                     <%@include file="widgets/leftsidebar.jsp" %>
                     <div style="display: none;" class="span9 offset3 thumbnail well content hide">
 
-                        
+                        <ul style="margin-left: 0px; " class="breadcrumb ">
+                            <li>
+                                <a >Out Patient Department</a><br/>
+
+                            </li>
+                        </ul>
 
                         <table cellpadding="0" cellspacing="0" border="0" class="display example table">
                             <thead>
@@ -77,14 +67,14 @@
                             </thead>
                             <tbody>
                                 <%
-                                    HMSHelper mgr = new HMSHelper();
+                                    
                                     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                                     //Patient p = (Patient)session.getAttribute("patient");
                                     //get current date time with Date()
                                     SimpleDateFormat formatter = new SimpleDateFormat("EEEE, d MMMM yyyy");
                                     Date date = new Date();
                                     //System.out.println(dateFormat.format(date));
-                                    List visits = mgr.listUnitVisitations((String) session.getAttribute("unit"), dateFormat.format(date));
+                                    List visits = mgr.listUnitVisitations((String)session.getAttribute("unit"), dateFormat.format(date));
                                     // List patients = mgr.listPatients();
                                     for (int i = 0; i < visits.size(); i++) {
                                         Visitationtable visit = (Visitationtable) visits.get(i);
@@ -94,21 +84,21 @@
 
                                 <tr>
                                     <td class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <%= mgr.getPatientByID(visit.getPatientid()).getFname()%></h5> <h5><b> Date of Birth :</b> <%= formatter.format(mgr.getPatientByID(visit.getPatientid()).getDateofbirth())%>  </h5> <span>"
-                                        data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%= mgr.getPatientByID(visit.getPatientid()).getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%= mgr.getPatientByID(visit.getPatientid()).getEmployer()%>  </td>  </tr> <tr> <td> Sponsor </td> <td> <%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(visit.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%>  </td> </tr> <tr>
+                                        data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%= mgr.getPatientByID(visit.getPatientid()).getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%= mgr.getPatientByID(visit.getPatientid()).getEmployer()%>  </td>  </tr> <tr> <td> Sponsor </td> <td> <%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid())==null?mgr.sponsorshipDetails(visit.getPatientid()).getType():mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%>  </td> </tr> <tr>
                                         <td> Policy Number </td> <td> <%= mgr.sponsorshipDetails(visit.getPatientid()).getMembershipid()%> </td> </tr> <tr> <td> Benefit Plan </td> <td> <%= mgr.sponsorshipDetails(visit.getPatientid()).getBenefitplan()%> </td> </tr>  </table> ">
                                         <a href="vital.jsp?patientid=<%=visit.getPatientid()%>&id=<%=visit.getVisitid()%>"><%= visit.getPatientid()%> </a> 
                                     </td>
                                     <td>
-                                        <%=mgr.getPatientByID(visit.getPatientid()).getFname()%>, <%=mgr.getPatientByID(visit.getPatientid()).getMidname()%> <%=mgr.getPatientByID(visit.getPatientid()).getLname()%>
+                                       <%=mgr.getPatientByID(visit.getPatientid()).getFname()%>, <%=mgr.getPatientByID(visit.getPatientid()).getMidname()%> <%=mgr.getPatientByID(visit.getPatientid()).getLname()%>
                                     </td>
                                     <td>
-                                        <%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(visit.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%> 
+                                        <%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid())==null?mgr.sponsorshipDetails(visit.getPatientid()).getType():mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%> 
                                     </td>
                                     <td>
                                         <%= formatter.format(mgr.getPatientByID(visit.getPatientid()).getDateofregistration())%>
                                     </td>
                                     <td>
-                                        <a id="<%=visit.getPatientid()%><%=visit.getVisitid()%>link"  class="visitlink btn btn-info btn-mini"> <i class="icon-pencil icon-white"> </i> New Vital Record </a>
+                                        <a id="<%=visit.getPatientid()%><%=visit.getVisitid()%>link"  class="visitlink btn btn-info"> <i class="icon-pencil icon-white"> </i> New Vital Record </a>
                                     </td>
                                 </tr>
                                 <% }
@@ -159,7 +149,7 @@
             });
         </script>
 
-        <div style="max-height: 600px; y-overflow: scroll; display: none;" class="visit hide" id="<%=visit.getPatientid()%><%=visit.getVisitid()%>"  title="Enter Patient's Vital">
+        <div style="max-height: 600px; y-overflow: scroll; display: none;" class="visit hide" id="<%=visit.getPatientid()%><%=visit.getVisitid()%>"  title="Patient Vital">
 
             <div class="well thumbnail">
                 <ul style="margin-left: 0px;" class="breadcrumb">
@@ -245,11 +235,11 @@
                                     <select class="chzn-select medium-select select chzn-done" name="conroom">
                                         <%
                                             List ls = mgr.listConRooms();
-                                            for (int x = 0; x < ls.size(); x++) {
-                                                Consultingrooms conroom = (Consultingrooms) ls.get(x);
-                                        %>
-                                        <option value="<%=conroom.getType()%>_<%=conroom.getConsultingroomid()%>"><%=conroom.getConsultingroom()%></option>
-                                        <%}
+                                                for(int x = 0 ; x < ls.size(); x++){
+                                                    Consultingrooms conroom = (Consultingrooms) ls.get(x);
+                                            %>
+                                            <option value="<%=conroom.getType()%>_<%=conroom.getConsultingroomid()%>"><%=conroom.getConsultingroom()%></option>
+                                                    <%}
 
                                         %>
 

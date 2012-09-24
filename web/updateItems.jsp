@@ -14,7 +14,7 @@
             if(user == null){
                 session.setAttribute("lasterror", "Please Login");
                 response.sendRedirect("index.jsp");
-            } %>
+            }   HMSHelper itm = new HMSHelper(); %>
 
 <html>
     <head>
@@ -122,7 +122,7 @@
                 int id = Integer.parseInt(id1);
                 HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
 
-                HMSHelper itm = new HMSHelper();
+             
 
                 List itmss = itm.EditItems(id);
                 for (int i = 0; i < itmss.size(); i++) {

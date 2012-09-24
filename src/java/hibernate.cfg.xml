@@ -51,11 +51,6 @@
     <mapping resource="entities/Department.hbm.xml"/>
     <mapping resource="entities/Users.hbm.xml"/>
     <mapping resource="entities/Loggingtable.hbm.xml"/>
-    <mapping resource="entities/DetailedinvPosinvresults.hbm.xml"/>
-    <mapping resource="entities/LabtypeDetailedinv.hbm.xml"/>
-    <mapping resource="entities/Labtypes.hbm.xml"/>
-    <mapping resource="entities/MaininvSubinv.hbm.xml"/>
-    <mapping resource="entities/DetailedInvestigation.hbm.xml"/>
-    <mapping resource="entities/PossibleinvResults.hbm.xml"/>
+    <mapping resource="entities/AppointType.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

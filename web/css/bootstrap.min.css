@@ -3534,7 +3534,7 @@ input[type="submit"].btn.btn-mini {
 }
 .modal {
   position: fixed;
-  top: 60%;
+  top: 50%;
   left: 50%;
   z-index: 1050;
   overflow: auto;
@@ -4690,21 +4690,4 @@ div.subnav .nav > .open > .dropdown-toggle:hover .caret {
 
 .center{
 	text-align: center;
-}
-
-
-
-
-label.valid {
-    width: 24px;
-    height: 24px;
-    background: url(img/valid.png) center center no-repeat;
-    display: inline-block;
-    text-indent: -9999px;
-}
-label.error {
-    font-weight: bold;
-    color: red;
-    padding: 2px 8px;
-    margin-top: 2px;
 }

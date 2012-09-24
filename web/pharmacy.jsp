@@ -484,7 +484,7 @@
                                                                 %>
                                                             </select>
                                                             <br/>
-                                                            <input type="hidden" name="from" value="Pharmacy"/>
+                                                           
                                                             <button class="btn btn-info" name="action" value="Forward to Accounts">
                                                                 <i class="icon-white icon-check"></i> Forward
                                                             </button>

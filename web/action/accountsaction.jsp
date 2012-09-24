@@ -27,7 +27,6 @@
             try {
                 visitid = Integer.parseInt(visit);
             } catch (NumberFormatException e) {
-                
                 session.setAttribute("lasterror", "Please try again");
                 response.sendRedirect("../accounts.jsp");
                 return;
@@ -96,8 +95,6 @@
                 }
                 mgr.updateFolderLocation((String)session.getAttribute("unit"), uName, pid);
                 mgr.updateVisitationStatus(vstid, uName, (String)session.getAttribute("unit"));
-                
-                
                 session.setAttribute("lasterror", "Successfully forwarded");
                 response.sendRedirect("../accounts.jsp");
                 return;

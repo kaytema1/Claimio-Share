@@ -20,15 +20,15 @@
                 session.setAttribute("lasterror", "patient does not exist please try again");
                 response.sendRedirect("records.jsp");
             }
-
-            Users user = (Users) session.getAttribute("staff");
-            if (user == null) {
+            
+             Users user = (Users) session.getAttribute("staff");
+            if(user == null){
                 session.setAttribute("lasterror", "Please Login");
                 response.sendRedirect("index.jsp");
-            }
+            } 
 
             //Patient patient = mgr.getPatientByID(patientid);
-        %>
+%>
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
         <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -76,7 +76,51 @@
 
     <body data-spy="scroll" data-target=".subnav" data-offset="50">
 
-        <%@include file="widgets/header.jsp" %>
+        <!-- Navbar
+        ================================================== -->
+        <div style="display: none;" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+                    <a class="brand" href="../"><img src="images/logo.png" width="200px;" /></a>
+
+                    <div style="margin-top: 10px;" class="nav-collapse">
+                        <ul class="nav pull-right">
+
+                             <li class="dropdown">
+                                <a class="active" > Logged in as:  <%=mgr.getStafftableByid(user.getStaffid()).getLastname() %> <%=mgr.getStafftableByid(user.getStaffid()).getOthername() %></a>
+
+                            </li>
+                            <li class="divider-vertical"></li>
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> Account <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+
+                                    <li>
+                                        <a target="_blank" href="bootstrap.min.css"><i class="icon-wrench"></i> Settings </a>
+                                    </li>
+
+                                    <li>
+                                        <a target="_blank" href="bootstrap.css"><i class="icon-question-sign"></i> Help </a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="bootstrap.css"><i class="icon-share"></i> Feedback </a>
+                                    </li>
+                                    <li class="divider"></li>
+
+                                    <li>
+                                        <a target="_blank" href="logout.jsp"><i class="icon-off"></i> Log Out</a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="container-fluid">
 
@@ -88,9 +132,9 @@
                     <ul class="nav nav-pills">
 
                         <li>
-                            <a href="records.jsp">Records</a><span class="divider"></span>
+                            <a href="#">Front Desk</a><span class="divider"></span>
                         </li>
-                        <li class="active">
+                        <li>
                             <a href="#">Today's Patients</a><span class="divider"></span>
                         </li>
 
@@ -117,11 +161,16 @@
 
                 <!-- Headings & Paragraph Copy -->
                 <div class="row">
-                    <%@include file="widgets/leftsidebar.jsp" %>
+                      <%@include file="widgets/leftsidebar.jsp" %>
                     <div style="margin-top: 0px; "class="span12 offset3 content1 hide">
 
                         <div style="padding-bottom: 80px;" class="span9 thumbnail well content">
+                            <ul style="margin-left: 0px;" class="breadcrumb">
+                                <li>
+                                    <a> <i class="icon-tasks"></i> Today's Patients</a>
+                                </li>
 
+                            </ul>
                             <table class="example display">
                                 <thead>
                                     <tr>
@@ -129,13 +178,13 @@
                                         <th> Full name</th>
                                         <th> Date of Birth </th>
                                         <th> Sponsor </th>
-                                       
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <%
-                                        Visitationtable vs = null;
-                                        for (int r = 0; r < visits.size(); r++) {
+                                    <% 
+                                    Visitationtable vs = null;
+                                    for (int r = 0; r < visits.size(); r++) {
                                             Visitationtable visit = (Visitationtable) visits.get(r);
                                             vs = mgr.currentVisitations(visit.getVisitid());
 
@@ -148,16 +197,14 @@
                                         <td><%=mgr.getPatientByID(visit.getPatientid()).getFname()%></td>
                                         <td> <%=mgr.getPatientByID(visit.getPatientid()).getDateofbirth()%> </td>
                                         <td> <%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%></td>
-                                       <!-- <td>
+                                        <td>
                                             <button class="btn btn-info user_summary_link link_<%=vs.getVisitid()%>" id="link_<%=vs.getVisitid()%>">
                                                 <i class="icon-white icon-pencil"></i> View Visit
-                                            </button>
-                                          
-                                          </td>  -->
+                                            </button></td>
                                     </tr>
-                                <div style="y-overflow: scroll; display: none;" class="visit hide" id="dialog_<%=vs.getVisitid()%>"  title="Todays Visit Details <%= mgr.getPatientByID(visit.getPatientid()).getFname()%>">
-                                </div>
-                                <%}%>
+                                    <div style="y-overflow: scroll; display: none;" class="visit hide" id="dialog_<%=vs.getVisitid()%>"  title="Todays Visit Details <%= mgr.getPatientByID(visit.getPatientid()).getFname()%>">
+                                    </div>
+                                    <%}%>
                                 </tbody>
                             </table>
 
@@ -178,8 +225,8 @@
 
         </div><!-- /container -->
 
-
-
+        
+        
         <!--end static dialog-->
 
         <!-- Le javascript
@@ -243,7 +290,6 @@
             $(document).ready(function() {
                 $('.example').dataTable({
                     "bJQueryUI" : true,
-                    "sScrollY" : '400',
                     "sPaginationType" : "full_numbers",
                     "iDisplayLength" : 25,
                     "aaSorting" : [],
@@ -261,38 +307,38 @@
             });
 
         </script>
-        <%
+ <%
 
-            String file = "";
-            String file2 = "";
+        String file = "";
+        String file2 = "";
 
-            for (int i = 0; i < visits.size(); i++) {
-                Visitationtable visit = (Visitationtable) visits.get(i);
-                vs = mgr.currentVisitations(visit.getVisitid());
-                // List patientHistory = mgr.patientHistory(visit.getPatientid());
-%>
-        <script type="text/javascript">
-            $(document).ready(function(){
+        for (int i = 0; i < visits.size(); i++) {
+            Visitationtable visit = (Visitationtable) visits.get(i);
+             vs = mgr.currentVisitations(visit.getVisitid());
+           // List patientHistory = mgr.patientHistory(visit.getPatientid());
+    %>
+    <script type="text/javascript">
+        $(document).ready(function(){
                                                       
                
-                $('#dialog_<%=vs.getVisitid()%>').dialog({
-                    autoOpen : false,
-                    width : 1000,
-                    modal :true,
-                    position : "top"
+            $('#dialog_<%=vs.getVisitid()%>').dialog({
+                autoOpen : false,
+                width : 1000,
+                modal :true,
+                position : "top"
 		
-                });
+            });
                 
-                $('#link_<%=vs.getVisitid()%>').click(function(){
+            $('#link_<%=vs.getVisitid()%>').click(function(){
                    
-                    $('#<%=vs.getVisitid()%>').dialog('open');
-                    return false;
-                });
+                $('#<%=vs.getVisitid()%>').dialog('open');
+                return false;
+            });
                 
                                                         
                 
-            });
-        </script>
-        <%}%>
+        });
+    </script>
+<%}%>
     </body>
 </html>

@@ -8,7 +8,6 @@
     Users current = (Users) session.getAttribute("staff");
             if(current == null){
                 session.setAttribute("lasterror", "Please Login");
-                session.setAttribute("class", "alert-error");
                 response.sendRedirect("index.jsp");
             }
         Session sess = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -30,8 +29,7 @@
             System.out.println("content "+id);
             String content  = ""+temperature+"-"+weight+"-"+height+"-"+systolic+":"+diatolic+"-"+pulse+"-"+vital+"";
             if(patientid.equalsIgnoreCase("") || id.equalsIgnoreCase("")){
-                session.setAttribute("lasterror", "Vitals could not be saved, Please Try Again");
-                session.setAttribute("class", "alert-error");
+                session.setAttribute("lasterror", "Vital could not be saved please try again");
                 response.sendRedirect("../vital.jsp");
                 return;
             }
@@ -40,8 +38,7 @@
             
             mgr.updateFolderLocation((String)session.getAttribute("unit"),forward, patientid);
             
-            session.setAttribute("lasterror", "Vital Successfully Saved!");
-            session.setAttribute("class", "alert-success");
+            session.setAttribute("lasterror", "Vital Successfully");
             response.sendRedirect("../opd.jsp");
         }
 

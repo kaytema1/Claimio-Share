@@ -9,9 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -561,6 +559,17 @@ public class HMSHelper {
         session.save(symptoms);
         session.getTransaction().commit();
         return symptoms;
+    }
+    
+    public AppointType addAppointType(String type) throws ParseException {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        AppointType appointType = new AppointType();
+        appointType.setType(type);
+        session.save(appointType);
+        session.getTransaction().commit();
+        return appointType;
     }
 
     public Users addUser(Users users) throws ParseException {
@@ -1410,6 +1419,14 @@ public class HMSHelper {
         return result;
     }
 
+    public List listAppointment(String title) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from Appoint where title='"+title+"'").list();
+        session.getTransaction().commit();
+        return result;
+    }
+
     public List listConsultation() {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -1475,6 +1492,14 @@ public class HMSHelper {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         List result = session.createQuery("from Sponsorship where type='Cooperate'").list();
+        session.getTransaction().commit();
+        return result;
+    }
+    
+    public List listAppointType() {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from AppointType").list();
         session.getTransaction().commit();
         return result;
     }
@@ -1814,7 +1839,7 @@ public class HMSHelper {
         session.getTransaction().commit();
         return app;
     }
-
+    
     public Appoint honorAppointment(int id) throws ParseException {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -1954,6 +1979,19 @@ public class HMSHelper {
         session.update(ward);
         session.getTransaction().commit();
         return ward;
+    }
+    
+    public AppointType updateAppointType(int wardid, String type) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        AppointType appointType = (AppointType) session.get(AppointType.class, wardid);
+        appointType.setType(type);
+        //appointType.setOccupied(ward.getOccupied() + 1);
+
+        session.update(appointType);
+        session.getTransaction().commit();
+        return appointType;
     }
 
     public Dosagemonitor updateDosage(int dosageid, String morning, String afternoon, String evening, int patientTreatmentid, int visitid, Date date) {
@@ -2161,6 +2199,16 @@ public class HMSHelper {
 
         session.getTransaction().commit();
         return sponsor;
+    }
+    
+    public AppointType getAppointTypeByid(int typeid) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        AppointType appointType = (AppointType) session.get(AppointType.class, typeid);
+
+        session.getTransaction().commit();
+        return appointType;
     }
 
     public Clerkingquestion getClerkingQuestionByid(int questionid) {
@@ -2443,16 +2491,6 @@ public class HMSHelper {
         return newborn;
     }
 
-    public Appoint getAppointmentById(int id) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        System.out.println("in the code");
-        Appoint appoint = (Appoint) session.get(Appoint.class, id);
-
-        session.getTransaction().commit();
-        return appoint;
-    }
-
     public Newborn getNewbornByPatientVisitId(String patientid) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -2493,6 +2531,15 @@ public class HMSHelper {
         return dosageMonitor;
     }
 
+    public Appoint getAppointmentById(int id){
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        Appoint appoint = (Appoint) session.get(Appoint.class, id);
+        //session.delete(dosageMonitor);
+        session.getTransaction().commit();
+        return appoint;
+    }
 
     /*
      * Deleting items from the system
@@ -2669,6 +2716,16 @@ public class HMSHelper {
         session.getTransaction().commit();
         return stafftable;
     }
+    
+    public AppointType deleteAppointType(int typeid) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        AppointType appointType = (AppointType) session.get(AppointType.class, typeid);
+        session.delete(appointType);
+        session.getTransaction().commit();
+        return appointType;
+    }
 
     public Department deleteDepartment(int departmentid) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -2737,263 +2794,5 @@ public class HMSHelper {
             return false;
         }
         return true;
-    }
-
-    /**
-     * **
-     * Nezer Sept 22th Sept 2012 *
-     */
-    public List listPatientVisits(String patientId) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        List result = session.createQuery("from Visitationtable where patientid ='" + patientId + "'").list();
-        session.getTransaction().commit();
-        return result;
-    }
-    
-    public List getPatientConsultationByVisitid(int visitid) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-
-        Query query = session.createQuery("from Patientconsultation where visitid = :code ");
-        query.setParameter("code", visitid);
-        List list = query.list();
-
-        session.getTransaction().commit();
-        System.out.println("size of list : " + list.size());
-        return list;
-    }
-    
-     public List getPatientTreatmentByVisitid(int visitid) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-
-        Query query = session.createQuery("from Patienttreatment where visitationid = :code ");
-        query.setParameter("code", visitid);
-        List list = query.list();
-
-        session.getTransaction().commit();
-        return list;
-    }
-     
-     public List getPatientInvestigatonsByVisitid(int visitid) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-
-        Query query = session.createQuery("from Patientinvestigation where visitationid = :code ");
-        query.setParameter("code", visitid);
-        List list = query.list();
-
-        session.getTransaction().commit();
-        return list;
-    }
-     
-     public List listAllPatientVisitsForDate(Date specificDate) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        List result = session.createQuery("from Visitationtable where date = '" + specificDate + "'").list();
-        session.getTransaction().commit();
-        return result;
-    }
-     
-      public List listAllPatientVisitsForDuration(Date startDate, Date endDate) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        List result = session.createQuery("from Visitationtable where date between '" + startDate + "' and '" + endDate + "'").list();
-        session.getTransaction().commit();
-        return result;
-    }
-      
-       public List listAllPatientVisits() {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        List result = session.createQuery("from Visitationtable").list();
-        session.getTransaction().commit();
-        return result;
-    }
-       
-       public List listPatientsOfSponsor(int sponsorId) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        List result = session.createQuery("from Sponsorhipdetails where sponsorid = '" + sponsorId + "'").list();
-        session.getTransaction().commit();
-        return result;
-    }
-       
-        public Labtypes addLabType(String name, String code) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        Labtypes labType = new Labtypes();
-        labType.setLabType(name);
-        labType.setLabCode(code);
-
-        session.save(labType);
-        session.getTransaction().commit();
-        return labType;
-    }
-    
-     public Labtypes deleteLabType(int id) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        //   Query result = session.createQuery("delete from ItemsTable where items_id = "+id);
-        Labtypes unit = (Labtypes) session.get(Labtypes.class, id);
-        session.delete(unit);
-        session.getTransaction().commit();
-
-        return unit;
-    }
-     
-     public Labtypes updateLabType(int uid, String uname) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-        Labtypes wardnote = (Labtypes) session.get(Labtypes.class, uid);
-        wardnote.setLabType(uname);
-        
-        session.update(wardnote);
-        session.getTransaction().commit();
-        return wardnote;
-    }
-     
-     public List listLabTypes() {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        List result = session.createQuery("from Labtypes").list();
-        session.getTransaction().commit();
-        return result;
-    }
-     
-         public DetailedInvestigation createDetailedInvestigation
-                 (String code, String name, double rate, String lowBound, String highBound, int 
-                         labTypeId, int typeOfTestId, int groupUnderId, String units, 
-                         String interpretation, String defaultValue, String rangeFrom, 
-                         String rangeUpTo, String comments, String reportCollDays, Date reportCollTime, 
-                         boolean resultOptions) throws Exception {
-             
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        DetailedInvestigation detailedInv = new DetailedInvestigation();
-        DateFormat formatter;
-        Date date;
-//        formatter = new SimpleDateFormat("yyyy-MM-dd");
-//        date = (Date) formatter.parse(dob);
-        detailedInv.setCode(code);
-        detailedInv.setName(name);
-        detailedInv.setRate(rate);
-        detailedInv.setLowBound(lowBound);
-        detailedInv.setHighBound(highBound);
-        detailedInv.setLabTypeId(labTypeId);
-        detailedInv.setTypeOfTestId(typeOfTestId);
-        detailedInv.setGroupedUnderId(groupUnderId);
-        detailedInv.setUnits(units);
-        detailedInv.setInterpretation(interpretation);
-        detailedInv.setDefaultValue(defaultValue);
-        detailedInv.setRangeFrom(rangeFrom);
-        detailedInv.setRangeUpTo(rangeUpTo);
-        detailedInv.setComments(comments);
-        detailedInv.setReportCollDays(reportCollDays);
-        detailedInv.setReportCollTime(reportCollTime);
-        detailedInv.setResultOptions(resultOptions);
-        
-
-        session.save(detailedInv);
-
-        session.getTransaction().commit();
-        return detailedInv;
-    }
-     
-         
-         // associate lab type with main investigation
-   public LabtypeDetailedinv addLabTypeMainTest(int labTypeId, int mainTestId) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        LabtypeDetailedinv labTypeMainTest = new LabtypeDetailedinv();
-        labTypeMainTest.setLabtypeId(labTypeId);
-        labTypeMainTest.setDetailedInvId(mainTestId);
-        session.save(labTypeMainTest);
-        session.getTransaction().commit();
-        return labTypeMainTest;
-    }
-   
-          // associate main investigation with sub investigation
-   public MaininvSubinv addMainTestSubTest(int mainTestId, int subTestId) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        MaininvSubinv mainInvSubInv = new MaininvSubinv();
-        mainInvSubInv.setMaininvId(mainTestId);
-        mainInvSubInv.setSubinvId(subTestId);
-        session.save(mainInvSubInv);
-        session.getTransaction().commit();
-        return mainInvSubInv;
-    }
-   
-    public PossibleinvResults addPosInvResult(String result) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        PossibleinvResults posinvResult = new PossibleinvResults();
-        posinvResult.setPosinvResult(result);
-
-        session.save(posinvResult);
-        session.getTransaction().commit();
-        return posinvResult;
-    }
-    
-      public DetailedinvPosinvresults addDetInvPosResult(int detailedInvId, int posResultId) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        DetailedinvPosinvresults detInvPosResult = new DetailedinvPosinvresults();
-        detInvPosResult.setDetailedinvId(detailedInvId);
-        detInvPosResult.setPosinvresultId(posResultId);
-        session.save(detInvPosResult);
-        session.getTransaction().commit();
-        return detInvPosResult;
-    }
-      
-      public List listLabTypeDetailedInv(int labTypeId) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        List result = session.createQuery("from LabtypeDetailedinv where labtype_id = '" + labTypeId + "'").list();
-        session.getTransaction().commit();
-        return result;
-    }
-      
-       public DetailedInvestigation getDetailedInvById(int id) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-        DetailedInvestigation detInv = (DetailedInvestigation) session.get(DetailedInvestigation.class, id);
-
-        session.getTransaction().commit();
-        return detInv;
-    }
-       
-       public LabtypeDetailedinv getLabtypeDetailedinvByIds(int labTypeId, int detailedInvId) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-        LabtypeDetailedinv labTypeDetailedInv = (LabtypeDetailedinv) session.createQuery("from labtype_detailedinv where labtype_id =" + labTypeId +" and detailed_inv_id =" + detailedInvId);
-
-        session.getTransaction().commit();
-        return labTypeDetailedInv;
-    }
-       
-         public List listAllDetailedInvestigation() {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        List result = session.createQuery("from DetailedInvestigation").list();
-        session.getTransaction().commit();
-        return result;
-    }
-         
-          public List listMainInvestigation() {
-              int typeOfTestId = 1;
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        List result = session.createQuery("from DetailedInvestigation where type_of_test_id = '" + typeOfTestId + "'").list();
-        session.getTransaction().commit();
-        return result;
     }
 }
