@@ -5,6 +5,7 @@
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/extended</property>
     <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password">myqueen83</property>
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.current_session_context_class">thread</property>
     <property name="hibernate.query.factory_class">org.hibernate.hql.classic.ClassicQueryTranslatorFactory</property>
@@ -51,6 +52,11 @@
     <mapping resource="entities/Department.hbm.xml"/>
     <mapping resource="entities/Users.hbm.xml"/>
     <mapping resource="entities/Loggingtable.hbm.xml"/>
-    
+    <mapping resource="entities/DetailedinvPosinvresults.hbm.xml"/>
+    <mapping resource="entities/LabtypeDetailedinv.hbm.xml"/>
+    <mapping resource="entities/Labtypes.hbm.xml"/>
+    <mapping resource="entities/MaininvSubinv.hbm.xml"/>
+    <mapping resource="entities/DetailedInvestigation.hbm.xml"/>
+    <mapping resource="entities/PossibleinvResults.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

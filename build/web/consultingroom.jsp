@@ -413,7 +413,7 @@
                                             vs = mgr.currentVisitations(visit.getVisitid());
 
                                             // List patientHistory = mgr.patientHistory(visit.getPatientid());
-%>
+                                %>
                                 <tr>
                                     <td>
                                         <!--<a href="condetails.jsp?patientid=<%=visit.getPatientid()%>&id=<%=visit.getVisitid()%>"> -->
@@ -1084,6 +1084,9 @@
                                 <option value="Select">Select Investigation</option>
                                 <%
                                     // List treatments = mgr.patientTreatment(int visitationid);
+
+
+
                                     investigations = mgr.listInvestigation();
                                     if (investigations != null) {
                                         for (int p = 0; p < investigations.size(); p++) {
@@ -1196,8 +1199,8 @@
                                 </td>
                             </tr>
                             <%}
-                                        }
-                                    }%>
+                                    }
+                                }%>
                             </tbody>
 
                         </table>

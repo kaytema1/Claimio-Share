@@ -74,6 +74,10 @@
             Date date = new Date();
             //System.out.println(dateFormat.format(date));
             List visits = mgr.listUnitVisitations("Accounts", dateFormat.format(date));
+            
+            
+            
+            System.out.println("visits.size : " + visits.size());
             List treatments = null;
             // for (int i = 0; i < visits.size(); i++) {
             //   Visitationtable visit = (Visitationtable) visits.get(i);

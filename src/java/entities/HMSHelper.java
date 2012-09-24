@@ -2761,6 +2761,7 @@ public class HMSHelper {
         List list = query.list();
 
         session.getTransaction().commit();
+        System.out.println("size of list : " + list.size());
         return list;
     }
     
@@ -2818,6 +2819,180 @@ public class HMSHelper {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         List result = session.createQuery("from Sponsorhipdetails where sponsorid = '" + sponsorId + "'").list();
+        session.getTransaction().commit();
+        return result;
+    }
+       
+        public Labtypes addLabType(String name, String code) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        Labtypes labType = new Labtypes();
+        labType.setLabType(name);
+        labType.setLabCode(code);
+
+        session.save(labType);
+        session.getTransaction().commit();
+        return labType;
+    }
+    
+     public Labtypes deleteLabType(int id) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        //   Query result = session.createQuery("delete from ItemsTable where items_id = "+id);
+        Labtypes unit = (Labtypes) session.get(Labtypes.class, id);
+        session.delete(unit);
+        session.getTransaction().commit();
+
+        return unit;
+    }
+     
+     public Labtypes updateLabType(int uid, String uname) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        Labtypes wardnote = (Labtypes) session.get(Labtypes.class, uid);
+        wardnote.setLabType(uname);
+        
+        session.update(wardnote);
+        session.getTransaction().commit();
+        return wardnote;
+    }
+     
+     public List listLabTypes() {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from Labtypes").list();
+        session.getTransaction().commit();
+        return result;
+    }
+     
+         public DetailedInvestigation createDetailedInvestigation
+                 (String code, String name, double rate, String lowBound, String highBound, int 
+                         labTypeId, int typeOfTestId, int groupUnderId, String units, 
+                         String interpretation, String defaultValue, String rangeFrom, 
+                         String rangeUpTo, String comments, String reportCollDays, Date reportCollTime, 
+                         boolean resultOptions) throws Exception {
+             
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        DetailedInvestigation detailedInv = new DetailedInvestigation();
+        DateFormat formatter;
+        Date date;
+//        formatter = new SimpleDateFormat("yyyy-MM-dd");
+//        date = (Date) formatter.parse(dob);
+        detailedInv.setCode(code);
+        detailedInv.setName(name);
+        detailedInv.setRate(rate);
+        detailedInv.setLowBound(lowBound);
+        detailedInv.setHighBound(highBound);
+        detailedInv.setLabTypeId(labTypeId);
+        detailedInv.setTypeOfTestId(typeOfTestId);
+        detailedInv.setGroupedUnderId(groupUnderId);
+        detailedInv.setUnits(units);
+        detailedInv.setInterpretation(interpretation);
+        detailedInv.setDefaultValue(defaultValue);
+        detailedInv.setRangeFrom(rangeFrom);
+        detailedInv.setRangeUpTo(rangeUpTo);
+        detailedInv.setComments(comments);
+        detailedInv.setReportCollDays(reportCollDays);
+        detailedInv.setReportCollTime(reportCollTime);
+        detailedInv.setResultOptions(resultOptions);
+        
+
+        session.save(detailedInv);
+
+        session.getTransaction().commit();
+        return detailedInv;
+    }
+     
+         
+         // associate lab type with main investigation
+   public LabtypeDetailedinv addLabTypeMainTest(int labTypeId, int mainTestId) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        LabtypeDetailedinv labTypeMainTest = new LabtypeDetailedinv();
+        labTypeMainTest.setLabtypeId(labTypeId);
+        labTypeMainTest.setDetailedInvId(mainTestId);
+        session.save(labTypeMainTest);
+        session.getTransaction().commit();
+        return labTypeMainTest;
+    }
+   
+          // associate main investigation with sub investigation
+   public MaininvSubinv addMainTestSubTest(int mainTestId, int subTestId) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        MaininvSubinv mainInvSubInv = new MaininvSubinv();
+        mainInvSubInv.setMaininvId(mainTestId);
+        mainInvSubInv.setSubinvId(subTestId);
+        session.save(mainInvSubInv);
+        session.getTransaction().commit();
+        return mainInvSubInv;
+    }
+   
+    public PossibleinvResults addPosInvResult(String result) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        PossibleinvResults posinvResult = new PossibleinvResults();
+        posinvResult.setPosinvResult(result);
+
+        session.save(posinvResult);
+        session.getTransaction().commit();
+        return posinvResult;
+    }
+    
+      public DetailedinvPosinvresults addDetInvPosResult(int detailedInvId, int posResultId) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        DetailedinvPosinvresults detInvPosResult = new DetailedinvPosinvresults();
+        detInvPosResult.setDetailedinvId(detailedInvId);
+        detInvPosResult.setPosinvresultId(posResultId);
+        session.save(detInvPosResult);
+        session.getTransaction().commit();
+        return detInvPosResult;
+    }
+      
+      public List listLabTypeDetailedInv(int labTypeId) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from LabtypeDetailedinv where labtype_id = '" + labTypeId + "'").list();
+        session.getTransaction().commit();
+        return result;
+    }
+      
+       public DetailedInvestigation getDetailedInvById(int id) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        DetailedInvestigation detInv = (DetailedInvestigation) session.get(DetailedInvestigation.class, id);
+
+        session.getTransaction().commit();
+        return detInv;
+    }
+       
+       public LabtypeDetailedinv getLabtypeDetailedinvByIds(int labTypeId, int detailedInvId) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        LabtypeDetailedinv labTypeDetailedInv = (LabtypeDetailedinv) session.createQuery("from labtype_detailedinv where labtype_id =" + labTypeId +" and detailed_inv_id =" + detailedInvId);
+
+        session.getTransaction().commit();
+        return labTypeDetailedInv;
+    }
+       
+         public List listAllDetailedInvestigation() {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from DetailedInvestigation").list();
+        session.getTransaction().commit();
+        return result;
+    }
+         
+          public List listMainInvestigation() {
+              int typeOfTestId = 1;
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from DetailedInvestigation where type_of_test_id = '" + typeOfTestId + "'").list();
         session.getTransaction().commit();
         return result;
     }

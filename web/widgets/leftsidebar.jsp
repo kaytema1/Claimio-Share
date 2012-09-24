@@ -94,6 +94,12 @@
                 <li class="subitem3">
                     <a href="#">Procurement Sheet</a>
                 </li>
+                <li class="subitem4">
+                    <a href="addlabtype.jsp">Add Lab Type</a>
+                </li>
+                <li class="subitem4">
+                    <a href="addmaininv.jsp">Add Investigation</a>
+                </li>
 
             </ul>
         </li>
