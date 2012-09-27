@@ -666,12 +666,12 @@
                                         Visit Date
                                     </th>
                                     <th>
-
-                                        Investigation
+ Diagnosis
+                                        
                                     </th>
                                     <th>
 
-                                        Diagnosis
+                                       Investigation
                                     </th>
                                     <th>
 

@@ -427,6 +427,7 @@
                                                           Sponsorship
                                                       </button>
                                                   </div>  -->
+                                                <a href="genericformshow.jsp?id=<%=p.getPatientid() %>&sid=<%=lastVisitId %>">View Claim</a>
                                                 <br />
                                                 <div class="clearfix"></div>
 

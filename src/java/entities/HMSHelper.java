@@ -308,20 +308,19 @@ public class HMSHelper {
         return laborders;
     }
 
-   /* public Investigation addAnInvestigation(String investigation, double price, String icd10, String gdrg) {
-        session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        Investigation investigationObj = new Investigation();
-        investigationObj.setInvestigation(investigation);
-        investigationObj.setPrice(price);
-        investigationObj.setGdrg(gdrg);
-        investigationObj.setIcd10(icd10);
+    /* public Investigation addAnInvestigation(String investigation, double price, String icd10, String gdrg) {
+     session = HibernateUtil.getSessionFactory().getCurrentSession();
+     session.beginTransaction();
+     Investigation investigationObj = new Investigation();
+     investigationObj.setInvestigation(investigation);
+     investigationObj.setPrice(price);
+     investigationObj.setGdrg(gdrg);
+     investigationObj.setIcd10(icd10);
 
-        session.save(investigationObj);
-        session.getTransaction().commit();
-        return investigationObj;
-    }*/
-
+     session.save(investigationObj);
+     session.getTransaction().commit();
+     return investigationObj;
+     }*/
     public Patientclerking addPatientClerking(int visitid, int questionid, int answerid) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -2750,7 +2749,7 @@ public class HMSHelper {
         session.getTransaction().commit();
         return result;
     }
-    
+
     public List getPatientConsultationByVisitid(int visitid) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -2764,8 +2763,8 @@ public class HMSHelper {
         System.out.println("size of list : " + list.size());
         return list;
     }
-    
-     public List getPatientTreatmentByVisitid(int visitid) {
+
+    public List getPatientTreatmentByVisitid(int visitid) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
 
@@ -2777,8 +2776,8 @@ public class HMSHelper {
         session.getTransaction().commit();
         return list;
     }
-     
-     public List getPatientInvestigatonsByVisitid(int visitid) {
+
+    public List getPatientInvestigatonsByVisitid(int visitid) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
 
@@ -2790,40 +2789,40 @@ public class HMSHelper {
         session.getTransaction().commit();
         return list;
     }
-     
-     public List listAllPatientVisitsForDate(Date specificDate) {
+
+    public List listAllPatientVisitsForDate(Date specificDate) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         List result = session.createQuery("from Visitationtable where date = '" + specificDate + "'").list();
         session.getTransaction().commit();
         return result;
     }
-     
-      public List listAllPatientVisitsForDuration(Date startDate, Date endDate) {
+
+    public List listAllPatientVisitsForDuration(Date startDate, Date endDate) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         List result = session.createQuery("from Visitationtable where date between '" + startDate + "' and '" + endDate + "'").list();
         session.getTransaction().commit();
         return result;
     }
-      
-       public List listAllPatientVisits() {
+
+    public List listAllPatientVisits() {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         List result = session.createQuery("from Visitationtable").list();
         session.getTransaction().commit();
         return result;
     }
-       
-       public List listPatientsOfSponsor(int sponsorId) {
+
+    public List listPatientsOfSponsor(int sponsorId) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         List result = session.createQuery("from Sponsorhipdetails where sponsorid = '" + sponsorId + "'").list();
         session.getTransaction().commit();
         return result;
     }
-       
-        public Labtypes addLabType(String name, String code) {
+
+    public Labtypes addLabType(String name, String code) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         Labtypes labType = new Labtypes();
@@ -2834,8 +2833,8 @@ public class HMSHelper {
         session.getTransaction().commit();
         return labType;
     }
-    
-     public Labtypes deleteLabType(int id) {
+
+    public Labtypes deleteLabType(int id) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         //   Query result = session.createQuery("delete from ItemsTable where items_id = "+id);
@@ -2845,34 +2844,32 @@ public class HMSHelper {
 
         return unit;
     }
-     
-     public Labtypes updateLabType(int uid, String uname) {
+
+    public Labtypes updateLabType(int uid, String uname) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
 
         Labtypes wardnote = (Labtypes) session.get(Labtypes.class, uid);
         wardnote.setLabType(uname);
-        
+
         session.update(wardnote);
         session.getTransaction().commit();
         return wardnote;
     }
-     
-     public List listLabTypes() {
+
+    public List listLabTypes() {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         List result = session.createQuery("from Labtypes").list();
         session.getTransaction().commit();
         return result;
     }
-     
-         public Investigation createDetailedInvestigation
-                 (String code, String name, double rate, String lowBound, String highBound, int 
-                         labTypeId, int typeOfTestId, int groupUnderId, String units, 
-                         String interpretation, String defaultValue, String rangeFrom, 
-                         String rangeUpTo, String comments, String reportCollDays, Date reportCollTime, 
-                         boolean resultOptions) throws Exception {
-             
+
+    public Investigation createDetailedInvestigation(String code, String name, double rate, String lowBound, String highBound, int labTypeId, int typeOfTestId, int groupUnderId, String units,
+            String interpretation, String defaultValue, String rangeFrom,
+            String rangeUpTo, String comments, String reportCollDays, Date reportCollTime,
+            boolean resultOptions) throws Exception {
+
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         Investigation detailedInv = new Investigation();
@@ -2897,17 +2894,16 @@ public class HMSHelper {
         detailedInv.setReportCollDays(reportCollDays);
         detailedInv.setReportCollTime(reportCollTime);
         detailedInv.setResultOptions(resultOptions);
-        
+
 
         session.save(detailedInv);
 
         session.getTransaction().commit();
         return detailedInv;
     }
-     
-         
-         // associate lab type with main investigation
-   public LabtypeDetailedinv addLabTypeMainTest(int labTypeId, int mainTestId) {
+
+    // associate lab type with main investigation
+    public LabtypeDetailedinv addLabTypeMainTest(int labTypeId, int mainTestId) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         LabtypeDetailedinv labTypeMainTest = new LabtypeDetailedinv();
@@ -2917,9 +2913,9 @@ public class HMSHelper {
         session.getTransaction().commit();
         return labTypeMainTest;
     }
-   
-          // associate main investigation with sub investigation
-   public MaininvSubinv addMainTestSubTest(int mainTestId, int subTestId) {
+
+    // associate main investigation with sub investigation
+    public MaininvSubinv addMainTestSubTest(int mainTestId, int subTestId) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         MaininvSubinv mainInvSubInv = new MaininvSubinv();
@@ -2929,7 +2925,7 @@ public class HMSHelper {
         session.getTransaction().commit();
         return mainInvSubInv;
     }
-   
+
     public PossibleinvResults addPosInvResult(String result) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -2940,8 +2936,8 @@ public class HMSHelper {
         session.getTransaction().commit();
         return posinvResult;
     }
-    
-      public DetailedinvPosinvresults addDetInvPosResult(int detailedInvId, int posResultId) {
+
+    public DetailedinvPosinvresults addDetInvPosResult(int detailedInvId, int posResultId) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         DetailedinvPosinvresults detInvPosResult = new DetailedinvPosinvresults();
@@ -2951,16 +2947,16 @@ public class HMSHelper {
         session.getTransaction().commit();
         return detInvPosResult;
     }
-      
-      public List listLabTypeDetailedInv(int labTypeId) {
+
+    public List listLabTypeDetailedInv(int labTypeId) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         List result = session.createQuery("from LabtypeDetailedinv where labtype_id = '" + labTypeId + "'").list();
         session.getTransaction().commit();
         return result;
     }
-      
-       public Investigation getDetailedInvById(int id) {
+
+    public Investigation getDetailedInvById(int id) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
 
@@ -2969,30 +2965,54 @@ public class HMSHelper {
         session.getTransaction().commit();
         return detInv;
     }
-       
-       public LabtypeDetailedinv getLabtypeDetailedinvByIds(int labTypeId, int detailedInvId) {
+
+    public LabtypeDetailedinv getLabtypeDetailedinvByIds(int labTypeId, int detailedInvId) {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
 
-        LabtypeDetailedinv labTypeDetailedInv = (LabtypeDetailedinv) session.createQuery("from labtype_detailedinv where labtype_id =" + labTypeId +" and detailed_inv_id =" + detailedInvId);
+        LabtypeDetailedinv labTypeDetailedInv = (LabtypeDetailedinv) session.createQuery("from labtype_detailedinv where labtype_id =" + labTypeId + " and detailed_inv_id =" + detailedInvId);
 
         session.getTransaction().commit();
         return labTypeDetailedInv;
     }
-       
-         public List listAllDetailedInvestigation() {
+
+    public List listAllDetailedInvestigation() {
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         List result = session.createQuery("from Investigation").list();
         session.getTransaction().commit();
         return result;
     }
-         
-          public List listMainInvestigation() {
-              int typeOfTestId = 1;
+
+    public List listMainInvestigation() {
+        int typeOfTestId = 1;
         session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         List result = session.createQuery("from Investigation where type_of_test_id = '" + typeOfTestId + "'").list();
+        session.getTransaction().commit();
+        return result;
+    }
+
+    public List listPatientDiagnosisForVisit(String patientId, int visitId) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from Patientdiagnosis where patientid = '" + patientId + "' and visitationid = '" + visitId + "'").list();
+        session.getTransaction().commit();
+        return result;
+    }
+    
+     public List listPatientLabForVisit(String patientId, int visitId) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from Patientinvestigation where patientid = '" + patientId + "' and visitationid = '" + visitId + "'").list();
+        session.getTransaction().commit();
+        return result;
+    }
+     
+      public List listPatientTreatmentForVisit(String patientId, int visitId) {
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List result = session.createQuery("from Patienttreatment where patientid = '" + patientId + "' and visitationid = '" + visitId + "'").list();
         session.getTransaction().commit();
         return result;
     }
