@@ -9,7 +9,7 @@
         <%@page import="entities.*,java.util.List,java.util.Date,java.text.SimpleDateFormat,java.text.DateFormat" %>
         <%
             HMSHelper mgr = new HMSHelper();
-
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             List patients = mgr.listPatients();
             //String patientid = request.getParameter("patientid")== null ? "" : request.getParameter("patientid");
             try {
@@ -23,7 +23,7 @@
                 response.sendRedirect("index.jsp");
             }
             //Patient patient = mgr.getPatientByID(patientid);
-        %>
+%>
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
         <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -38,10 +38,10 @@
         <style type="text/css" title="currentStyle">
             @import "css/jquery.dataTables_themeroller.css";
             @import "css/custom-theme/jquery-ui-1.8.16.custom.css";
-                body {
-                    overflow: hidden;
-                }
-            
+            body {
+                overflow: hidden;
+            }
+
             .large_button {
                 background-color: #35AFE3;
                 background-image: -moz-linear-gradient(center top , #45C7EB, #2698DB);
@@ -63,6 +63,21 @@
                 list-style: none outside none;
                 color: #777777;
                 /* padding: 7px 14px; */
+            }
+            
+            .table th {
+                border-top: 1px solid #DDDDDD;
+                line-height: 10px;
+                text-align: center;
+                vertical-align: top;
+                color: #000000;
+                font-size: 12px;
+            }
+
+            .table td {
+                padding: 6px;
+                padding-bottom: 0px;
+                line-height: 18px;
             }
         </style>
         <link href="css/tablecloth.css" rel="stylesheet" type="text/css" media="screen" />
@@ -118,7 +133,7 @@
                     <div style="margin-top: 0px; "class="span12 offset3 content1 hide">
 
                         <div style="padding-bottom: 80px; " class="span9 thumbnail well content">
-                            
+
                             <table class="example display">
                                 <thead>
                                     <tr>
@@ -135,34 +150,34 @@
                                             Patient patient = (Patient) patients.get(r);
                                     %>
                                     <tr>
-                                        <td class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <%=patient.getFname()%></h5> <h5><b> Date of Birth :</b>  <%=patient.getDateofbirth()%></h5> </span>"
+                                        <td style="text-transform: uppercase; color: #4183C4; font-weight: bold;" class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <%=patient.getFname()%> <%=patient.getLname()%></h5> <h5><b> Date of Birth :</b>  <%=formatter.format(patient.getDateofbirth())%></h5> </span>"
                                             data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%=patient.getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%=patient.getEmployer()%> </td>  </tr> 
                                             </table> "> <%=patient.getPatientid()%> </td>
 
                                         <td><%=patient.getFname()%> <%=patient.getMidname()%> <%=patient.getLname()%></td>
-                                        <td> <%=patient.getDateofbirth()%> </td>
-                                        <td><% String locations[]=mgr.getPatientFolder(patient.getPatientid()).getStatus().split("_"); %>
+                                        <td> <%=formatter.format(patient.getDateofbirth())%> </td>
+                                        <td style="text-transform: capitalize;" ><% String locations[] = mgr.getPatientFolder(patient.getPatientid()).getStatus().split("_");%>
                                             <%= locations[0]%>
                                             <!--<div style="display: block" id="s_<%=patient.getPatientid()%>">
                                                 <select class="input-medium" name="contype" onchange='showConType("d_<%=patient.getPatientid()%>")'>
                                                     <option>Select</option>
-                                                    <%
-                                                        List types = mgr.listConsultation();
-                                                        for (int j = 0; j < types.size(); j++) {
-                                                            Consultation unit = (Consultation) types.get(j);
-                                                    %>
-                                                    <option value="<%=unit.getConid()%>"><%=unit.getContype()%></option> 
-                                                    <% }%>
-                                                </select>
-                                            </div>
-                                            <div id="d_<%=patient.getPatientid()%>" style="display: none">
-                                                <button class="btn user_summary_link btn-info btn-small">
-                                                    <i class="icon-white icon-pencil"></i> New Visit
-                                                </button>
-                                            </div>-->
+                                            <%
+                                                List types = mgr.listConsultation();
+                                                for (int j = 0; j < types.size(); j++) {
+                                                    Consultation unit = (Consultation) types.get(j);
+                                            %>
+                                            <option value="<%=unit.getConid()%>"><%=unit.getContype()%></option> 
+                                            <% }%>
+                                        </select>
+                                    </div>
+                                    <div id="d_<%=patient.getPatientid()%>" style="display: none">
+                                        <button class="btn user_summary_link btn-info btn-small">
+                                            <i class="icon-white icon-pencil"></i> New Visit
+                                        </button>
+                                    </div>-->
                                         </td>
                                         <td>
-                                            <div style="max-height: 600px; display: none" id="<%=patient.getPatientid()%>_dialog" title="Patient's Profile">
+                                            <div style="max-height: 600px; display: none" id="<%=patient.getPatientid()%>_dialog" title="<%=patient.getFname()%> <%=patient.getMidname()%> <%=patient.getLname()%>'s Profile">
 
                                                 <form action="action/registrationaction.jsp" method="POST" class="form-horizontal well">
                                                     <fieldset>
@@ -170,7 +185,7 @@
                                                             <div class="control-group">
                                                                 <label class="control-label" for="input01">Folder No. / Patient ID </label>
                                                                 <div class="controls">
-                                                                    <input type="text" name="patientid"  id="input01" value="<%=patient.getPatientid()%>"/>
+                                                                    <input disabled="disabled" type="text" name="patientid"  id="input01" value="<%=patient.getPatientid()%>"/>
                                                                     <p class="help-inline">
 
                                                                     </p>
@@ -178,11 +193,11 @@
                                                             </div>
 
                                                         </div>
-                                                        <div class="first_half">
+                                                        <div class="first_half pull-left">
                                                             <div class="control-group">
                                                                 <label class="control-label" for="input01">Full Name</label>
                                                                 <div class="controls">
-                                                                    <input  type="text" name="fname"  id="input01" value="<%=patient.getFname()%>"/>
+                                                                    <input  type="text" name="fname"  id="input01" value="<%=patient.getFname()%> <%=patient.getMidname()%> <%=patient.getLname()%>"/>
                                                                     <p class="help-inline">
 
                                                                     </p>
@@ -249,11 +264,10 @@
                                                                     </p>
                                                                 </div>
                                                             </div>
-
                                                             <div class="control-group">
                                                                 <label class="control-label" for="input01">Country</label>
                                                                 <div class="controls">
-                                                                    <label><%=patient.getCountry()%> </label>
+
                                                                     <select name="country" id="select01">
                                                                         <option>Ghana</option>
                                                                         <option>Togo</option>
@@ -272,6 +286,9 @@
                                                                     <span class="help-inline"></span>
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        <div style="margin-top: -50px;" class="pull-left">            
+
                                                             <div class="control-group">
                                                                 <label class="control-label" for="inputSuccess">Address</label>
                                                                 <div class="controls">
@@ -316,12 +333,15 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="form-actions">
-                                                                <button type="submit" name ="action" value="patient" class="btn ui-primary">
-                                                                    <i class="icon-ok"></i> Update Profile
-                                                                </button>
 
-                                                            </div>
+                                                        </div>
+                                                        <div class="clearfix">
+
+                                                        </div>           
+                                                        <div class="form-actions center">
+                                                            <button type="submit" name ="action" value="patient" class="btn btn-primary btn-large">
+                                                                <i class="icon-ok"></i> Update Profile
+                                                            </button>
 
                                                         </div>
                                                     </fieldset>
@@ -329,14 +349,14 @@
 
                                             </div>
                                             <button class="btn btn-info btn-small" id="<%=patient.getPatientid()%>_link">
-                                                 Update
+                                                Update
                                             </button>
                                         </td>
                                         <td>
 
 
                                             <button class="btn btn-danger btn-small" onclick='deletePatient("id_<%=patient.getPatientid()%>")'>
-                                                 Delete
+                                                Delete
                                             </button>
                                             <input type="hidden" id ="id_<%=patient.getPatientid()%>" value="<%=patient.getPatientid()%>"/>
 
@@ -496,7 +516,7 @@
                       
             $("#<%= vst.getPatientid()%>_dialog").dialog({
                 autoOpen : false,
-                width : 1000,
+                width : 850,
                 modal :true
 
             });

@@ -6,8 +6,14 @@
         <%@page contentType="text/html" pageEncoding="UTF-8"%>
         <%@page import="entities.*,java.util.List,java.util.Date,java.text.SimpleDateFormat,java.text.DateFormat" %>
         <%
+            Users user = (Users) session.getAttribute("staff");
+            if (user == null) {
+                session.setAttribute("lasterror", "Please Login");
+                response.sendRedirect("index.jsp");
+            }
             HMSHelper mgr = new HMSHelper();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
             Date date = new Date();
             List visits = mgr.listRecentVisits(dateFormat.format(date));
@@ -104,14 +110,14 @@
 
 
 
-                  <%if (session.getAttribute("lasterror") != null) {%>
-                    <div class="alert hide <%=session.getAttribute("class")%> span12 center">
-                        <b> <%=session.getAttribute("lasterror")%>  </b>
-                    </div>
-                    <br/>
-                    <div style="margin-bottom: 20px;" class="clearfix"></div>
-                    <%session.removeAttribute("lasterror");
-                        }%>
+                <%if (session.getAttribute("lasterror") != null) {%>
+                <div class="alert hide <%=session.getAttribute("class")%> span12 center">
+                    <b> <%=session.getAttribute("lasterror")%>  </b>
+                </div>
+                <br/>
+                <div style="margin-bottom: 20px;" class="clearfix"></div>
+                <%session.removeAttribute("lasterror");
+                    }%>
 
 
 
@@ -184,7 +190,7 @@
             <form id="registration" enctype="multipart/data"action="action/registrationaction.jsp" method="POST" class="form-horizontal well">
                 <fieldset>
                     <div style="float: left;" class="pre_first_half">
-                        <div class="control-group">
+                        <div class="control-group success">
                             <label class="control-label" for="input01">Folder No. / Patient ID </label>
                             <div class="controls">
                                 <%String yr = "" + Calendar.getInstance().get(Calendar.YEAR);
@@ -268,7 +274,7 @@
                                     <option value="31">31</option>
                                 </select>
 
-                                <select class="input-mini dob" name="month">
+                                <select class="input-mini dob" id="month" name="month">
                                     <option>M</option>
                                     <option value="01">Jan</option>
                                     <option value="02">Feb</option>
@@ -286,7 +292,7 @@
 
 
 
-                                <select class="input-small dob"  name="year">
+                                <select class="input-small dob" id="year" name="year">
                                     <option>Y</option>
                                     <option value="2004">2004</option>
                                     <option value="2003">2003</option>
@@ -627,8 +633,8 @@
                         <br />
                         <br />
 
-                        
-                        
+
+
                         <button type="submit" name="action" class="btn btn-large btn-info">
                             <i class="icon-white icon-search"></i> Search
                         </button>
@@ -860,6 +866,32 @@
                     alert("Please Select Payment Method");
                 }
             });
+            
+            
+            $("#sponsor").change(function(){
+                
+                
+                if ($('#sponsor').attr('value')!="Select"){
+                    $('#sponsor').closest('.control-group').addClass('success').removeClass('error')
+                }else{
+                    $('#sponsor').closest('.control-group').addClass('error').removeClass('success')
+                }
+           
+            });
+            
+            
+            $("#year").change(function(){
+                
+                
+                if ($('#year').attr('value')!="Y"){
+                    $('#year').closest('.control-group').addClass('success').removeClass('error')
+                }else{
+                    $('#year').closest('.control-group').addClass('error').removeClass('success')
+                }
+           
+            });
+            
+            
                
                
                

@@ -12,10 +12,21 @@
         response.sendRedirect("index.jsp");
     }
     HMSHelper mgr = new HMSHelper();
+    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 %>
 <html>
     <head>
         <%@include file="widgets/stylesheets.jsp" %>
+        <style type="text/css">
+            .consult th {
+                border-top: 1px solid #DDDDDD;
+                line-height: 18px;
+                text-align: center;
+                vertical-align: top;
+                color: #FFFFFF;
+                font-size: 12px;
+            }
+        </style>
         <script type="text/javascript">
             function updateLaborders(){
                 alert("here at least");
@@ -355,18 +366,34 @@
         <%@include file="widgets/header.jsp" %>
 
         <div class="container-fluid">
-            <%@include file="widgets/subhead.jsp" %>
+            <!-- Masthead
+           ================================================== -->
+            <header  class="jumbotron subhead" id="overview">
+
+                <div style="margin-top: 20px; margin-bottom: -80px;" class="subnav navbar-fixed-top hide">
+                    <ul class="nav nav-pills">
+
+                        <li class="active">
+                            <a href="#">Consultation</a><span class="divider"></span>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </header>
 
             <%@include file="widgets/loading.jsp" %>
 
+
+
             <section id="dashboard"> 
                 <%if (session.getAttribute("lasterror") != null) {%>
-
-                <div class="alert alert-danger">
-                    <%=session.getAttribute("lasterror")%> 
+                <div class="alert hide <%=session.getAttribute("class")%> span12 center">
+                    <b> <%=session.getAttribute("lasterror")%>  </b>
                 </div>
-                <%
-                        session.removeAttribute("lasterror");
+                <br/>
+                <div style="margin-bottom: 20px;" class="clearfix"></div>
+                <%session.removeAttribute("lasterror");
                     }%>
                 <div class="row">
 
@@ -374,12 +401,6 @@
 
                     <div style="display: none;" class="span9 offset3 thumbnail well content hide">
 
-                        <ul style="margin-left: 0px;" class="breadcrumb">
-                            <li>
-                                <a>Consultation Room</a><br/>
-
-                            </li>
-                        </ul>
 
 
                         <table cellpadding="0" cellspacing="0" border="0" class="display example table">
@@ -390,7 +411,7 @@
                                     <th>Full Name </th>
                                     <th>Sponsor</th>
                                     <th>Registered On</th>
-                                    <th> <%=(String) session.getAttribute("unit")%></th>
+                                    <th style="text-transform: capitalize;"> <%=(String) session.getAttribute("unit")%></th>
 
 
 
@@ -400,7 +421,7 @@
                                 <%
                                     //HMSHelper mgr = new HMSHelper();
                                     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                    SimpleDateFormat formatter = new SimpleDateFormat("EEEE, d MMMM yyyy");
+
                                     Visitationtable vs = null;
                                     List investigations = null;
                                     List treatments = null;
@@ -415,14 +436,17 @@
                                             vs = mgr.currentVisitations(visit.getVisitid());
 
                                             // List patientHistory = mgr.patientHistory(visit.getPatientid());
-                                %>
+%>
                                 <tr>
-                                    <td>
-                                        <!--<a href="condetails.jsp?patientid=<%=visit.getPatientid()%>&id=<%=visit.getVisitid()%>"> -->
-                                        <%= visit.getPatientid()%> </a> 
+                                    <td style="text-transform: uppercase; color: #4183C4; font-weight: bold;" class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <b><%= mgr.getPatientByID(visit.getPatientid()).getFname()%> <%= mgr.getPatientByID(visit.getPatientid()).getMidname()%> <%= mgr.getPatientByID(visit.getPatientid()).getLname()%>  </b></h5> <h5><b> Date of Birth :</b> <%= formatter.format(mgr.getPatientByID(visit.getPatientid()).getDateofbirth())%></h5> <span>"
+                                        data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%= mgr.getPatientByID(visit.getPatientid()).getGender()%></td> </tr> <tr> <td> Employer </td> <td> <%= mgr.getPatientByID(visit.getPatientid()).getEmployer()%>  </td>  </tr> <tr> <td> Sponsor </td> <td>
+                                        <%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(visit.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%>  </td> </tr>
+                                        </table>">
+                                        <a style="text-transform: uppercase;" class="patientid"><%= visit.getPatientid()%> </a> </a>
                                     </td>
+
                                     <td>
-                                        <%= mgr.getPatientByID(visit.getPatientid()).getFname()%>, <%= mgr.getPatientByID(visit.getPatientid()).getMidname()%> <%= mgr.getPatientByID(visit.getPatientid()).getLname()%>
+                                        <%= mgr.getPatientByID(visit.getPatientid()).getFname()%> <%= mgr.getPatientByID(visit.getPatientid()).getMidname()%> <%= mgr.getPatientByID(visit.getPatientid()).getLname()%>
                                     </td>
                                     <td>
                                         <%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(visit.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%> 
@@ -430,7 +454,7 @@
                                     <td>
                                         <%= formatter.format(mgr.getPatientByID(visit.getPatientid()).getDateofregistration())%>
                                     </td>
-                                    <td>
+                                    <td class="center">
                                         <a id="<%=visit.getPatientid()%><%=visit.getVisitid()%>link"  class="visitlink btn btn-info"> <i class="icon-pencil icon-white"> </i> Consultation </a>
                                     </td>
                                 </tr>
@@ -490,21 +514,19 @@
         });
     </script>
 
-    <div style="y-overflow: scroll; display: none;" class="visit hide" id="<%=visit.getPatientid()%><%=visit.getVisitid()%>"  title="Consultation for <%= mgr.getPatientByID(visit.getPatientid()).getFname()%>,  <%= mgr.getPatientByID(visit.getPatientid()).getLname()%>   ">
-
-
+    <div style="overflow: hidden; display: none;" class="visit hide" id="<%=visit.getPatientid()%><%=visit.getVisitid()%>"  title="Consultation for <%= mgr.getPatientByID(visit.getPatientid()).getFname()%>,  <%= mgr.getPatientByID(visit.getPatientid()).getLname()%>   ">
 
         <div class="span10">
 
             <div style="margin-left: -50px;" class="span2 ">
                 <ul class="menu">
-                    <li>  <a class="history_link "> <i class="icon icon-white icon-list-alt"> </i>  History </a></li>
-                    <li> <a class="vital_link active"> <i class="icon-white icon-list-alt"> </i> Vitals </a></li>
-                    <li> <a class="diagnosis_link"> <i class="icon-white icon-list-alt"> </i> Diagnosis </a></li>
-                    <li> <a class="laboratory_link"> <i class="icon-white icon-list-alt"> </i> Lab Request </a></li>
-                    <li> <a class="results_link"> <i class="icon-white icon-list-alt"> </i> Lab Results </a></li>
-                    <li> <a class="prescription_link"> <i class="icon-white icon-list-alt"> </i> Prescription </a></li>
-                    <li> <a class="clerking_link"> <i class="icon-white icon-list-alt"> </i> Clerking </a></li>
+                    <li>  <a class="history_link "> <i class="icon  icon-list-alt"> </i>  History </a></li>
+                    <li> <a class="vital_link active"> <i class="icon icon-check"> </i> Vitals </a></li>
+                    <li> <a class="diagnosis_link"> <i class="icon icon-adjust"> </i> Diagnosis </a></li>
+                    <li> <a class="laboratory_link"> <i class="icon icon-search"> </i> Lab Request </a></li>
+                    <li> <a class="results_link"> <i class="icon icon-share"> </i> Lab Results </a></li>
+                    <li> <a class="prescription_link"> <i class="icon icon-tasks"> </i> Prescription </a></li>
+                    <li> <a class="clerking_link"> <i class="icon icon-edit"> </i> Clerking </a></li>
                 </ul>
             </div>
             <div class="span8">
@@ -512,7 +534,7 @@
                     <div style="display: block; " class="well thumbnail center vital">
                         <ul class="breadcrumb">
                             <li>
-                                <a style="text-align: center;">Vitals</a>
+                                <a style="text-align: center;"> <b> Vitals </b></a>
                             </li>
 
                         </ul>
@@ -523,30 +545,59 @@
                             String[] bps = vts[3].split(":");
 
                         %>
-                        <table class="table  right table table-bordered table-condensed">
+                        <table class="table  right table table-bordered">
                             <tr>
                                 <td><b>Temperature</b></td>
 
-                                <td><%=vts[0]%> (Celsius)</td>
+                                <td><%=vts[0]%>&nbsp;&nbsp;(Degrees Celsius)</td>
                             </tr>
 
                             <tr>
                                 <td><b>Weight </b></td>
 
-                                <td><%=vts[1]%> (Kg)</td>
+                                <td><%=vts[1]%>&nbsp;&nbsp;(Kg)</td>
                             </tr>
 
                             <tr>
                                 <td><b>Height </b> </td>
 
-                                <td><%=vts[2]%> (m)</b></td>
+                                <td><%=vts[2]%>&nbsp; &nbsp;(cm)</b></td>
                             </tr>
                             <tr>
                                 <td><b>Blood Pressure </b> </td>
 
-                                <td>Systolic <%=bps[0]%><br/>
-                                    Diastolic <%=bps[1]%><br/>
-                                    Pulse <%=vts[4]%> (minutes)<br/>
+                                <td style="padding: 0px;">
+                                    <table style="margin: 0px;" class="table">
+                                        <tr>
+                                            <td>
+                                                Systolic
+                                            </td>
+
+                                            <td>
+                                                <%=bps[0]%>&nbsp;&nbsp;(mmHg)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Diastolic
+                                            </td>
+
+                                            <td>
+                                                <%=bps[1]%>&nbsp;&nbsp;(mmHg)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Pulse
+                                            </td>
+
+                                            <td>
+                                                <%=vts[4]%>&nbsp; &nbsp;(BPM)
+                                            </td>
+                                        </tr>
+
+                                    </table>
+
                                 </td>
                             </tr>
                             <tr>
@@ -559,10 +610,10 @@
 
                         <%}%>
 
-                        </textarea>
+
                         <table  class="table hide">
 
-                            <thead style="color: black;">
+                            <thead>
                                 <tr>
                                     <th>
                                         Visit Date
@@ -600,7 +651,7 @@
                     <div style="display: none;" class="well thumbnail center diagnosis">
                         <ul class="breadcrumb">
                             <li>
-                                <a style="text-align: center;">Diagnosis</a>
+                                <a style="text-align: center;"><b> Diagnosis </b></a>
                             </li>
 
                         </ul>
@@ -642,6 +693,13 @@
 
 
                         <table id="appendd_<%=visit.getVisitid()%>" class="table">
+                            <thead>
+                                <tr style="padding: 12px 0px 12px 0px;">
+                                    <th style="color: white; padding: 10px 0px 10px 0px;" colspan="8">
+                                        Selected Diagnosis
+                                    </th>
+                                </tr>
+                            </thead>
 
                         </table>
 
@@ -658,12 +716,12 @@
                     <div style="display: none;" class="well thumbnail center history">
                         <ul class="breadcrumb">
                             <li>
-                                <a style="text-align: center;">History</a>
+                                <a style="text-align: center;"> <b> History </b></a>
                             </li>
 
                         </ul>
 
-                        <table class="table">
+                        <table class="table consult">
                             <thead>
                                 <tr>
                                     <th style="width: 150px;">
@@ -700,8 +758,8 @@
                                 %>
                                 <tr>
 
-                                    <td>
-                                        <%=vps.getDate()%>
+                                    <td style="text-align: center;">
+                                        <b>  <%=formatter.format(vps.getDate())%> </b>
                                     </td>
 
                                     <td>
@@ -760,7 +818,7 @@
 
                         <div id="treat">
 
-                            <table> 
+                            <table class="consult table"> 
 
                                 <thead>
 
@@ -842,8 +900,8 @@
                         <script>
                             $("#diagnosis_details").autocomplete("gettreatment.jsp");
                         </script>-->
-                                            <select class="input-medium"  id="treatment<%=visit.getVisitid()%>" onchange = 'addTreatment("treatment<%=visit.getVisitid()%>","tt<%=visit.getVisitid()%>")'>
-                                                <option value="Select">Select Treatment</option>
+                                            <select class="input"  id="treatment<%=visit.getVisitid()%>" onchange = 'addTreatment("treatment<%=visit.getVisitid()%>","tt<%=visit.getVisitid()%>")'>
+                                                <option value="Select">Select</option>
                                                 <%
                                                     treatments = mgr.listTreatments();
                                                     String replacedString = "";
@@ -938,8 +996,8 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select class="input-medium"  name="dosage" id="dosage<%=visit.getVisitid()%>">
-                                                <option value="Select">Select Dosage</option>
+                                            <select class="input-small"  name="dosage" id="dosage<%=visit.getVisitid()%>">
+                                                <option value="Select">Select</option>
                                                 <%
                                                     dosages = mgr.listDosages();
                                                     if (dosages != null) {
@@ -954,7 +1012,7 @@
                                         </td>
                                         <td>
 
-                                            <input type="text" value="duration" class="input-mini" name="duration" id="duration<%=visit.getVisitid()%>"/>
+                                            <input type="text" value="Duration" class="input-mini" name="duration" id="duration<%=visit.getVisitid()%>"/>
                                         </td>
                                         </td>
                                         <td>                                   
@@ -1019,14 +1077,16 @@
                             </table>
 
 
-                   <!-- <textarea style="width: 95%" name="treatment" id="tt<%=visit.getVisitid()%>" ></textarea> -->
+
+
+           <!-- <textarea style="width: 95%" name="treatment" id="tt<%=visit.getVisitid()%>" ></textarea> -->
                             <div id="" style="display: none;">
                             </div>
 
                             <table class="table" id="append_<%=visit.getVisitid()%>">
                                 <thead>
-                                    <tr>
-                                        <th colspan="8">
+                                    <tr style="padding: 12px 0px 12px 0px;">
+                                        <th style="color: white; padding: 10px 0px 10px 0px;" colspan="8">
                                             Selected Prescription
                                         </th>
                                     </tr>
@@ -1061,7 +1121,7 @@
                     <div style="display: none;" class="well thumbnail center laboratory">
                         <ul class="breadcrumb">
                             <li>
-                                <a href="#" onclick="showdInvestigation()">Laboratory Request Form</a>
+                                <a href="#" onclick="showdInvestigation()"><b> Laboratory Request Form </b></a>
                             </li>
 
                         </ul>
@@ -1127,11 +1187,19 @@
                             </table>
 
 
-                            
-                  
 
-                            
+
+
+
                             <table id="appendx_<%=visit.getVisitid()%>" class="table">
+
+                                <thead>
+                                    <tr style="padding: 12px 0px 12px 0px;">
+                                        <th style="color: white; padding: 10px 0px 10px 0px;" colspan="8">
+                                            Selected Investigations
+                                        </th>
+                                    </tr>
+                                </thead>
 
                             </table>
 
@@ -1158,16 +1226,16 @@
                             <thead>
                                 <tr >
                                     <th>
-                                        <label style="color: white;"> Order By</label>
+                                        <label style="color: white; font-weight: bold"> Order By</label>
                                     </th>
                                     <th>
-                                        <label style="color: white;"> Ordered Date </label>
+                                        <label style="color: white; font-weight: bold"> Ordered Date </label>
                                     </th>
                                     <th>
-                                        <label style="color: white;" > Done On </label>
+                                        <label style="color: white; font-weight: bold" > Done On </label>
                                     </th>
                                     <th>
-                                        <label style="color: white;"> View </label>
+                                        <label style="color: white; font-weight: bold"> View </label>
                                     </th>
 
 
@@ -1240,7 +1308,7 @@
 
                         <ul class="breadcrumb">
                             <li>
-                                <a href="#" onclick="">Current Visit</a>
+                                <a href="#" onclick=""><b> Current Visit </b></a>
                             </li>
 
                         </ul>
@@ -1255,7 +1323,7 @@
                                         <label style="color: white; font-weight: bolder"> Answers </label>
                                     </th>
                                     <th>
-                                        <label style="color: white; font-weight: bolder"> New Answers </label>
+                                        <label style="color: white; font-weight: bolder"> Supplementary Answers </label>
                                     </th>
 
                                 </tr>
@@ -1267,20 +1335,31 @@
 
                                 %>
                                 <tr>
-                                    <td>
-                                      <!-- <input type="checkbox" name="qtns" value="<%=clerkingquestion.getClerkid()%>"/> --><%=clerkingquestion.getQuestion()%>
+                                    <td style="padding-left: 15px; font-size: 14px;">
+                                        <%=clerkingquestion.getQuestion()%>
                                     </td>
-                                    <td>
-                                        <%
-                                            List answers = mgr.listClerkAnswersByQuestionid(clerkingquestion.getClerkid());
-                                            for (int ca = 0; ca < answers.size(); ca++) {
-                                                Clerkinganswer clerkinganswer = (Clerkinganswer) answers.get(ca);%>
-                                        <input type="checkbox" name="anss[]" value="<%=clerkinganswer.getQuestionid()%>-<%=clerkinganswer.getAnswerid()%>"/> <%=clerkinganswer.getAnswer()%><br/>
+                                    <td style="padding: 0px;">
+                                        <table style="margin: 0px;" class="table table-condensed">
+                                            <%
+                                                List answers = mgr.listClerkAnswersByQuestionid(clerkingquestion.getClerkid());
+                                                for (int ca = 0; ca < answers.size(); ca++) {
+                                                    Clerkinganswer clerkinganswer = (Clerkinganswer) answers.get(ca);%>
 
-                                        <%}%>
+                                            <tr>
+                                                <td class="">
+                                                    <label class="checkbox">
+                                                        <input style="vertical-align: middle; padding-top: 5px;" type="checkbox" name="anss[]" value="<%=clerkinganswer.getQuestionid()%>-<%=clerkinganswer.getAnswerid()%>"/> &nbsp; &nbsp; &nbsp; <%=clerkinganswer.getAnswer()%> </label>     
+
+
+                                                </td>
+                                            </tr>
+                                            <%}%>
+
+
+                                        </table>
                                     </td>
                                     <td>
-                                        <textarea name="newanswers_<%=clerkingquestion.getClerkid()%>"></textarea>
+                                        <textarea style="width: 95%;" name="newanswers_<%=clerkingquestion.getClerkid()%>"></textarea>
                                     </td>
                                 </tr>
                                 <%}%>
@@ -1288,15 +1367,15 @@
 
                         </table>
                     </div>
-                    <div class="form-actions center" >
-                        <ul class="breadcrumb">
-                            <li>
-                                <a href="#" onclick="">Additional Notes</a>
-                            </li>
-
-                        </ul>
-                        <textarea style="width: 95%; height: 80px;"  name="further"></textarea>
-                    </div>
+                    <!--     <div class="form-actions center" >
+                             <ul class="breadcrumb">
+                                 <li>
+                                     <a href="#" onclick="">Additional Notes</a>
+                                 </li>
+     
+                             </ul>
+                             <textarea style="width: 95%; height: 80px;"  name="further"></textarea>
+                         </div> -->
                     <div class="form-actions center" >
                         <table>
 
@@ -1304,7 +1383,7 @@
 
 
                                 <td>
-                                    <select name="unitid">
+                                    <select class="input-medium" name="unitid">
                                         <% List list = mgr.listWard();
                                             for (int j = 0; j < list.size(); j++) {
                                                 Ward ward = (Ward) list.get(j);
@@ -1330,7 +1409,7 @@
 
                                 </td>
 
-                                <td>
+                                <td class="center">
 
                                     <%if (visit.getPatientstatus().equals("In Patient")) {%>
                                     <input style="vertical-align: middle;" type="checkbox" checked="checked" name="admission" value="In Patient"/>
@@ -1339,7 +1418,7 @@
 
                                 </td>
 
-                                <td>
+                                <td class="center">
 
                                     <button type="submit" name="action" value="Forward" class="btn btn-danger btn-large">
 

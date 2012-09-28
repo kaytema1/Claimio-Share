@@ -11,7 +11,7 @@
             HMSHelper mgr = new HMSHelper();
             List units = mgr.listUnits();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             Date date = new Date();
             List visits = mgr.listRecentVisits(dateFormat.format(date));
             //String patientid = request.getParameter("patientid")== null ? "" : request.getParameter("patientid");
@@ -69,6 +69,21 @@
                 color: #777777;
                 /* padding: 7px 14px; */
             }
+            
+            .table th {
+                border-top: 1px solid #DDDDDD;
+                line-height: 10px;
+                text-align: center;
+                vertical-align: top;
+                color: #000000;
+                font-size: 12px;
+            }
+
+            .table td {
+                padding: 6px;
+                padding-bottom: 0px;
+                line-height: 18px;
+            }
         </style>
         <link href="css/tablecloth.css" rel="stylesheet" type="text/css" media="screen" />
 
@@ -122,7 +137,7 @@
 
                         <div style="padding-bottom: 80px;" class="span9 thumbnail well content">
 
-                            <table class="example display">
+                            <table class="example display table">
                                 <thead>
                                     <tr>
                                         <th> Folder Number </th>
@@ -141,12 +156,12 @@
 
                                     %>
                                     <tr>
-                                        <td class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <%=mgr.getPatientByID(visit.getPatientid()).getFname()%></h5> <h5><b> Date of Birth :</b>  <%=mgr.getPatientByID(visit.getPatientid()).getDateofbirth()%></h5> </span>"
+                                        <td style="text-transform: uppercase; color: #4183C4;" class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <%=mgr.getPatientByID(visit.getPatientid()).getFname()%> <%=mgr.getPatientByID(visit.getPatientid()).getMidname()%> <%=mgr.getPatientByID(visit.getPatientid()).getLname()%></h5> <h5><b> Date of Birth :</b>  <%=formatter.format(mgr.getPatientByID(visit.getPatientid()).getDateofbirth())%></h5> </span>"
                                             data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%=mgr.getPatientByID(visit.getPatientid()).getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%=mgr.getPatientByID(visit.getPatientid()).getEmployer()%> </td>  </tr> <tr> <td> Sponsor </td> <td><%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%> </td> </tr> <tr>
                                             <td> Policy Number </td> <td><%=mgr.sponsorshipDetails(visit.getPatientid()).getMembershipid()%> </td> </tr> <tr> <td> Benefit Plan </td> <td> <%=mgr.sponsorshipDetails(visit.getPatientid()).getBenefitplan()%> </td> </tr>  </table> "> <%=mgr.getPatientByID(visit.getPatientid()).getPatientid()%> </td>
 
-                                        <td><%=mgr.getPatientByID(visit.getPatientid()).getFname()%></td>
-                                        <td> <%=mgr.getPatientByID(visit.getPatientid()).getDateofbirth()%> </td>
+                                        <td><%=mgr.getPatientByID(visit.getPatientid()).getFname()%> <%=mgr.getPatientByID(visit.getPatientid()).getMidname().substring(0, 1) %>. <%=mgr.getPatientByID(visit.getPatientid()).getLname()%> </td>
+                                        <td> <%= formatter.format(mgr.getPatientByID(visit.getPatientid()).getDateofbirth())%> </td>
                                         <td> <%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%></td>
                                        <!-- <td>
                                             <button class="btn btn-info user_summary_link link_<%=vs.getVisitid()%>" id="link_<%=vs.getVisitid()%>">

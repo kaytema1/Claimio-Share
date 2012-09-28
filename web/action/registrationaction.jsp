@@ -178,7 +178,8 @@
             }
             if (sd == null) {
                 session.setAttribute("lasterror", "Patient Sponsorship Details could not be updated. Please Update Later");
-                response.sendRedirect("../registration.jsp");
+                session.setAttribute("class", "alert-error");
+                response.sendRedirect("../records.jsp");
                 return;
             }
             /*if (p != null) {
@@ -203,6 +204,7 @@
             response.sendRedirect("../records.jsp");
         } else {
             // throw new ServletException(ex);
+            session.setAttribute("class", "alert-error");
             session.setAttribute("lasterror", "An Error Occurred. Please Try Again Later");
             response.sendRedirect("../records.jsp");
         }

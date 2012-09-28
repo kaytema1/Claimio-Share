@@ -57,7 +57,7 @@
                 color: #777777;
                 /* padding: 7px 14px; */
             }
-            
+
             .modal {
                 top: 65%;
             }
@@ -112,8 +112,22 @@
 
         <!-- Navbar
         ================================================== -->
-        <% HMSHelper mgr = new HMSHelper(); %>
-        <%@include file="widgets/header.jsp" %>
+        <% HMSHelper mgr = new HMSHelper();%>
+        <!-- Navbar
+        ================================================== -->
+        <div class="navbar navbar-fixed-top hide">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+                    <a class="brand" href="#"><img src="images/logo.png" width="200px;" /></a>
+
+                    <div style="margin-top: 10px;" class="nav-collapse">
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="container-fluid">
 
@@ -124,7 +138,7 @@
                 <div style="margin-top: 20px; margin-bottom: -50px;" class="subnav navbar-fixed-top hide">
                     <ul class="nav nav-pills">
 
-                        
+
 
                     </ul>
                 </div>  
@@ -149,7 +163,7 @@
 
                 <!-- Headings & Paragraph Copy -->
                 <div class="row">
-                    
+
                     <%if (session.getAttribute("lasterror") != null) {%>
                     <div class="alert hide <%=session.getAttribute("class")%> span12 center">
                         <b> <%=session.getAttribute("lasterror")%>  </b>
@@ -163,7 +177,7 @@
 
                         HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction();
 
-                        
+
 
                         List itmss = mgr.listPermissions();
 

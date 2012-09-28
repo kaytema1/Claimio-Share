@@ -21,4 +21,19 @@
 </style>
 <link href="css/tablecloth.css" rel="stylesheet" type="text/css" media="screen" />
 <link href="third-party/jQuery-UI-Date-Range-Picker/css/ui.daterangepicker.css" media="screen" rel="Stylesheet" type="text/css" />
+<style type="text/css">
+    .table th {
+                border-top: 1px solid #DDDDDD;
+                line-height: 10px;
+                text-align: center;
+                vertical-align: top;
+                color: #000000;
+                font-size: 11px;
+            }
+            
+            
+            body{
+                overflow: hidden;
+            }
 
+</style>

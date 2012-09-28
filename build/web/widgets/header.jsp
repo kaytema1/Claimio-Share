@@ -7,13 +7,15 @@
             <a class="brand" href="#"><img src="images/logo.png" width="200px;" /></a>
 
             <div style="margin-top: 10px;" class="nav-collapse">
+                
                 <ul class="nav pull-right">
 
                     <li class="dropdown">
-                                <a class="active" > Logged in as:  Mr. Amoo
-                                    <!--%=mgr.getStafftableByid(user.getStaffid()).getLastname() %> <-%=mgr.getStafftableByid(user.getStaffid()).getOthername() %--></a>
+                        <a href="#">
+                            Logged in as  :<span style="color: #4183C4;">    <%=mgr.getStafftableByid(user.getStaffid()).getLastname()%> </span>
+                        </a>
 
-                            </li>
+                    </li>
                     <li class="divider-vertical"></li>
 
                     <li class="dropdown">

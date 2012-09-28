@@ -14,59 +14,12 @@
     }%>
 <html>
     <head>
-        <meta charset="utf-8">
-        <title>ClaimSync Extended</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="author" content="">
-
-        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-        <!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-
-        <!-- Le styles -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/bootstrap-responsive.css" rel="stylesheet">
-        <link type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
-        <link href="css/docs.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/styles.css">
-        <style type="text/css" title="currentStyle">
-            @import "css/jquery.dataTables_themeroller.css";
-            @import "css/custom-theme/jquery-ui-1.8.16.custom.css";
-            body {
-                /*    overflow: hidden; */
-            }
-
-            .large_button {
-                background-color: #35AFE3;
-                background-image: -moz-linear-gradient(center top , #45C7EB, #2698DB);
-                box-shadow: 0 1px 0 0 #6AD2EF inset;
-                color: #FFFFFF;
-                text-decoration: none;
-                font-weight: lighter;
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                font-size: 36px;
-            }
-
-            .large_button:hover {
-                background-color: #FBFBFB;
-                background-image: -moz-linear-gradient(center top , #FFFFFF, #F5F5F5);
-                background-repeat: repeat-x;
-                border: 1px solid #DDDDDD;
-                border-radius: 3px 3px 3px 3px;
-                box-shadow: 0 1px 0 #FFFFFF inset;
-                list-style: none outside none;
-                color: #777777;
-                /* padding: 7px 14px; */
-            }
-        </style>
-
-        <link href="css/tablecloth.css" rel="stylesheet" type="text/css" media="screen" />
+        <%@include file="widgets/stylesheets.jsp" %>
 
         <%
             HMSHelper mgr = new HMSHelper();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             //Patient p = (Patient)session.getAttribute("patient");
             //get current date time with Date()
             Date date = new Date();
@@ -75,56 +28,12 @@
             List treatments = null;
             // for (int i = 0; i < visits.size(); i++) {
             //   Visitationtable visit = (Visitationtable) visits.get(i);
-%>
+        %>
     </head>
 
     <body data-spy="scroll" data-target=".subnav" data-offset="50">
 
-        <!-- Navbar
-        ================================================== -->
-        <div style="display: none;" class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
-                    <a class="brand" href="../"><img src="images/logo.png" width="200px;" /></a>
-
-                    <div style="margin-top: 10px;" class="nav-collapse">
-                        <ul class="nav pull-right">
-
-                            <li class="dropdown">
-                                <a class="active" > Logged in as:  Mr. Amoo </a>
-
-                            </li>
-                            <li class="divider-vertical"></li>
-
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> Account <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-
-                                    <li>
-                                        <a target="_blank" href="bootstrap.min.css"><i class="icon-wrench"></i> Settings </a>
-                                    </li>
-
-                                    <li>
-                                        <a target="_blank" href="bootstrap.css"><i class="icon-question-sign"></i> Help </a>
-                                    </li>
-                                    <li>
-                                        <a target="_blank" href="bootstrap.css"><i class="icon-share"></i> Feedback </a>
-                                    </li>
-                                    <li class="divider"></li>
-
-                                    <li>
-                                        <a target="_blank" href="logout.jsp"><i class="icon-off"></i> Log Out</a>
-                                    </li>
-
-                                </ul>
-
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <%@include file="widgets/header.jsp" %>
 
         <div class="container-fluid">
 
@@ -144,41 +53,29 @@
 
             </header>
 
-            <div style="position: absolute; left: 30%; top: 200px; text-align: center;" class="progress1">
-                <img src="images/logoonly.png" width="136px;" style="margin-bottom: 20px;" />
-                <a href="#"> <h3 class="segoe" style="text-align: center; font-weight: lighter;"> Your page is taking longer than expected to load.....
-                        <br />
-                        Please be patient!</h3>
-                    <br />
-                </a>
-                <div  class="progress progress-striped active span5">
-
-                    <div class="bar"
-                         style="width: 100%;"></div>
-                </div>
-            </div>
+            <%@include file="widgets/loading.jsp" %>
 
             <section style="margin-top: -30px;" id="dashboard">
 
-                <!-- Headings & Paragraph Copy -->
+                <%if (session.getAttribute("lasterror") != null) {%>
+                <div class="alert hide <%=session.getAttribute("class")%> span12 center">
+                    <b> <%=session.getAttribute("lasterror")%>  </b>
+                </div>
+                <br/>
+                <div style="margin-bottom: 20px;" class="clearfix"></div>
+                <%session.removeAttribute("lasterror");
+                    }%>
+                    
                 <div class="row">
                     <%@include file="widgets/leftsidebar.jsp" %>
                     <div style="margin-top: 0px; "class="span12 offset3 content1 hide">
 
                         <div style="padding-bottom: 80px;" class="span9 thumbnail well content">
-                            <ul style="margin-left: 0px;" class="breadcrumb">
-                                <li>
-                                    <a> <i class="icon-tasks"></i> Laboratory</a><br/>
-                                    <%if (session.getAttribute("lasterror") != null) {%>
-                                    <h3><a> <%=session.getAttribute("lasterror")%> </a></h3>
-                                    <%}%>
-                                </li>
-
-                            </ul>
-                            <table class="example display">
+                            
+                            <table class="example display table">
                                 <thead>
                                     <tr>
-                                        <th> Patient No </th>
+                                        <th> Patient # </th>
                                         <th> Patient Name </th>
                                         <th> Date of Birth  </th>
                                         <th> Sponsor </th>
@@ -193,8 +90,8 @@
                                                 Visitationtable vst = (Visitationtable) visits.get(i);
                                     %>
                                     <tr>
-                                        <td colspan="7">
-                                            <div class="dialog" id="<%=vst.getVisitid()%>_dialog" title="Enter Results">
+                                        <td>
+                                            <div class="dialog" id="<%=vst.getVisitid()%>_dialog" title=" Results">
 
                                                 <div class="well thumbnail">
                                                     <ul style="margin-left: 0px;" class="breadcrumb">
@@ -227,7 +124,7 @@
                                                                     <td class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5><%=mgr.getPatientByID(vst.getPatientid()).getFname()%> </h5> <h5><b> Date of Birth :</b> <%=mgr.getPatientByID(vst.getPatientid()).getDateofbirth()%></h5> </span>"
                                                                         data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%=mgr.getPatientByID(vst.getPatientid()).getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%=mgr.getPatientByID(vst.getPatientid()).getEmployer()%> </td>  </tr> <tr> <td> Sponsor </td> <td> <%=mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(vst.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid()).getSponsorname()%></td> </tr> <tr>
                                                                         <td> Policy Number </td> <td> <%=mgr.sponsorshipDetails(vst.getPatientid()).getMembershipid()%> </td> </tr> <tr> <td> Benefit Plan </td> <td> <%=mgr.sponsorshipDetails(vst.getPatientid()).getBenefitplan()%> </td> </tr>  </table> "><%=mgr.getInvestigation(ptPatienttreatments.getInvestigationid()).getName()%> </td>
-                                                                    <%if (ptPatienttreatments.getPerformed().equalsIgnoreCase("paid")) { %>
+                                                                    <%if (ptPatienttreatments.getPerformed().equalsIgnoreCase("paid")) {%>
                                                                     <td> Result: <input type="text" name="results<%=ptPatienttreatments.getId()%>" value=""/><br/>
                                                                         Con'tn: <input type="text" name="concentration<%=ptPatienttreatments.getId()%>" value=""/><br/>
                                                                         Range: <input type="text" name="range<%=ptPatienttreatments.getId()%>" value=""/>
@@ -272,10 +169,10 @@
                                                                             List consultingrooms = mgr.listConRooms();
                                                                             List units = mgr.listUnits();
                                                                             String previous = vst.getPreviouslocstion();
-                                                                                String[] strs = previous.split("_");
+                                                                            String[] strs = previous.split("_");
                                                                             for (int j = 0; j < units.size(); j++) {
                                                                                 Units unit = (Units) units.get(j);
-                                                                                
+
                                                                                 if (strs[0].equalsIgnoreCase("account")) {
                                                                                     if (unit.getType().equalsIgnoreCase("records")) {
                                                                         %>
@@ -287,7 +184,8 @@
                                                                         %>
                                                                         <option value="<%=unit.getType()%>_<%=unit.getUnitid()%>"><%=unit.getUnitname()%></option> 
                                                                         <% }
-                                                                            }}
+                                                                                }
+                                                                            }
                                                                         %>
                                                                     </select>
 
@@ -308,6 +206,18 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
                                     </tr>
 
                                     <tr>
@@ -323,9 +233,10 @@
                                         <td><%=vst.getDate()%> </td>
 
                                         <td>
-                                            <button class="btn btn-info" id="<%=vst.getVisitid()%>_link">
-                                                <i class="icon-white icon-check"></i> Update 
-                                            </button></td>
+                                            <button class="btn btn-info btn-small" id="<%=vst.getVisitid()%>_link">
+                                               Update 
+                                            </button>
+                                        </td>
                                     </tr>
                                     <%}
                                         }%> 
@@ -415,14 +326,15 @@
 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
-        //  $('.example').dataTable({
-        //      "bJQueryUI" : true,
-        //      "sPaginationType" : "full_numbers",
-        //     "iDisplayLength" : 25,
-        //     "aaSorting" : [],
-        //     "bSort" : true
+          $('.example').dataTable({
+              "bJQueryUI" : true,
+              "sPaginationType" : "full_numbers",
+             "iDisplayLength" : 25,
+             "aaSorting" : [],
+             "bSort" : true,
+             "sScrollY" : 400
 
-        //  });
+          });
             
             
 

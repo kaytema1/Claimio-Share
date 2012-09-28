@@ -12,7 +12,9 @@
     if (user == null) {
         session.setAttribute("lasterror", "Please Login");
         response.sendRedirect("index.jsp");
-    }%>
+    }
+    HMSHelper mgr = new HMSHelper();
+%>
 <html>
     <head>
         <%@include file="widgets/stylesheets.jsp" %>
@@ -25,9 +27,9 @@
         <div class="container-fluid">
             <header  class="jumbotron subhead" id="overview">
 
-                <div style="margin-top: 20px; margin-bottom: -50px;" class="subnav navbar-fixed-top hide">
+                <div style="margin-top: 20px; margin-bottom: -80px;" class="subnav navbar-fixed-top hide">
                     <ul class="nav nav-pills">
-                        
+
                         <li>
                             <a href="#">Records</a><span class="divider"></span>
                         </li>
@@ -52,14 +54,14 @@
                 <br/>
                 <div style="margin-bottom: 20px;" class="clearfix"></div>
                 <%session.removeAttribute("lasterror");
-                        }%>
+                    }%>
                 <!-- Headings & Paragraph Copy -->
                 <div class="row">
 
                     <%@include file="widgets/leftsidebar.jsp" %>
                     <div style="display: none;" class="span9 offset3 thumbnail well content hide">
 
-                        
+
 
                         <table cellpadding="0" cellspacing="0" border="0" class="display example table">
                             <thead>
@@ -77,11 +79,11 @@
                             </thead>
                             <tbody>
                                 <%
-                                    HMSHelper mgr = new HMSHelper();
+
                                     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                                     //Patient p = (Patient)session.getAttribute("patient");
                                     //get current date time with Date()
-                                    SimpleDateFormat formatter = new SimpleDateFormat("EEEE, d MMMM yyyy");
+                                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                                     Date date = new Date();
                                     //System.out.println(dateFormat.format(date));
                                     List visits = mgr.listUnitVisitations((String) session.getAttribute("unit"), dateFormat.format(date));
@@ -93,13 +95,13 @@
                                 %>
 
                                 <tr>
-                                    <td class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <%= mgr.getPatientByID(visit.getPatientid()).getFname()%></h5> <h5><b> Date of Birth :</b> <%= formatter.format(mgr.getPatientByID(visit.getPatientid()).getDateofbirth())%>  </h5> <span>"
+                                    <td style="text-transform: uppercase" class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <%= mgr.getPatientByID(visit.getPatientid()).getFname()%> <%= mgr.getPatientByID(visit.getPatientid()).getMidname()%> <%= mgr.getPatientByID(visit.getPatientid()).getLname()%></h5> <h5><b> Date of Birth :</b> <%= formatter.format(mgr.getPatientByID(visit.getPatientid()).getDateofbirth())%>  </h5> <span>"
                                         data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%= mgr.getPatientByID(visit.getPatientid()).getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%= mgr.getPatientByID(visit.getPatientid()).getEmployer()%>  </td>  </tr> <tr> <td> Sponsor </td> <td> <%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(visit.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%>  </td> </tr> <tr>
                                         <td> Policy Number </td> <td> <%= mgr.sponsorshipDetails(visit.getPatientid()).getMembershipid()%> </td> </tr> <tr> <td> Benefit Plan </td> <td> <%= mgr.sponsorshipDetails(visit.getPatientid()).getBenefitplan()%> </td> </tr>  </table> ">
                                         <a href="vital.jsp?patientid=<%=visit.getPatientid()%>&id=<%=visit.getVisitid()%>"><%= visit.getPatientid()%> </a> 
                                     </td>
                                     <td>
-                                        <%=mgr.getPatientByID(visit.getPatientid()).getFname()%>, <%=mgr.getPatientByID(visit.getPatientid()).getMidname()%> <%=mgr.getPatientByID(visit.getPatientid()).getLname()%>
+                                        <%=mgr.getPatientByID(visit.getPatientid()).getFname()%> <%=mgr.getPatientByID(visit.getPatientid()).getMidname()%> <%=mgr.getPatientByID(visit.getPatientid()).getLname()%>
                                     </td>
                                     <td>
                                         <%=mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(visit.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(visit.getPatientid()).getSponsorid()).getSponsorname()%> 
@@ -108,7 +110,7 @@
                                         <%= formatter.format(mgr.getPatientByID(visit.getPatientid()).getDateofregistration())%>
                                     </td>
                                     <td>
-                                        <a id="<%=visit.getPatientid()%><%=visit.getVisitid()%>link"  class="visitlink btn btn-info btn-mini"> <i class="icon-pencil icon-white"> </i> New Vital Record </a>
+                                        <a id="<%=visit.getPatientid()%><%=visit.getVisitid()%>link"  class="visitlink btn btn-info btn-small"> <i class="icon-pencil icon-white"> </i> New Vital Record </a>
                                     </td>
                                 </tr>
                                 <% }
@@ -142,7 +144,7 @@
                
                 $('#<%=visit.getPatientid()%><%=visit.getVisitid()%>').dialog({
                     autoOpen : false,
-                    width : 700,
+                    width : 750,
                     modal :true,
                     position : "top"
 		
@@ -159,12 +161,12 @@
             });
         </script>
 
-        <div style="max-height: 600px; y-overflow: scroll; display: none;" class="visit hide" id="<%=visit.getPatientid()%><%=visit.getVisitid()%>"  title="Enter Patient's Vital">
+        <div style="max-height: 600px; y-overflow: scroll; display: none;" class="visit hide" id="<%=visit.getPatientid()%><%=visit.getVisitid()%>"  title=" <%= mgr.getPatientByID(visit.getPatientid()).getFname()%> <%= mgr.getPatientByID(visit.getPatientid()).getLname()%> 's Vitals">
 
             <div class="well thumbnail">
-                <ul style="margin-left: 0px;" class="breadcrumb">
+                <ul style="margin-left: 0px; text-transform: uppercase" class="breadcrumb">
                     <li>
-                        <span class="divider"></span>  Folder No: <%= mgr.getPatientByID(visit.getPatientid()).getPatientid()%> 
+                        <span class="divider"></span> <b> Folder No: <%= mgr.getPatientByID(visit.getPatientid()).getPatientid()%> </b>
                     </li>
                 </ul>
                 <form action="action/vitalaction.jsp" method="post" class="form-horizontal">
@@ -172,30 +174,32 @@
                     <fieldset>
                         <div style="float: left;">
                             <div class="control-group">
-                                <label class="control-label" for="input01">Temperature (Celsius): </label>
+                                <label class="control-label" for="input01">Temperature : </label>
                                 <div class="controls">
-                                    <input type="text" name="temp" class="input-small" placeholder="0.0" value=""/>
-                                    <p class="help-block"></p>
+                                    <input type="text" name="temp" class="input-mini" placeholder="37" value=""/>
+                                    <p class="help-inline">(Celsius)</p>
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label" for="input01">Weight (kg): </label>
+                                <label class="control-label" for="input01">Weight : </label>
                                 <div class="controls">
-                                    <input type="text" name="weight" class="input-small" placeholder="0.0" value=""/>
-                                    <p class="help-block"></p>
+                                    <input type="text" name="weight" class="input-mini" placeholder="60" value=""/>
+                                    <p class="help-inline">(kg)</p>
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label" for="input01">Height (m): </label>
+                                <label class="control-label" for="input01">Height: </label>
                                 <div class="controls">
-                                    <input type="text" name="height" class="input-small" placeholder="0.0" value=""/>
-                                    <p class="help-block"></p>
+                                    <input type="text" name="height" class="input-mini" placeholder="150" value=""/>
+                                    <p class="help-inline">(cm)</p>
                                 </div>
                             </div>
-                            <div class="well thumbnail">
+
+
+                            <div class="well thumbnail" style="padding: 20px; padding-left: 5px;">
                                 <ul style="margin-left: 0px;" class="breadcrumb">
                                     <li>
-                                        <span class="divider"></span>  Blood Pressure
+                                        <b>  Blood Pressure </b>
                                     </li>
                                 </ul>  
 
@@ -204,8 +208,8 @@
                                     <label class="control-label" for="input01">Systolic </label>
                                     <div class="controls">
 
-                                        <input type="text" name="systolic" class="input-small" placeholder="0" value=""/>
-                                        <p class="help-block"></p>
+                                        <input type="text" name="systolic" class="input-mini" placeholder="90–119" value=""/>
+                                        <p class="help-inline"> mmHg</p>
                                     </div>
                                 </div>
 
@@ -213,16 +217,16 @@
                                     <label class="control-label" for="input01">Diastolic </label>
                                     <div class="controls">
 
-                                        <input type="text" name="diatolic" class="input-small" placeholder="0" value=""/>
-                                        <p class="help-block"></p>
+                                        <input type="text" name="diatolic" class="input-mini" placeholder="60–79" value=""/>
+                                        <p class="help-inline"> mmHg</p>
                                     </div>
                                 </div>
 
                                 <div class="control-group">
-                                    <label class="control-label" for="input01">Pulse (minutes): </label>
+                                    <label class="control-label" for="input01">Pulse: </label>
                                     <div class="controls">
-                                        <input type="text" name="pulse"class="input-small" placeholder="0" value=""/>
-                                        <p class="help-block"></p>
+                                        <input type="text" name="pulse"class="input-mini" placeholder="60–100" value=""/>
+                                        <p class="help-inline">BPM</p>
                                     </div>
                                 </div>
 
@@ -242,7 +246,7 @@
                             <div style="margin-top: 115px;" class="control-group">
                                 <label class="control-label" for="input01">To Consultation Room: </label>
                                 <div class="controls">
-                                    <select class="chzn-select medium-select select chzn-done" name="conroom">
+                                    <select class="chzn-select medium-select select chzn-done input-medium" name="conroom">
                                         <%
                                             List ls = mgr.listConRooms();
                                             for (int x = 0; x < ls.size(); x++) {

@@ -55,20 +55,24 @@
                 color: #777777;
                 /* padding: 7px 14px; */
             }
+
+
         </style>
 
         <link href="css/tablecloth.css" rel="stylesheet" type="text/css" media="screen" />
 
-       
+
 
         <%
             Users user = (Users) session.getAttribute("staff");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             if (user == null) {
                 session.setAttribute("lasterror", "Please Login");
                 response.sendRedirect("index.jsp");
             }
             HMSHelper mgr = new HMSHelper();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            
             //Patient p = (Patient)session.getAttribute("patient");
             //get current date time with Date()
             Date date = new Date();
@@ -81,12 +85,7 @@
             //   Visitationtable visit = (Visitationtable) visits.get(i);
 %>
 
-        <script type="text/javascript">
-            
-            function alert(){
-                
-            }
-        </script>
+
     </head>
 
     <body data-spy="scroll" data-target=".subnav" data-offset="50">
@@ -144,18 +143,18 @@
 
 
 
-                        <div style="padding-bottom: 80px;" class="span9 thumbnail well content">
+                        <div class="span9 thumbnail well content">
 
                             <table class="example display">
                                 <thead>
                                     <tr>
-                                        <th> Patient No </th>
-                                        <th> Patient Name </th>
-                                        <th> Date of Birth  </th>
-                                        <th> Sponsor </th>
-                                        <th> Membership ID </th>
-                                        <th> Request Date </th>
-                                        <th><%=(String) session.getAttribute("unit")%></th>
+                                        <th style="font-size: 12px;"> Patient #</th>
+                                        <th style="font-size: 12px;"> Patient Name </th>
+                                        <th style="font-size: 12px;"> Date of Birth  </th>
+                                        <th style="font-size: 12px;"> Sponsor </th>
+                                        <th style="font-size: 12px;"> Policy ID </th>
+                                        <th style="font-size: 12px;"> Request Date </th>
+                                        <th style="text-transform: capitalize; font-size: 12px;"> <%=(String) session.getAttribute("unit")%></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -167,7 +166,7 @@
                                                 Visitationtable vst = (Visitationtable) visits.get(i);
                                     %>
                                     <tr>
-                                        <td colspan="7">
+                                        <td>
                                             <div class="dialog" id="<%=vst.getVisitid()%>_dialog" title="Accounts">
 
                                                 <div class="well thumbnail">
@@ -183,15 +182,15 @@
                                                         String[] previouslocations = previouslocation.split("_");
                                                         if (previouslocations[0].equals("pharmacy")) {%>
                                                     <form action="action/accountsaction.jsp" method="post">
-                                                        <table class="table example display">
+                                                        <table  class="table">
                                                             <thead>
-                                                                <tr style="color: #000;">
+                                                                <tr style="color: #000; font-size: 10px;">
                                                                     <th>Requested </th>
                                                                     <th>Quantity </th>
                                                                     <th>Unit Cost </th>
                                                                     <th>Total </th>
-                                                                    <th>Amount Paid</th>
-                                                                    <th>Outstanding Amount</th>
+                                                                    <th>Tendered</th>
+                                                                    <th>Balance</th>
                                                                     <th>Payment</th>
                                                                 </tr>
                                                             </thead>
@@ -214,7 +213,7 @@
                                                                     <td><%= (ptPatienttreatments.getQuantity() * ptPatienttreatments.getPrice())%></td>
                                                                     <%if (ptPatienttreatments.getDispensed().equals("Afford")) {%>
                                                                     <td>
-                                                                        <input type="text" name="mn_<%=ptPatienttreatments.getId()%>"/>
+                                                                        <input accept=""class="input-mini" type="text" name="mn_<%=ptPatienttreatments.getId()%>"/>
                                                                         <input type="hidden" name="pid[]" value="<%=ptPatienttreatments.getId()%>"/>
                                                                     </td>
                                                                     <td id="outstanding"></td>
@@ -299,7 +298,7 @@
                                                         String[] prevs = prev.split("_");
                                                         if (prevs[0].equals("lab")) {%>
                                                     <form action="action/accountsaction.jsp" method="post">
-                                                        <table class="table example display">
+                                                        <table class="table">
                                                             <thead>
                                                                 <tr style="color: #000;">
                                                                     <th>Requested </th>
@@ -330,7 +329,7 @@
                                                                     <% int qty = patientinvestigation.getQuantity() == 0 ? 1 : patientinvestigation.getQuantity();
                                                                         double tt = patientinvestigation.getPrice() * qty;%>
                                                                     <td><%=tt%></td>
-                                                                    <td><input type="text" name="nm_<%=patientinvestigation.getId()%>" readonly="readonly"/></td>
+                                                                    <td><input type="text"class="input-small" name="nm_<%=patientinvestigation.getId()%>" readonly="readonly"/></td>
                                                                     <td><%=tt - patientinvestigation.getAmountpaid()%></td>
                                                                     <td>CANNOT AFFORD</td>
                                                                 </tr>
@@ -363,7 +362,7 @@
                                                             <% int qty = patientinvestigation.getQuantity() == 0 ? 1 : patientinvestigation.getQuantity();
                                                                 double tt = patientinvestigation.getPrice() * qty;%>
                                                             <td><%=tt%></td>
-                                                            <td><input type="text" name="nm_<%=patientinvestigation.getId()%>"/></td>
+                                                            <td><input type="text" class="input-mini" name="nm_<%=patientinvestigation.getId()%>"/></td>
                                                             <td><%=tt - patientinvestigation.getAmountpaid()%></td>
                                                             <td><input type="checkbox" name="checks[]" value="<%=patientinvestigation.getId()%>" /></td>
                                                                 <% total = total + patientinvestigation.getPrice();%> 
@@ -448,12 +447,12 @@
                                                         String[] recs = rec.split("_");
                                                         if (recs[0].equals("records")) {%>
                                                     <form action="action/accountsaction.jsp" method="post">
-                                                        <table class="table example display">
+                                                        <table class="table">
                                                             <thead>
                                                                 <tr style="color: #000;">
                                                                     <th>Requested </th>
                                                                     <th>Total </th>
-                                                                    <th>Amount Paid</th>
+                                                                    <th>Amount Tendered</th>
                                                                     <th>Balance Due </th>
                                                                     <th>Payment Status</th>
 
@@ -470,11 +469,20 @@
                                                                     if (patientconsultation != null) {%>
                                                                 <tr>
                                                                     <td><%=mgr.getConsultationId(patientconsultation.getTypeid()).getContype()%></td>
-                                                                    <td><input class="input-small" style="color: blue;" type="text" disabled="disabled" value="<%=mgr.getConsultationId(patientconsultation.getTypeid()).getAmount()%>" id="amountdue"/></td>
-                                                                    <td><input  class="input-small" style="color: blue;" type="text" name="amountpaid" value=""/></td>
-                                                                    <td><input  class="input-small" style="color: blue;" type="text" id="balance"    value=""/></td>
-                                                                    <td><select name="status">
-                                                                            <option value="Full">Fully Payment</option>
+                                                                    <td><input class="input-small " style="color: blue;" id="amountdue" type="text" disabled="disabled" value="<%=mgr.getConsultationId(patientconsultation.getTypeid()).getAmount()%>" id="amountdue"/></td>
+                                                                    <td><input  class="input-small" style="color: blue;" id="amountpaid" type="text" name="amountpaid" value=""/></td>
+                                                                    <td>
+                                                                        <div class="control-group">
+
+                                                                            <div class="controls">
+
+
+                                                                                <input disabled="disabled"  class="input-small" id="balance" type="text" id="balance"    value=""/></td>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    <td><select class="input-medium" name="status">
+                                                                            <option value="Full">Full Payment</option>
                                                                             <option value="Part">Part Payment</option>
                                                                             <option value="umpaid">No Payment</option>
                                                                         </select>
@@ -528,22 +536,40 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
                                     </tr>
 
                                     <tr>
-                                        <td class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5><%=mgr.getPatientByID(vst.getPatientid()).getFname()%></h5> <h5><b> Date of Birth :</b> <%=mgr.getPatientByID(vst.getPatientid()).getDateofbirth()%></h5> </span>"
+                                        <td style="text-transform: uppercase; color: #4183C4; font-weight: bold" class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5><%=mgr.getPatientByID(vst.getPatientid()).getFname()%> <%=mgr.getPatientByID(vst.getPatientid()).getLname()%></h5> <h5><b> Date of Birth :</b> <%=mgr.getPatientByID(vst.getPatientid()).getDateofbirth()%></h5> </span>"
                                             data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%=mgr.getPatientByID(vst.getPatientid()).getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%=mgr.getPatientByID(vst.getPatientid()).getEmployer()%> </td>  </tr> <tr> <td> Sponsor </td> <td> <%=mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(vst.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid()).getSponsorname()%> </td> </tr> <tr>
                                             <td> Policy Number </td> <td> <%=mgr.sponsorshipDetails(vst.getPatientid()).getMembershipid()%> </td> </tr> <tr> <td> Benefit Plan </td> <td> <%=mgr.sponsorshipDetails(vst.getPatientid()).getBenefitplan()%> </td> </tr>  </table> "> <%=vst.getPatientid()%>   </td>
                                         <td><%=mgr.getPatientByID(vst.getPatientid()).getFname()%>, <%=mgr.getPatientByID(vst.getPatientid()).getMidname()%> <%=mgr.getPatientByID(vst.getPatientid()).getLname()%></td>
-                                        <td><%=mgr.getPatientByID(vst.getPatientid()).getDateofbirth()%> </td>
+                                        <td><%=formatter.format(mgr.getPatientByID(vst.getPatientid()).getDateofbirth())%> </td>
 
                                         <td><%=mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(vst.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid()).getSponsorname()%> </td>
                                         <td><%=mgr.sponsorshipDetails(vst.getPatientid()).getMembershipid()%>   </td>
 
-                                        <td><%=vst.getDate()%> </td>
+                                        <td><%=formatter.format(vst.getDate())%> </td>
 
                                         <td>
-                                            <button class="btn btn-info" id="<%=vst.getVisitid()%>_link">
+                                            <button class="btn btn-info btn-small" id="<%=vst.getVisitid()%>_link">
                                                 <i class="icon-white icon-check"></i> Receipt
                                             </button></td>
                                     </tr>
@@ -604,14 +630,12 @@
 <!--initiate accordion-->
 <script type="text/javascript">
     
-    $(document).ready(function(){
-        
-    });
+    
     
     $(function() {
         
 
-        alert("What")
+        
         var menu_ul = $('.menu > li > ul'), menu_a = $('.menu > li > a');
 
         menu_ul.hide();
@@ -636,22 +660,17 @@
             }
         });
 
-    });
-
-</script>
-
-
-<script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
         
+       
         $('.example').dataTable({
             "bJQueryUI" : true,
             "sPaginationType" : "full_numbers",
             "iDisplayLength" : 25,
             "aaSorting" : [],
-            "bSort" : true
+            "bSort" : true,
+            "sScrollY" : 300
 
-        });
+        }); 
         $(".patient").popover({
 
             placement : 'right',
@@ -660,11 +679,41 @@
         });
         
         
+        $("#amountpaid").live('keyup',function(){
+           
+            var amountdue = $("#amountdue").attr("value");
+            var amountpaid = $("#amountpaid").attr("value");
+            var balance = amountpaid - amountdue;
+            
+            
+            if(balance < 0){
+                
+                $('#balance').closest('.control-group').addClass('error').removeClass('success')
+            }
+            
+            else if(balance == 0){
+                
+                $('#balance').closest('.control-group').addClass('info').removeClass('success').removeClass('error')
+            }
+            else{
+                
+                $('#balance').closest('.control-group').addClass('success').removeClass('error')
+            }
+            
+            
+            $("#balance").attr("value",balance);
+            
+            
+        });
+        
         
 
     });
 
 </script>
+
+
+
 <% for (int i = 0;
             i < visits.size();
             i++) {

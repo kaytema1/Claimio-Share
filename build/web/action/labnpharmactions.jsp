@@ -117,6 +117,8 @@
         HibernateUtil.getSessionFactory().getCurrentSession().beginTransaction().commit();
         HibernateUtil.getSessionFactory().close();
         // System.out.println("here" + id);
+        session.setAttribute("lasterror", "Patient Forwarded Successfully");
+        session.setAttribute("class", "alert-success");
         response.sendRedirect("../consultingroom.jsp");
     } catch (Exception ex) {
         HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().rollback();

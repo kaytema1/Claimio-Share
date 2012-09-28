@@ -7,6 +7,9 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <% Users user = (Users) session.getAttribute("staff");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+
             if (user == null) {
                 session.setAttribute("lasterror", "Please Login");
                 response.sendRedirect("index.jsp");
@@ -127,12 +130,13 @@
                 text-align: center;
                 vertical-align: top;
                 color: #000000;
+                font-size: 12px;
             }
 
             .table td {
                 padding: 6px;
                 padding-bottom: 0px;
-                line-height: 25px;
+                line-height: 18px;
             }
 
 
@@ -215,29 +219,30 @@
 
                                 <tr class="odd gradeX">
 
-                                    <td class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <b><%= p.getFname()%>, <%= p.getLname()%> <%= p.getMidname()%> </b></h5> <h5><b> Date of Birth :</b> <%= p.getDateofbirth()%></h5> <span>"
+                                    <td class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <b><%= p.getFname()%> <%= p.getMidname()%> <%= p.getLname()%>  </b></h5> <h5><b> Date of Birth :</b> <%= formatter.format(p.getDateofbirth())%></h5> <span>"
                                         data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%= p.getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%= p.getEmployer()%>  </td>  </tr> <tr> <td> Sponsor </td> <td>
                                         <%=  mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(p.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()).getSponsorname()%>  </td> </tr>
                                         </table>">
-                                        <a class="patientid"><%= p.getPatientid()%></a>
+                                        <a style="text-transform: uppercase;" class="patientid"><%= p.getPatientid()%></a>
                                     </td>
-                                    <td><%= p.getFname()%>, <%= p.getLname()%> <%= p.getMidname()%></td><td><%= mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(p.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()).getSponsorname()%></td><td>  <%= p.getDateofbirth()%> </td>
+                                    <td><%= p.getFname()%> <%= p.getMidname().substring(0, 1) %>. <%= p.getLname()%> </td><td><%= mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(p.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(p.getPatientid()).getSponsorid()).getSponsorname()%></td>
+                                    <td>  <%= formatter.format(p.getDateofbirth())%> </td>
                                     <td><%= mgr.getPatientFolder(p.getPatientid()).getStatus()%></td>
                                     <td>
-                                        <div style="display: block" id="s_<%=p.getPatientid()%>">
-                                            <select class="input-medium" name="contype" onchange='showConType("d_<%=p.getPatientid()%>")' id="ty">
+                                        <div class="center" style="display: block" id="s_<%=p.getPatientid()%>">
+                                            <select style="text-transform: capitalize;" class="input-medium" name="contype" onchange='showConType("d_<%=p.getPatientid()%>")' id="ty">
                                                 <option>Select</option>
                                                 <%
                                                     List types = mgr.listConsultation();
                                                     for (int j = 0; j < types.size(); j++) {
                                                         Consultation unit = (Consultation) types.get(j);
                                                 %>
-                                                <option value="<%=unit.getConid()%>"><%=unit.getContype()%></option> 
+                                                <option style="text-transform: capitalize;" value="<%=unit.getConid()%>"><%=unit.getContype()%></option> 
                                                 <% }%>
                                             </select>
                                         </div>
-                                        <div id="d_<%=p.getPatientid()%>" style="display: none; float: left;">
-                                            <a  id="patientidlink"  class="btn btn-info" onclick='getContype()'> <i class="icon-pencil icon-white"> </i> New Visit </a>
+                                        <div class="center" id="d_<%=p.getPatientid()%>" style="display: none;">
+                                            <a  id="patientidlink"  class="btn btn-info center" onclick='getContype()'> <i class="icon-pencil icon-white"> </i> New Visit </a>
                                         </div></td>
                                 </tr>
 
@@ -261,22 +266,31 @@
 
         <div style="max-height: 600px; y-overflow: scroll; display: none;" class="usersummary hide" id="<%= p.getPatientid()%>"  title="Patient Information">
             <div class="well thumbnail">
-                <ul style="margin-left: 0px;" class="breadcrumb">
+                <ul style="margin-left: 0px; text-transform: uppercase;" class="breadcrumb">
                     <li>
-                        <span class="divider"></span> Folder No: <%= p.getPatientid()%>
+                        <span class="divider"></span> Folder No:  <b> <%= p.getPatientid()%> </b>
                     </li>
                 </ul>
 
                 <div style="margin-top: 12px; padding-top: 5px;  padding-bottom: 5px; text-align: center;" class="thumbnail span2">
-                    <img src="images/default_profile.png" />
-
+                    <% if(p.getGender().equalsIgnoreCase("Male")){ %>
+                   
+                    
+                    <img src="img/default-facebook-avatar-male.gif" />
+                    
+                    
+                    <% } else { %>
+                    
+                    <img src="img/default-facebook-avatar-female.gif" />
+                    
+                    <% } %>
                 </div>
 
                 <table class="table span3 right table table-bordered table-condensed">
                     <tr>
                         <td> Full Name</td>
 
-                        <td><b> <%= p.getFname()%>, <%= p.getLname()%> <%= p.getMidname()%></b></td>
+                        <td><b> <%= p.getFname()%> <%= p.getMidname()%> <%= p.getLname()%> </b></td>
                     </tr>
 
                     <tr>
@@ -293,7 +307,7 @@
                     <tr>
                         <td> Folder No </td>
 
-                        <td><b> <%= p.getPatientid() %></b></td>
+                        <td><b> <%= p.getPatientid()%></b></td>
                     </tr>
 
                 </table>
@@ -411,7 +425,7 @@
                             <tr class="odd gradeX">
                                 <td class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5> <b> <%= pp.getFname()%>, <%= pp.getLname()%> <%= pp.getMidname()%> </b></h5> <h5><b> Date of Birth :</b> <%= pp.getDateofbirth()%></h5> <span>"
                                     data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%= pp.getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%= pp.getEmployer()%>  </td>  </tr> <tr> <td> Sponsor </td> <td><%=mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(pp.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid()).getSponsorname()%>  </td> </tr>
-                                    </table>"><a class="patientid"><%= pp.getPatientid()%></a></td><td><b><%= pp.getFname()%>, <%= pp.getLname()%> <%= pp.getMidname()%> </b></td><td><%= mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(pp.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid()).getSponsorname()%></td><td>  <%= pp.getDateofbirth()%> </td>
+                                    </table>"><a class="patientid"><%= pp.getPatientid()%></a></td><td><b><%= pp.getFname()%>  <%= pp.getMidname()%> <%= pp.getLname()%> </b></td><td><%= mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(pp.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(pp.getPatientid()).getSponsorid()).getSponsorname()%></td><td>  <%= pp.getDateofbirth()%> </td>
                                 <td><%= mgr.getPatientFolder(pp.getPatientid()).getStatus()%></td>
                                 <td>
                                     <div style="display: block" id="s_<%=pp.getPatientid()%>">
@@ -454,14 +468,24 @@
     %>
     <div style="max-height: 600px; y-overflow: scroll; display: none;" class="usersummary hide" id="<%= ppp.getPatientid()%>_dialog"  title="Patient Information">
         <div class="well thumbnail">
-            <ul style="margin-left: 0px;" class="breadcrumb">
+            <ul style="margin-left: 0px; text-transform: uppercase;" class="breadcrumb">
                 <li>
                     <span class="divider"></span> Folder No: <%= ppp.getPatientid()%>
                 </li>
             </ul>
 
             <div style="margin-top: 12px; padding-top: 5px;  padding-bottom: 5px; text-align: center;" class="thumbnail span2">
-                <img src="images/default_profile.png" />
+                <% if(ppp.getGender().equalsIgnoreCase("Male")){ %>
+                   
+                    
+                    <img src="img/default-facebook-avatar-male.gif" />
+                    
+                    
+                    <% } else { %>
+                    
+                    <img src="img/default-facebook-avatar-female.gif" />
+                    
+                    <% } %>
 
             </div>
 
@@ -475,7 +499,7 @@
                 <tr>
                     <td> Full Name</td>
 
-                    <td><b> <%= ppp.getFname()%></b></td>
+                    <td><b> <%= ppp.getFname()%> <%= p.getMidname()%> <%= ppp.getLname()%></b></td>
                 </tr>
 
                 <tr>

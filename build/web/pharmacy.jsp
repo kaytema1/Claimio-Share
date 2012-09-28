@@ -4,134 +4,48 @@
     Author     : dependable
 --%>
 
+<%@page import="java.util.Formatter"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="entities.*,java.util.List,java.util.Date,java.text.SimpleDateFormat,java.text.DateFormat" %>
 <!DOCTYPE html>
 <% Users user = (Users) session.getAttribute("staff");
-            if(user == null){
-                session.setAttribute("lasterror", "Please Login");
-                response.sendRedirect("index.jsp");
-            } %>
+    if (user == null) {
+        session.setAttribute("lasterror", "Please Login");
+        session.setAttribute("class", "alert-error");
+        response.sendRedirect("index.jsp");
+
+
+    }%>
+
+<%
+    HMSHelper mgr = new HMSHelper();
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+    //Patient p = (Patient)session.getAttribute("patient");
+    //get current date time with Date()
+    Date date = new Date();
+    //System.out.println(dateFormat.format(date));
+    List visits = mgr.listUnitVisitations((String) session.getAttribute("unit"), dateFormat.format(date));
+    List treatments = null;
+    // for (int i = 0; i < visits.size(); i++) {
+    //   Visitationtable visit = (Visitationtable) visits.get(i);
+%>
 <html>
     <head>
-        <meta charset="utf-8">
-        <title>ClaimSync Extended</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="author" content="">
-
-        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-        <!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-
-        <!-- Le styles -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/bootstrap-responsive.css" rel="stylesheet">
-        <link type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
-        <link href="css/docs.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/styles.css">
-        <style type="text/css" title="currentStyle">
-            @import "css/jquery.dataTables_themeroller.css";
-            @import "css/custom-theme/jquery-ui-1.8.16.custom.css";
-            body {
-                /*    overflow: hidden; */
-            }
-
-            .large_button {
-                background-color: #35AFE3;
-                background-image: -moz-linear-gradient(center top , #45C7EB, #2698DB);
-                box-shadow: 0 1px 0 0 #6AD2EF inset;
-                color: #FFFFFF;
-                text-decoration: none;
-                font-weight: lighter;
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                font-size: 36px;
-            }
-
-            .large_button:hover {
-                background-color: #FBFBFB;
-                background-image: -moz-linear-gradient(center top , #FFFFFF, #F5F5F5);
-                background-repeat: repeat-x;
-                border: 1px solid #DDDDDD;
-                border-radius: 3px 3px 3px 3px;
-                box-shadow: 0 1px 0 #FFFFFF inset;
-                list-style: none outside none;
-                color: #777777;
-                /* padding: 7px 14px; */
-            }
-        </style>
-
-        <link href="css/tablecloth.css" rel="stylesheet" type="text/css" media="screen" />
-
-        <%
-            HMSHelper mgr = new HMSHelper();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            //Patient p = (Patient)session.getAttribute("patient");
-            //get current date time with Date()
-            Date date = new Date();
-            //System.out.println(dateFormat.format(date));
-            List visits = mgr.listUnitVisitations((String)session.getAttribute("unit"), dateFormat.format(date));
-            List treatments = null;
-            // for (int i = 0; i < visits.size(); i++) {
-            //   Visitationtable visit = (Visitationtable) visits.get(i);
-        %>
-        
-        <script type="text/javascript">
-            
-            function alert(){
-                
-            }
-        </script>
+        <%@include file="widgets/stylesheets.jsp" %>
     </head>
+    <script type="text/javascript">
+        
+        
+        function alert(){
+            
+        }
+    </script>
+
 
     <body data-spy="scroll" data-target=".subnav" data-offset="50">
 
-        <!-- Navbar
-        ================================================== -->
-        <div style="display: none;" class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
-                    <a class="brand" href="../"><img src="images/logo.png" width="200px;" /></a>
-
-                    <div style="margin-top: 10px;" class="nav-collapse">
-                        <ul class="nav pull-right">
-
-                            <li class="dropdown">
-                                <a class="active" > Logged in as:  <%=mgr.getStafftableByid(user.getStaffid()).getLastname() %> <%=mgr.getStafftableByid(user.getStaffid()).getLastname() %></a>
-
-                            </li>
-                            <li class="divider-vertical"></li>
-
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> Account <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-
-                                    <li>
-                                        <a target="_blank" href="bootstrap.min.css"><i class="icon-wrench"></i> Settings </a>
-                                    </li>
-
-                                    <li>
-                                        <a target="_blank" href="bootstrap.css"><i class="icon-question-sign"></i> Help </a>
-                                    </li>
-                                    <li>
-                                        <a target="_blank" href="bootstrap.css"><i class="icon-share"></i> Feedback </a>
-                                    </li>
-                                    <li class="divider"></li>
-
-                                    <li>
-                                        <a target="_blank" href="logout.jsp"><i class="icon-off"></i> Log Out</a>
-                                    </li>
-
-                                </ul>
-
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <%@include file="widgets/header.jsp" %>
 
         <div class="container-fluid">
 
@@ -142,7 +56,7 @@
                 <div style="margin-top: 20px; margin-bottom: -50px;" class="subnav navbar-fixed-top hide">
                     <ul class="nav nav-pills">
 
-                        <li>
+                        <li class="active">
                             <a href="#">Pharmacy</a><span class="divider"></span>
                         </li>
 
@@ -151,59 +65,49 @@
 
             </header>
 
-            <div style="position: absolute; left: 30%; top: 200px; text-align: center;" class="progress1">
-                <img src="images/logoonly.png" width="136px;" style="margin-bottom: 20px;" />
-                <a href="#"> <h3 class="segoe" style="text-align: center; font-weight: lighter;"> Your page is taking longer than expected to load.....
-                        <br />
-                        Please be patient!</h3>
-                    <br />
-                </a>
-                <div  class="progress progress-striped active span5">
-
-                    <div class="bar"
-                         style="width: 100%;"></div>
-                </div>
-            </div>
+            <%@include file="widgets/loading.jsp" %>
 
             <section style="margin-top: -30px;" id="dashboard">
 
-                <!-- Headings & Paragraph Copy -->
+                <%if (session.getAttribute("lasterror") != null) {%>
+                <div class="alert hide <%=session.getAttribute("class")%> span12 center">
+                    <b> <%=session.getAttribute("lasterror")%>  </b>
+                </div>
+                <br/>
+                <div style="margin-bottom: 20px;" class="clearfix"></div>
+                <%session.removeAttribute("lasterror");
+                    }%>
+
+
+
                 <div class="row">
 
-                 
-                   <%@include file="widgets/leftsidebar.jsp" %>
+
+                    <%@include file="widgets/leftsidebar.jsp" %>
 
                     <div style="margin-top: 0px; "class="span12 offset3 content1 hide">
 
-                        <div style="padding-bottom: 80px;" class="span9 thumbnail well content">
-                            <ul style="margin-left: 0px;" class="breadcrumb">
-                                <li>
-                                    <a> <i class="icon-tasks"></i> Pharmacy</a><br/>
-                                    <%if(session.getAttribute("lasterror") != null){ %>
-                                    <h3><a> <%=session.getAttribute("lasterror")%> </a></h3>
-                                    <%}%>
-                                </li>
+                        <div class="span9 thumbnail well content">
 
-                            </ul>
-                            <table class="example display">
+                            <table class="example display table">
                                 <thead>
                                     <tr>
                                         <th> Patient No </th>
                                         <th> Patient Name </th>
                                         <th> Date of Birth  </th>
                                         <th> Sponsor </th>
-                                        <th> Membership ID </th>
+                                        <th> Policy # </th>
                                         <th> Request Date </th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% if(visits != null){
-                                    for (int i = 0; i < visits.size(); i++) {
-                                            Visitationtable vst = (Visitationtable) visits.get(i);
+                                    <% if (visits != null) {
+                                            for (int i = 0; i < visits.size(); i++) {
+                                                Visitationtable vst = (Visitationtable) visits.get(i);
                                     %>
                                     <tr>
-                                        <td colspan="7">
+                                        <td>
                                             <div class="dialog" id="<%=vst.getPatientid()%>_dialog" title="Dispense Drugs">
 
                                                 <div class="well thumbnail">
@@ -213,9 +117,9 @@
                                                         </li>    
                                                     </ul>
                                                     <form action="action/forwardaction.jsp" method="post">
-                                                        <table class="table example display">
+                                                        <table class="table">
                                                             <thead>
-                                                                <tr style="color: #000;">
+                                                                <tr style="color: #FFF;">
                                                                     <th> Drug </th>
                                                                     <th> Type </th>
                                                                     <th> Dosage </th>
@@ -236,34 +140,37 @@
                                                                 <tr>
                                                                     <td><%=mgr.getTreatment(ptPatienttreatments.getTreatmentid()).getTreatment()%> </td>
                                                                     <td> <%=ptPatienttreatments.getType()%>  </td>
-                                                                    <td><%=ptPatienttreatments.getDosage().split("_")[1] %>  </td>
-                                                                    
+                                                                    <td><%=ptPatienttreatments.getDosage().split("_")[1]%>  </td>
+
                                                                     <td> <%=ptPatienttreatments.getQuantity()%> </td>
 
                                                                     <td><%=ptPatienttreatments.getPrice()%> </td>
                                                                     <td><%= (ptPatienttreatments.getQuantity() * ptPatienttreatments.getPrice())%></td>
-                                                                    <%if(ptPatienttreatments.getDispensed().equalsIgnoreCase("paid")){%> 
+                                                                    <%if (ptPatienttreatments.getDispensed().equalsIgnoreCase("paid")) {%> 
                                                                     <td>
                                                                         Paid
                                                                     </td>
                                                                     <td>
-                                                                       <input type="checkbox" name="dispensed[]" value="<%=ptPatienttreatments.getId()%>"/>
+                                                                        <input type="checkbox" name="dispensed[]" value="<%=ptPatienttreatments.getId()%>"/>
                                                                     </td>
-                                                                    <%}if(ptPatienttreatments.getDispensed().equalsIgnoreCase("No")){%>
+                                                                    <%}
+                                                                        if (ptPatienttreatments.getDispensed().equalsIgnoreCase("No")) {%>
                                                                     <td>
                                                                         Can You Afford?
                                                                     </td> 
                                                                     <td>
-                                                                         <input type="checkbox" name="afford[]" value="<%=ptPatienttreatments.getId()%>"/>
+                                                                        <input type="checkbox" name="afford[]" value="<%=ptPatienttreatments.getId()%>"/>
                                                                     </td>
-                                                                    <%}if(ptPatienttreatments.getDispensed().equalsIgnoreCase("Afford")){%>
+                                                                    <%}
+                                                                        if (ptPatienttreatments.getDispensed().equalsIgnoreCase("Afford")) {%>
                                                                     <td>
                                                                         Pending Payment
                                                                     </td>
                                                                     <td>
                                                                         Can Afford
                                                                     </td>
-                                                                    <%}if(ptPatienttreatments.getDispensed().equalsIgnoreCase("Dispensed")){%>
+                                                                    <%}
+                                                                        if (ptPatienttreatments.getDispensed().equalsIgnoreCase("Dispensed")) {%>
                                                                     <td>
                                                                         Dispensed
                                                                     </td>
@@ -296,73 +203,73 @@
                                                                         <select class="input-xlarge"  id="treatment" onchange = "addTreatment()">
                                                                             <%
                                                                                 //treatments = mgr.listNhisTreatment();
-                                                                             treatments = mgr.listTreatments();
-                                                                                 String replacedString = "";
-                                                    String[] treatmentString = null;
-                                                    if (treatments != null) {
-                                                        for (int v = 0; v < treatments.size(); v++) {
-                                                            Treatment treatment = (Treatment) treatments.get(v);
-                                                            treatmentString = treatment.getTreatment().split(",");
-                                                            if (treatmentString[0].contains("Injection")) {
-                                                                replacedString = treatmentString[0].replaceAll("Injection", " ");
-                                                            }
-                                                            if (treatmentString[0].contains("Tablet")) {
-                                                                replacedString = treatmentString[0].replaceAll("Tablet", " ");
-                                                            }
-                                                            if (treatmentString[0].contains("Suppository")) {
-                                                                replacedString = treatmentString[0].replaceAll("Suppository", " ");
-                                                            }
-                                                            if (treatmentString[0].contains("Capsule")) {
-                                                                replacedString = treatmentString[0].replaceAll("Capsule", " ");
-                                                            }
-                                                            if (treatmentString[0].contains("Syrup")) {
-                                                                replacedString = treatmentString[0].replaceAll("Syrup", " ");
-                                                            }
-                                                            if (treatmentString[0].contains("Cream")) {
-                                                                replacedString = treatmentString[0].replaceAll("Cream", " ");
-                                                            }
+                                                                                treatments = mgr.listTreatments();
+                                                                                String replacedString = "";
+                                                                                String[] treatmentString = null;
+                                                                                if (treatments != null) {
+                                                                                    for (int v = 0; v < treatments.size(); v++) {
+                                                                                        Treatment treatment = (Treatment) treatments.get(v);
+                                                                                        treatmentString = treatment.getTreatment().split(",");
+                                                                                        if (treatmentString[0].contains("Injection")) {
+                                                                                            replacedString = treatmentString[0].replaceAll("Injection", " ");
+                                                                                        }
+                                                                                        if (treatmentString[0].contains("Tablet")) {
+                                                                                            replacedString = treatmentString[0].replaceAll("Tablet", " ");
+                                                                                        }
+                                                                                        if (treatmentString[0].contains("Suppository")) {
+                                                                                            replacedString = treatmentString[0].replaceAll("Suppository", " ");
+                                                                                        }
+                                                                                        if (treatmentString[0].contains("Capsule")) {
+                                                                                            replacedString = treatmentString[0].replaceAll("Capsule", " ");
+                                                                                        }
+                                                                                        if (treatmentString[0].contains("Syrup")) {
+                                                                                            replacedString = treatmentString[0].replaceAll("Syrup", " ");
+                                                                                        }
+                                                                                        if (treatmentString[0].contains("Cream")) {
+                                                                                            replacedString = treatmentString[0].replaceAll("Cream", " ");
+                                                                                        }
 
-                                                %>
-                                                <option value="<%=replacedString%>><<%=treatment.getTreatmentid()%>"><%=replacedString%></option> 
-                                                <% }
+                                                                            %>
+                                                                            <option value="<%=replacedString%>><<%=treatment.getTreatmentid()%>"><%=replacedString%></option> 
+                                                                            <% }
 
-                                                    }
+                                                                                }
                                                                             %>
                                                                         </select>
                                                                         <%  } else {%>                                      
                                                                         <select class="input-xlarge" id="treatment" onchange = "addTreatment()">
                                                                             <%
                                                                                 treatments = mgr.listTreatments();
-                                                                                 String replacedString = "";
-                                                    String[] treatmentString = null;
-                                                    if (treatments != null) {
-                                                        for (int v = 0; v < treatments.size(); v++) {
-                                                            Treatment treatment = (Treatment) treatments.get(v);
-                                                            treatmentString = treatment.getTreatment().split(",");
-                                                            if (treatmentString[0].contains("Injection")) {
-                                                                replacedString = treatmentString[0].replaceAll("Injection", " ");
-                                                            }
-                                                            if (treatmentString[0].contains("Tablet")) {
-                                                                replacedString = treatmentString[0].replaceAll("Tablet", " ");
-                                                            }
-                                                            if (treatmentString[0].contains("Suppository")) {
-                                                                replacedString = treatmentString[0].replaceAll("Suppository", " ");
-                                                            }
-                                                            if (treatmentString[0].contains("Capsule")) {
-                                                                replacedString = treatmentString[0].replaceAll("Capsule", " ");
-                                                            }
-                                                            if (treatmentString[0].contains("Syrup")) {
-                                                                replacedString = treatmentString[0].replaceAll("Syrup", " ");
-                                                            }
-                                                            if (treatmentString[0].contains("Cream")) {
-                                                                replacedString = treatmentString[0].replaceAll("Cream", " ");
-                                                            }
+                                                                                String replacedString = "";
+                                                                                String[] treatmentString = null;
+                                                                                if (treatments != null) {
+                                                                                    for (int v = 0; v < treatments.size(); v++) {
+                                                                                        Treatment treatment = (Treatment) treatments.get(v);
+                                                                                        treatmentString = treatment.getTreatment().split(",");
+                                                                                        if (treatmentString[0].contains("Injection")) {
+                                                                                            replacedString = treatmentString[0].replaceAll("Injection", " ");
+                                                                                        }
+                                                                                        if (treatmentString[0].contains("Tablet")) {
+                                                                                            replacedString = treatmentString[0].replaceAll("Tablet", " ");
+                                                                                        }
+                                                                                        if (treatmentString[0].contains("Suppository")) {
+                                                                                            replacedString = treatmentString[0].replaceAll("Suppository", " ");
+                                                                                        }
+                                                                                        if (treatmentString[0].contains("Capsule")) {
+                                                                                            replacedString = treatmentString[0].replaceAll("Capsule", " ");
+                                                                                        }
+                                                                                        if (treatmentString[0].contains("Syrup")) {
+                                                                                            replacedString = treatmentString[0].replaceAll("Syrup", " ");
+                                                                                        }
+                                                                                        if (treatmentString[0].contains("Cream")) {
+                                                                                            replacedString = treatmentString[0].replaceAll("Cream", " ");
+                                                                                        }
 
-                                                %>
-                                                <option value="<%=replacedString%>><<%=treatment.getTreatmentid()%>"><%=replacedString%></option> 
-                                                <% }
+                                                                            %>
+                                                                            <option value="<%=replacedString%>><<%=treatment.getTreatmentid()%>"><%=replacedString%></option> 
+                                                                            <% }
 
-                                                    }
+                                                                                }
                                                                             %>
                                                                         </select>
 
@@ -386,19 +293,19 @@
                                                                             <option value="Cream">
                                                                                 Cream
                                                                             </option></select></td>
-                                                                            <td>
+                                                                    <td>
 
                                                                         <b>Recommended Dosage
 
                                                                         </b> <br />
-                                                                        <input name="dosage" type="text" class="input" />
+                                                                        <input name="dosage" type="text" class="input-medium" />
                                                                     </td>
                                                                     <td><b>Quantity
 
                                                                         </b>
                                                                         <br />
 
-                                                                        <select name="qty" class="input-small">  <option value="0">
+                                                                        <select name="qty" class="input-mini">  <option value="0">
                                                                                 0
                                                                             </option>
                                                                             <option value="1">
@@ -432,20 +339,23 @@
                                                                                 10
                                                                             </option>
                                                                         </select></td>
-                                                                    
 
-                                                                    <td colspan="3"> 
-                                                                        <br />
 
-                                                                        <input name="dosage" type="button" value="Add" class="btn btn-large btn-danger" onclick=";return false"/><!-- <button class="btn btn-info" id="">
-                                                                                                         <i class="icon-white icon-check"></i> Add
-                                                                                                     </button>--></td>
+                                                                        <td colspan="4" class="center"> 
+                                                                       
+
+                                                                        <button style="margin-top: 15px;" name="dosage" type="button"  class="btn btn-large btn-danger center" onclick=";return false"/>
+                                                                        <i class="icon icon-white icon-plus-sign"></i> Add
+                                                                        </button>
+                                                                        
+                                                                        <!-- <button class="btn btn-info" id="">
+                                                                                                        </td>
                                                                 </tr>
 
 
-                                                                <!-- </form>
-
-                                                               end-->
+                                                                        <!-- </form>
+        
+                                                                       end-->
 
                                                             </tbody>
 
@@ -453,11 +363,11 @@
 
                                                         <div style="text-align: center;" class="form-actions">
 
-                                                           
+
                                                             <input type="hidden" name="patient" value="<%=vst.getPatientid()%>"/>
                                                             <input type="hidden" name="visitid" value="<%=vst.getVisitid()%>"/>
                                                             <!-- <input type="submit" name="action" value="Forward to Accounts"/>-->
-                                                             <select name="unitid">
+                                                            <select name="unitid">
                                                                 <%
                                                                     List units = mgr.listUnits();
                                                                     for (int j = 0; j < units.size(); j++) {
@@ -470,16 +380,17 @@
                                                                         Ward ward = (Ward) wards.get(j);
                                                                 %>
                                                                 <option value="<%=ward.getType()%>_<%=ward.getType()%>"><%=ward.getWardname()%></option> 
-                                                                <% }List consultingrooms = mgr.listConRooms();
+                                                                <% }
+                                                                    List consultingrooms = mgr.listConRooms();
                                                                     for (int j = 0; j < consultingrooms.size(); j++) {
-                                            Consultingrooms consultingroom = (Consultingrooms) consultingrooms.get(j);
-                                    %>
-                                    <option value="<%=consultingroom.getType()%>_<%=consultingroom.getType()%>"><%=consultingroom.getConsultingroom()%></option> 
-                                    <% }
+                                                                        Consultingrooms consultingroom = (Consultingrooms) consultingrooms.get(j);
+                                                                %>
+                                                                <option value="<%=consultingroom.getType()%>_<%=consultingroom.getType()%>"><%=consultingroom.getConsultingroom()%></option> 
+                                                                <% }
 
-                                    
 
-                    %>
+
+                                                                %>
 
                                                                 %>
                                                             </select>
@@ -493,27 +404,45 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
                                     </tr>
 
                                     <tr>
-                                        <td class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5><%=mgr.getPatientByID(vst.getPatientid()).getFname()%></h5> <h5><b> Date of Birth :</b> <%=mgr.getPatientByID(vst.getPatientid()).getDateofbirth()%></h5> </span>"
-                                            data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%=mgr.getPatientByID(vst.getPatientid()).getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%=mgr.getPatientByID(vst.getPatientid()).getEmployer()%> </td>  </tr> <tr> <td> Sponsor </td> <td> <%=mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid())==null?mgr.sponsorshipDetails(vst.getPatientid()).getType():mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid()).getSponsorname()%> </td> </tr> <tr>
+                                        <td style="text-transform: uppercase; color: #4183C4;" class="patient" rel="popover" data-original-title="<span style='text-align:center;'> <h3>Patient Information Summary </h3> <h5><%=mgr.getPatientByID(vst.getPatientid()).getFname()%> <%=mgr.getPatientByID(vst.getPatientid()).getMidname()%> <%=mgr.getPatientByID(vst.getPatientid()).getLname()%></h5> <h5><b> Date of Birth :</b> <%=mgr.getPatientByID(vst.getPatientid()).getDateofbirth()%></h5> </span>"
+                                            data-content="<table class='table table-bordered'> <tr> <td> Gender  </td> <td> <%=mgr.getPatientByID(vst.getPatientid()).getGender()%> </td> </tr> <tr> <td> Employer </td> <td> <%=mgr.getPatientByID(vst.getPatientid()).getEmployer()%> </td>  </tr> <tr> <td> Sponsor </td> <td> <%=mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(vst.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid()).getSponsorname()%> </td> </tr> <tr>
                                             <td> Policy Number </td> <td> <%=mgr.sponsorshipDetails(vst.getPatientid()).getMembershipid()%> </td> </tr> <tr> <td> Benefit Plan </td> <td> <%=mgr.sponsorshipDetails(vst.getPatientid()).getBenefitplan()%> </td> </tr>  </table> "> <%=vst.getPatientid()%>   </td>
-                                        <td><%=mgr.getPatientByID(vst.getPatientid()).getFname()%>, <%=mgr.getPatientByID(vst.getPatientid()).getMidname()%> <%=mgr.getPatientByID(vst.getPatientid()).getLname()%></td>
-                                        <td><%=mgr.getPatientByID(vst.getPatientid()).getDateofbirth()%> </td>
+                                        <td><%=mgr.getPatientByID(vst.getPatientid()).getFname()%> <%=mgr.getPatientByID(vst.getPatientid()).getMidname().substring(0, 1)%>. <%=mgr.getPatientByID(vst.getPatientid()).getLname()%></td>
+                                        <td><%= formatter.format(mgr.getPatientByID(vst.getPatientid()).getDateofbirth())%> </td>
 
-                                        <td><%=mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid())==null?mgr.sponsorshipDetails(vst.getPatientid()).getType():mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid()).getSponsorname()%>  </td>
+                                        <td><%=mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid()) == null ? mgr.sponsorshipDetails(vst.getPatientid()).getType() : mgr.getSponsor(mgr.sponsorshipDetails(vst.getPatientid()).getSponsorid()).getSponsorname()%>  </td>
                                         <td><%=mgr.sponsorshipDetails(vst.getPatientid()).getMembershipid()%>   </td>
 
-                                        <td><%=vst.getDate()%> </td>
+                                        <td><%=formatter.format(vst.getDate())%> </td>
 
                                         <td>
-                                            <button class="btn btn-info" id="<%=vst.getPatientid()%>_link">
+                                            <button class="btn btn-info btn-small" id="<%=vst.getPatientid()%>_link">
                                                 <i class="icon-white icon-check"></i> Dispense
                                             </button></td>
                                     </tr>
                                     <%}
-                                    }%> 
+                                        }%> 
 
                                 </tbody>
                             </table>
@@ -579,6 +508,7 @@
         $(".navbar").fadeIn();
         $(".footer").fadeIn();
         $(".subnav").fadeIn();
+        $(".alert").fadeIn();
         $(".progress1").hide();
 
         menu_a.click(function(e) {
@@ -592,18 +522,20 @@
                 $(this).next().stop(true, true).slideUp('normal');
             }
         });
+        
+        
+        $(".patient").popover({
 
-    });
+            placement : 'right',
+            animation : true
 
-</script>
-
-
-<script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
+        });
+    
         $('.example').dataTable({
             "bJQueryUI" : true,
             "sPaginationType" : "full_numbers",
             "iDisplayLength" : 25,
+            "sScrollY" : "300px",
             "aaSorting" : [],
             "bSort" : true
 
@@ -611,12 +543,9 @@
             
             
 
-        $(".patient").popover({
-
-            placement : 'right',
-            animation : true
-
-        });
+        
+        
+        
 
     });
 
